@@ -8,7 +8,26 @@
     android:layout_marginTop="10dp"
     >
 
-    <!-- 책리스트 container -->
+    <!--리사이클러뷰-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/to_read_book_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_book"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/icon_add_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+   <!--  책리스트 container
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -17,18 +36,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_book"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/icon_add_black"
-            app:layout_constraintBottom_toBottomOf="@+id/scrollView"
-            app:layout_constraintEnd_toEndOf="parent">
 
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
-        <!--스크롤뷰 테스트-->
+        &lt;!&ndash;스크롤뷰 테스트&ndash;&gt;
         <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
@@ -36,7 +46,7 @@
             tools:layout_editor_absoluteX="26dp"
             tools:layout_editor_absoluteY="-311dp">
 
-            <!--스크롤뷰 테스트 : 스크롤 뷰는 하나의 자식만을 가진다-->
+            &lt;!&ndash;스크롤뷰 테스트 : 스크롤 뷰는 하나의 자식만을 가진다&ndash;&gt;
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -44,14 +54,14 @@
                 android:layout_marginRight="20dp"
 
                 android:orientation="vertical">
-                <!-- 1행 -->
+                &lt;!&ndash; 1행 &ndash;&gt;
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="9">
 
-                    <!-- 화면전환, 데이터 전달 테스트 -->
+                    &lt;!&ndash; 화면전환, 데이터 전달 테스트 &ndash;&gt;
                     <LinearLayout
                         android:id="@+id/to_read_book"
                         android:layout_width="wrap_content"
@@ -63,7 +73,7 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:id="@+id/img"
                             android:layout_width="80dp"
@@ -72,7 +82,7 @@
                             android:background="@drawable/book_fiftypeople"
                             android:scaleType="centerInside" />
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:id="@+id/title"
                             android:layout_width="wrap_content"
@@ -83,7 +93,7 @@
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
-                        <!-- 등록일 -->
+                        &lt;!&ndash; 등록일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -110,7 +120,7 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -118,7 +128,7 @@
                             android:background="@drawable/book_fiftypeople"
                             android:scaleType="centerInside" />
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -127,7 +137,7 @@
                             android:text="피프티피플"
                             android:textSize="16sp"
                             android:textStyle="bold" />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -135,7 +145,7 @@
                             android:text="등록일"
                             android:textSize="12sp" />
 
-                        <!--등록일 -->
+                        &lt;!&ndash;등록일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -154,7 +164,7 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -162,7 +172,7 @@
                             android:background="@drawable/book_fiftypeople"
                             android:scaleType="centerInside" />
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -171,7 +181,7 @@
                             android:text="피프티피플"
                             android:textSize="16sp"
                             android:textStyle="bold" />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -179,7 +189,7 @@
                             android:text="등록일"
                             android:textSize="12sp" />
 
-                        <!--등록일 -->
+                        &lt;!&ndash;등록일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -188,13 +198,13 @@
                             android:textSize="12sp" />
                     </LinearLayout>
 
-                </LinearLayout><!--2행 끝 -->
+                </LinearLayout>&lt;!&ndash;2행 끝 &ndash;&gt;
 
 
-            </LinearLayout><!--목록-->
+            </LinearLayout>&lt;!&ndash;목록&ndash;&gt;
 
 
-        </ScrollView>
+        </ScrollView>-->
 
 
         <!--목록 감싸는 레이아웃-->
@@ -425,7 +435,7 @@
         </LinearLayout>&lt;!&ndash;목록&ndash;&gt;-->
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+   <!-- </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -248,7 +248,7 @@
 
 
         <ListView
-            android:id="@+id/listView_read_memo"
+            android:id="@+id/read_memo_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

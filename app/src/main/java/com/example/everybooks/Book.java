@@ -5,14 +5,23 @@ import android.graphics.drawable.Drawable;
 // 책 정보 객체 생성하는 클래스
 public class Book
 {
+    // 리사이클러뷰 임시 생성자
+    public Book(int bookId, String title, String insertDate)
+    {
+        this.bookId = bookId;
+        this.title = title;
+        this.insertDate = insertDate;
+    }
+
+    private int bookId;
     private Drawable img;       // 표지
     private String title;       // 제목
     private String writer;      // 작가
     private String publisher;   // 출판사
-    private String publish_date;// 출간일
-    private String insert_date; // 등록일
-    private String start_date;  // 독서 시작일
-    private String end_date;    // 독서 마감일
+    private String publishDate;// 출간일
+    private String insertDate; // 등록일
+    private String startDate;  // 독서 시작일
+    private String endDate;    // 독서 마감일
     private String state;       // 상태 : to_read, reading, read
 
     private int pages;          // 페이지수
@@ -52,36 +61,36 @@ public class Book
         this.publisher = publisher;
     }
 
-    public String getPublish_date() {
-        return publish_date;
+    public String publishDate() {
+        return publishDate;
     }
 
-    public void setPublish_date(String publish_date) {
-        this.publish_date = publish_date;
+    public void publishDate(String publish_date) {
+        this.publishDate = publish_date;
     }
 
-    public String getInsert_date() {
-        return insert_date;
+    public String getInsertDate() {
+        return insertDate;
     }
 
-    public void setInsert_date(String insert_date) {
-        this.insert_date = insert_date;
+    public void setInsertDate(String insertDate) {
+        this.insertDate = insertDate;
     }
 
-    public String getStart_date() {
-        return start_date;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setStart_date(String start_date) {
-        this.start_date = start_date;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
-    public String getEnd_date() {
-        return end_date;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setEnd_date(String end_date) {
-        this.end_date = end_date;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public int getPages() {

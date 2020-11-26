@@ -17,11 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-
 public class ReadBookInfoActivity extends AppCompatActivity
 {
     Intent intent;
@@ -84,7 +79,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
         textView_time = findViewById(R.id.time);
         ratingBar_rate = findViewById(R.id.rate);
 
-        listView = findViewById(R.id.listView_read_memo);
+        listView = findViewById(R.id.read_memo_list);
         cardView_memo = findViewById(R.id.memo);
         textView_memo_text = findViewById(R.id.memo_text);
         textView_memo_date = findViewById(R.id.memo_date);

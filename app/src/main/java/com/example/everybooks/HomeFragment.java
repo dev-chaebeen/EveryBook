@@ -15,6 +15,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 
 public class HomeFragment extends Fragment
@@ -24,12 +29,13 @@ public class HomeFragment extends Fragment
     // 뷰 요소 선언
     private View view;
 
-    Button button_to_read;   // to_read 버튼
-    Button button_reading;   // reading 버튼
-    Button button_read;      // read 버튼
-    EditText editText_search;// 검색 텍스트
-    Spinner spinner_order;   // 정렬 순서
-    ImageView imageView_mic; // 마이크 아이콘
+    Button button_to_read;
+    Button button_reading;
+    Button button_read;
+    EditText editText_search;
+    Spinner spinner_order;
+    ImageView imageView_mic;
+
 
 
     @Nullable
@@ -47,15 +53,9 @@ public class HomeFragment extends Fragment
         // 화면 생성
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // 처음 childFragment 지정
+        //처음 childFragment 지정
         getChildFragmentManager().beginTransaction().add(R.id.home_frame, new ToReadFragment()).commit();
 
-        return view;
-    }//end onCreateView
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         // 뷰 요소 초기화
         button_to_read = view.findViewById(R.id.btn_to_read);
         button_reading =  view.findViewById(R.id.btn_reading);
@@ -64,6 +64,17 @@ public class HomeFragment extends Fragment
         spinner_order = view.findViewById(R.id.spinner_order);
         imageView_mic = view.findViewById(R.id.mic);
 
+
+        return view;
+    }//end onCreateView
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+        // 각각의 버튼을 클릭하면 해당하는 리스트를 보여줄 수 있도록
         // to_read 클릭 이벤트
         button_to_read.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +82,7 @@ public class HomeFragment extends Fragment
                 getChildFragmentManager().beginTransaction().replace(R.id.home_frame, new ToReadFragment()).commit();
             }
         });
+
 
         // reading 클릭 이벤트
         button_reading.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +97,18 @@ public class HomeFragment extends Fragment
             @Override
             public void onClick(View view) {
                 getChildFragmentManager().beginTransaction().replace(R.id.home_frame, new ReadFragment()).commit();
+
             }
         });
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+
     }
 }
