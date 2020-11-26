@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,9 +47,13 @@ public class CreateBookInfoActivity extends AppCompatActivity {
     // 리스너 선언
     View.OnClickListener click;
 
+    // 리사이클러뷰 어댑터 선언
+    ToReadBookAdapter adapter;
+
     // 인텐트 requestCode 상수
     final int TAKE_PICTURE = 1000;
     final int OPEN_GALLERY = 1001;
+
 
     Intent intent;
 
@@ -88,6 +94,22 @@ public class CreateBookInfoActivity extends AppCompatActivity {
 
                     case R.id.save:
                         // save 클릭했을 때 수행할 동작
+
+                        // 임시
+                        Book book = new Book();
+
+                        book.setImg(imageView_img_book.getDrawable());
+                        book.setTitle(editText_title.getText().toString());
+                        book.setWriter(editText_writer.getText().toString());
+                        book.setPublisher(editText_publisher.getText().toString());
+                        book.setPublishDate(editText_publish_date.getText().toString());
+                        book.setInsertDate("2020.11.12");
+
+                        adapter = new ToReadBookAdapter();
+                        adapter.addItem(book);
+
+                        finish();
+
                         break;
 
                     case R.id.add_photo:

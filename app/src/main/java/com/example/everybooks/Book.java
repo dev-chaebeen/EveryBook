@@ -5,6 +5,9 @@ import android.graphics.drawable.Drawable;
 // 책 정보 객체 생성하는 클래스
 public class Book
 {
+    // 일반 생성자
+    public Book(){}
+
     // 리사이클러뷰 생성자
     /*
     public Book(int bookId, String title, String insertDate)
@@ -39,6 +42,7 @@ public class Book
 
     private int pages;          // 페이지수
     private int time;           // 기록한 시간
+    private int starNum;
     
 
     // getter / setter
@@ -120,5 +124,37 @@ public class Book
 
     public void setTime(int time) {
         this.time = time;
+    }
+
+    public int getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
+    }
+
+    public String getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(String publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public int getStarNum() {
+        return starNum;
+    }
+
+    public void setStarNum(int starNum) {
+        this.starNum = starNum;
     }
 }

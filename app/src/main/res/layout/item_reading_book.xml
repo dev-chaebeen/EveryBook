@@ -17,7 +17,6 @@
             android:id="@+id/img"
             android:layout_width="80dp"
             android:layout_height="100dp"
-            android:background="@drawable/book_fiftypeople"
             android:scaleType="centerInside"
             android:layout_gravity="center"/>
 
@@ -32,7 +31,6 @@
             android:layout_gravity="center"
             />
         <TextView
-            android:id="@+id/sub_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="시작일"

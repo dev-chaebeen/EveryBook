@@ -20,7 +20,6 @@
             android:layout_width="80dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:background="@drawable/book_fiftypeople"
             android:scaleType="centerInside" />
 
         <!--제목-->
@@ -36,7 +35,6 @@
 
         <!-- 등록일 -->
         <TextView
-            android:id="@+id/sub_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

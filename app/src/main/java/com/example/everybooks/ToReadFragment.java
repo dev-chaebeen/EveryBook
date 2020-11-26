@@ -42,22 +42,7 @@ public class ToReadFragment extends Fragment
         // 화면 생성
         view = inflater.inflate(R.layout.fragment_to_read, container, false);
 
-        // 리사이클러뷰 생성
-        recyclerView = (RecyclerView) view.findViewById(R.id.to_read_book_list);
 
-        // 임시로 리스트에 데이터 넣기
-        ArrayList<Book> bookList = new ArrayList<>();
-
-        bookList.add(new Book("읽을책1","2020.11.26"));
-        bookList.add(new Book("읽을책2","2020.11.27"));
-        bookList.add(new Book("읽을책3","2020.11.28"));
-        bookList.add(new Book("읽을책4","2020.11.29"));
-
-        recyclerView.setHasFixedSize(true);
-        adapter = new ToReadBookAdapter(bookList);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-
-        recyclerView.setAdapter(adapter);
 
         return view;
 
@@ -96,5 +81,29 @@ public class ToReadFragment extends Fragment
 
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        showItemList();
+    }
+
+    public void showItemList()
+    {
+        // 리사이클러뷰 생성
+        recyclerView = (RecyclerView) view.findViewById(R.id.to_read_book_list);
+
+        // 임시로 리스트에 데이터 넣기
+        /*
+        ToReadBookAdapter.toReadBookList.add(new Book("읽을책1","2020.11.26"));
+        ToReadBookAdapter.toReadBookList.add(new Book("읽을책2","2020.11.27"));
+        ToReadBookAdapter.toReadBookList.add(new Book("읽을책3","2020.11.28"));
+        */
+
+        recyclerView.setHasFixedSize(true);
+        adapter = new ToReadBookAdapter(ToReadBookAdapter.toReadBookList);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+
+        recyclerView.setAdapter(adapter);
+    }
 
 }

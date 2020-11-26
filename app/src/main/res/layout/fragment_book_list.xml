@@ -10,7 +10,7 @@
 
     <!--리사이클러뷰-->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/to_read_book_list"
+        android:id="@+id/read_book_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

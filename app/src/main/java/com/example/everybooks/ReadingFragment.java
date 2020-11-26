@@ -38,7 +38,7 @@ public class ReadingFragment extends Fragment
         view = inflater.inflate(R.layout.fragment_reading, container, false);
 
         // 리사이클러뷰 생성
-        recyclerView = (RecyclerView) view.findViewById(R.id.to_read_book_list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.reading_book_list);
 
         // 임시로 리스트에 데이터 넣기
         ArrayList<Book> bookList = new ArrayList<>();

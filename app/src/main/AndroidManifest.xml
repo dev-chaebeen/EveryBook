@@ -42,17 +42,22 @@
         <activity android:name=".TimeRecordActivity"/>
 
         <!--책 정보 수정-->
-        <activity android:name=".EditBookInfoActivity" />
+        <activity android:name=".EditBookInfoActivity"
+            android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".EditMemoActivity"/>
+        <activity android:name=".EditMemoActivity"
+            android:windowSoftInputMode="stateHidden" />
 
         <!--책 정보-->
         <activity android:name=".ReadingBookInfoActivity"/>
         <activity android:name=".ReadBookInfoActivity"/>
 
-        <activity android:name=".CreateMemoActivity"/>
+        <activity android:name=".CreateMemoActivity"
+            android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".CreateBookInfoActivity"/>
+        <activity android:name=".CreateBookInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            />
         <activity android:name=".EditNotificationActivity"/>
 
         <provider
