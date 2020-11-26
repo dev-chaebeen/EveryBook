@@ -8,20 +8,29 @@
     android:orientation="vertical"
     >
 
+    <!--리사이클러뷰-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/to_read_book_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <!-- 책리스트 container -->
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <!--
+    &lt;!&ndash; 책리스트 container &ndash;&gt;
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         >
 
-        <!--스크롤뷰 테스트-->
+        &lt;!&ndash;스크롤뷰 테스트&ndash;&gt;
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!--스크롤뷰 테스트 : 스크롤 뷰는 하나의 자식만을 가진다-->
+            &lt;!&ndash;스크롤뷰 테스트 : 스크롤 뷰는 하나의 자식만을 가진다&ndash;&gt;
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -30,7 +39,7 @@
 
                 android:orientation="vertical"
                 >
-                <!-- 1행 -->
+                &lt;!&ndash; 1행 &ndash;&gt;
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -38,7 +47,7 @@
                     android:weightSum="9"
                     >
 
-                    <!-- 화면전환, 데이터 전달 테스트 -->
+                    &lt;!&ndash; 화면전환, 데이터 전달 테스트 &ndash;&gt;
                     <LinearLayout
                         android:id="@+id/reading_book"
                         android:layout_width="wrap_content"
@@ -51,7 +60,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:id="@+id/img"
                             android:layout_width="80dp"
@@ -60,7 +69,7 @@
                             android:scaleType="centerInside"
                             android:layout_gravity="center"/>
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:id="@+id/title"
                             android:layout_width="wrap_content"
@@ -71,7 +80,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--시작일-->
+                        &lt;!&ndash;시작일&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -80,7 +89,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:id="@+id/start_date"
                             android:layout_width="wrap_content"
@@ -102,7 +111,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -111,7 +120,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -121,7 +130,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -130,7 +139,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -151,7 +160,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -159,7 +168,7 @@
                             android:scaleType="centerInside"
                             android:layout_gravity="center"/>
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -169,7 +178,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -178,7 +187,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -188,9 +197,9 @@
                             />
                     </LinearLayout>
 
-                </LinearLayout><!--2행 끝 -->
+                </LinearLayout>&lt;!&ndash;2행 끝 &ndash;&gt;
 
-                <!-- 2행 -->
+                &lt;!&ndash; 2행 &ndash;&gt;
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -209,7 +218,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -217,7 +226,7 @@
                             android:scaleType="centerInside"
                             android:layout_gravity="center"/>
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -227,7 +236,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -236,7 +245,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -257,7 +266,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -266,7 +275,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -276,7 +285,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -285,7 +294,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -306,7 +315,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -314,7 +323,7 @@
                             android:scaleType="centerInside"
                             android:layout_gravity="center"/>
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -324,7 +333,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -333,7 +342,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -343,9 +352,9 @@
                             />
                     </LinearLayout>
 
-                </LinearLayout><!--2행 끝 -->
+                </LinearLayout>&lt;!&ndash;2행 끝 &ndash;&gt;
 
-                <!-- 3행 -->
+                &lt;!&ndash; 3행 &ndash;&gt;
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -364,7 +373,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -372,7 +381,7 @@
                             android:scaleType="centerInside"
                             android:layout_gravity="center"/>
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -382,7 +391,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -391,7 +400,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -412,7 +421,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -421,7 +430,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -431,7 +440,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -440,7 +449,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -461,7 +470,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -469,7 +478,7 @@
                             android:scaleType="centerInside"
                             android:layout_gravity="center"/>
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -479,7 +488,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -488,7 +497,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -498,10 +507,10 @@
                             />
                     </LinearLayout>
 
-                </LinearLayout><!--3행 끝 -->
+                </LinearLayout>&lt;!&ndash;3행 끝 &ndash;&gt;
 
 
-                <!-- 4행 -->
+                &lt;!&ndash; 4행 &ndash;&gt;
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -520,7 +529,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -528,7 +537,7 @@
                             android:scaleType="centerInside"
                             android:layout_gravity="center"/>
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -538,7 +547,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -547,7 +556,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -568,7 +577,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -577,7 +586,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -587,7 +596,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--작가-->
+                        &lt;!&ndash;작가&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -596,7 +605,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -617,7 +626,7 @@
                         android:layout_weight="3"
                         >
 
-                        <!--표지-->
+                        &lt;!&ndash;표지&ndash;&gt;
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="100dp"
@@ -625,7 +634,7 @@
                             android:scaleType="centerInside"
                             android:layout_gravity="center"/>
 
-                        <!--제목-->
+                        &lt;!&ndash;제목&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -635,7 +644,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             />
-                        <!--시작일-->
+                        &lt;!&ndash;시작일&ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -644,7 +653,7 @@
                             android:layout_gravity="center"
                             />
 
-                        <!--시작일 -->
+                        &lt;!&ndash;시작일 &ndash;&gt;
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -654,11 +663,11 @@
                             />
                     </LinearLayout>
 
-                </LinearLayout><!--4행 끝 -->
+                </LinearLayout>&lt;!&ndash;4행 끝 &ndash;&gt;
 
-            </LinearLayout><!--목록-->
+            </LinearLayout>&lt;!&ndash;목록&ndash;&gt;
 
-        </ScrollView>
+        </ScrollView>-->
 
         <!--<ScrollView
             android:layout_width="match_parent"
@@ -709,5 +718,5 @@
         </LinearLayout>&lt;!&ndash;목록&ndash;&gt;
         </ScrollView>-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 </LinearLayout>

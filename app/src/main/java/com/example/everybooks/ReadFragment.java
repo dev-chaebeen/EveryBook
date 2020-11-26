@@ -36,7 +36,7 @@ public class ReadFragment extends Fragment
         // 뷰 요소 초기화
         readBook = view.findViewById(R.id.read_book);
 
-        // 책 클릭하면
+        /*// 책 클릭하면
         readBook.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -45,7 +45,7 @@ public class ReadFragment extends Fragment
 
                 startActivity(intent);
             }
-        });
+        });*/
 
 
     }

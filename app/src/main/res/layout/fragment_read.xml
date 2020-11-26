@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
 
-    <!--스크롤뷰 테스트-->
+    <!--리사이클러뷰-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/to_read_book_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+<!--
+    스크롤뷰 테스트
     <ScrollView
      xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--스크롤뷰 테스트 : 스크롤 뷰는 하나의 자식만을 가진다-->
+
+    스크롤뷰 테스트 : 스크롤 뷰는 하나의 자식만을 가진다
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +33,7 @@
 
         android:orientation="vertical"
         >
-        <!-- 1행 -->
+         1행
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,7 +41,7 @@
             android:weightSum="9"
             >
 
-            <!--화면전환 테스트-->
+            화면전환 테스트
             <LinearLayout
                 android:id="@+id/read_book"
                 android:layout_width="wrap_content"
@@ -37,7 +54,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="80dp"
@@ -46,7 +63,7 @@
                     android:scaleType="centerInside"
                     android:layout_gravity="center"/>
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -56,7 +73,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -65,7 +82,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -88,7 +105,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -97,7 +114,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -107,7 +124,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,7 +133,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -139,7 +156,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -147,7 +164,7 @@
                     android:scaleType="centerInside"
                     android:layout_gravity="center"/>
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -157,7 +174,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -166,7 +183,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -178,11 +195,11 @@
                     android:progressTint="@color/yellow" />
             </LinearLayout>
 
-        </LinearLayout><!--1행 끝 -->
+        </LinearLayout>1행 끝
 
 
 
-        <!-- 2행 -->
+         2행
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -201,7 +218,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -209,7 +226,7 @@
                     android:scaleType="centerInside"
                     android:layout_gravity="center"/>
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -219,7 +236,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -228,7 +245,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -251,7 +268,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -260,7 +277,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -270,7 +287,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -279,7 +296,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -302,7 +319,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -310,7 +327,7 @@
                     android:scaleType="centerInside"
                     android:layout_gravity="center"/>
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -320,7 +337,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -329,7 +346,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -341,10 +358,10 @@
                     android:progressTint="@color/yellow" />
             </LinearLayout>
 
-        </LinearLayout><!--2행 끝 -->
+        </LinearLayout>2행 끝
 
 
-        <!-- 3행 -->
+         3행
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -363,7 +380,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -371,7 +388,7 @@
                     android:scaleType="centerInside"
                     android:layout_gravity="center"/>
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -381,7 +398,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -390,7 +407,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -413,7 +430,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -422,7 +439,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -432,7 +449,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -441,7 +458,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -464,7 +481,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -472,7 +489,7 @@
                     android:scaleType="centerInside"
                     android:layout_gravity="center"/>
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -482,7 +499,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -491,7 +508,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -503,9 +520,9 @@
                     android:progressTint="@color/yellow" />
             </LinearLayout>
 
-        </LinearLayout><!--3행 끝 -->
+        </LinearLayout>3행 끝
 
-        <!-- 4행 -->
+         4행
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -524,7 +541,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -532,7 +549,7 @@
                     android:scaleType="centerInside"
                     android:layout_gravity="center"/>
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -542,7 +559,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -551,7 +568,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -574,7 +591,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -583,7 +600,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -593,7 +610,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -602,7 +619,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -625,7 +642,7 @@
                 android:layout_weight="3"
                 >
 
-                <!--표지-->
+                표지
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -633,7 +650,7 @@
                     android:scaleType="centerInside"
                     android:layout_gravity="center"/>
 
-                <!--제목-->
+                제목
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -643,7 +660,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     />
-                <!--작가-->
+                작가
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -652,7 +669,7 @@
                     android:layout_gravity="center"
                     />
 
-                <!--별점-->
+                별점
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -664,11 +681,11 @@
                     android:progressTint="@color/yellow" />
             </LinearLayout>
 
-            </LinearLayout><!--4행 끝 -->
+            </LinearLayout>4행 끝
 
 
         </LinearLayout>
 
-    </ScrollView><!--스크롤뷰 테스트-->
+    </ScrollView>스크롤뷰 테스트-->
 
-
+</LinearLayout>

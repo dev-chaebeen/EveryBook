@@ -12,6 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 // 읽고 있는 책 목록
 public class ReadingFragment extends Fragment
@@ -19,10 +23,12 @@ public class ReadingFragment extends Fragment
     private View view;
 
     //  뷰 요소 선언
-    LinearLayout linearLayout_reading_book;
-    ImageView imageView_img;        // 책 표지
-    TextView textView_title;        // 책 제목
-    TextView textView_start_date;   // 독서 시작일
+    ImageView imageView_img;
+    TextView textView_title;
+    TextView textView_start_date;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
 
     @Nullable
     @Override
@@ -31,6 +37,22 @@ public class ReadingFragment extends Fragment
         // 화면 생성
         view = inflater.inflate(R.layout.fragment_reading, container, false);
 
+        // 리사이클러뷰 생성
+        recyclerView = (RecyclerView) view.findViewById(R.id.to_read_book_list);
+
+        // 임시로 리스트에 데이터 넣기
+        ArrayList<Book> bookList = new ArrayList<>();
+
+        bookList.add(new Book("읽는책1","2020.11.26"));
+        bookList.add(new Book("읽는책2","2020.11.27"));
+        bookList.add(new Book("읽는책3","2020.11.28"));
+        bookList.add(new Book("읽는책4","2020.11.29"));
+
+        recyclerView.setHasFixedSize(true);
+        adapter = new ReadingBookAdapter(bookList);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        recyclerView.setAdapter(adapter);
+
         return view;
 
     }// end onCreate();
@@ -38,14 +60,14 @@ public class ReadingFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         // 뷰 요소 초기화
-        linearLayout_reading_book = view.findViewById(R.id.reading_book);
         imageView_img = view.findViewById(R.id.img);
         textView_title = view.findViewById(R.id.title);
         textView_start_date = view.findViewById(R.id.start_date);
 
         // 책 클릭하면
-        linearLayout_reading_book.setOnClickListener(new View.OnClickListener() {
+/*        linearLayout_reading_book.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 인텐트 생성해서
@@ -59,6 +81,6 @@ public class ReadingFragment extends Fragment
                 startActivity(intent);
 
             }
-        });
+        });*/
     }
 }

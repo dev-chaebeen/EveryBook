@@ -11,18 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.BookViewHolder> {
+public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.BookViewHolder> {
 
     // todo static 수정하기
-    static ArrayList<Book> toReadBookList = null ;
+    static ArrayList<Book> ReadingBookList = null ;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView_img;
         TextView textView_title;
         TextView textView_sub_title;
-        TextView textView_insert_date;
-        //RatingBar ratingBar_rate;  따로 해야 하나 ?
+        TextView textView_start_date;
 
         // 생성자
         BookViewHolder(View itemView) {
@@ -32,7 +31,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
             imageView_img = itemView.findViewById(R.id.img);
             textView_title = itemView.findViewById(R.id.title);
             textView_sub_title = itemView.findViewById(R.id.sub_title);
-            textView_insert_date = itemView.findViewById(R.id.insert_date);
+            textView_start_date = itemView.findViewById(R.id.insert_date);
 
             // 각각의 아이템을 클릭하면 책 정보 수정 페이지로 화면 전환한다.
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -41,7 +40,9 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
 
-                        Intent intent = new Intent(v.getContext(), EditBookInfoActivity.class);
+                        Intent intent = new Intent(v.getContext(), ReadingBookInfoActivity.class);
+
+                        // todo 데이터 담고 이동하도록
                         v.getContext().startActivity(intent);
 
                     }
@@ -54,13 +55,13 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     }
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    ToReadBookAdapter(ArrayList<Book> toReadBookList) {
-        this.toReadBookList = toReadBookList;
+    ReadingBookAdapter(ArrayList<Book> ReadingBookList) {
+        this.ReadingBookList = ReadingBookList;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
-    public ToReadBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReadingBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
        /* Context context = parent.getContext() ;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
@@ -74,19 +75,19 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
-    public void onBindViewHolder(ToReadBookAdapter.BookViewHolder holder, int position) {
-        Book book = toReadBookList.get(position);
+    public void onBindViewHolder(ReadingBookAdapter.BookViewHolder holder, int position) {
+        Book book = ReadingBookList.get(position);
 
         // holder.imageView_img.set...
         holder.textView_title.setText(book.getTitle());
-        holder.textView_sub_title.setText("등록일");   // 읽을 책 : 등록일 / 읽는 책 : 시작일 / 읽은 책 : 작가이름
-        holder.textView_insert_date.setText(book.getInsertDate());
+        holder.textView_sub_title.setText("시작일");   // 읽을 책 : 등록일 / 읽는 책 : 시작일 / 읽은 책 : 작가이름
+        holder.textView_start_date.setText(book.getInsertDate());
 
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        return toReadBookList.size() ;
+        return ReadingBookList.size() ;
     }
 }
