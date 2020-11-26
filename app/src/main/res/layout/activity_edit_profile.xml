@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:orientation="vertical"
+    ><!--  tools:context=".BookInfo"-->
+
+    <!-- 회색 바 -->
+    <LinearLayout
+        android:id="@+id/bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/grey"
+        android:orientation="horizontal"
+        >
+
+        <!--Edit ProfileLogoutFragment -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+
+            android:text="Edit Profile"
+            android:textSize="20dp"
+            />
+
+    </LinearLayout>
+
+    <!--회색바 아래 콘텐츠 공간-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+
+        >
+
+        <!--User Info-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="User Info"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp" />
+
+
+        <!-- Nickname -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            >
+            <!--Nickname-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="Nickname"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:layout_weight="1" />
+
+            <!-- 유저 닉네임 -->
+            <TextView
+                android:id="@+id/user_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="채빈"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            />
+
+        <!-- Email -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            >
+            <!--Email-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="Email"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:layout_weight="1" />
+
+            <!-- 유저 Email -->
+            <TextView
+                android:id="@+id/user_email"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="chxxbeen@gmail.com"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey" />
+
+
+        <!-- Edit -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="Edit Info"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp" />
+
+        <!-- Photo -->
+        <LinearLayout
+            android:id="@+id/edit_photo"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            >
+            <!--Photo-->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:text="Photo"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey" />
+
+
+        <!-- Nickname -->
+        <LinearLayout
+            android:id="@+id/edit_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            >
+            <!--Nickname-->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:text="Nickname"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:layout_weight="1"
+                tools:ignore="RtlHardcoded" />
+
+        </LinearLayout>
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey" />
+
+        <!-- Withdraw -->
+        <LinearLayout
+            android:id="@+id/withdraw"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            >
+            <!--Withdraw-->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:text="Withdraw"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey" />
+
+
+    </LinearLayout><!--회색바 아래-->
+</LinearLayout>

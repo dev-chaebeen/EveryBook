@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    ><!--    tools:context=".BookInfo"-->
+
+    <!-- 회색 바 -->
+    <LinearLayout
+        android:id="@+id/bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/grey"
+        android:orientation="horizontal"
+        >
+
+      <!--  &lt;!&ndash; 화살표 &ndash;&gt;
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:src="@drawable/ic_back"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+
+            android:layout_marginStart="10dp" />-->
+
+        <!-- Notification -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="150dp"
+            android:text="Notification"
+            android:textSize="20sp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Add -->
+        <TextView
+            android:id="@+id/add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:gravity="right"
+            android:text="Add"
+            android:textSize="20sp"
+            android:layout_marginRight="20dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout><!--end 회색바-->
+
+
+    <!--회색바 아래 콘텐츠 공간-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--목록 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <!-- 하나 -->
+                <LinearLayout
+                    android:id="@+id/notification"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="20dp"
+                    >
+
+                    <!-- 시간이랑 요일 -->
+                    <LinearLayout
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <!--시간 -->
+                        <TextView
+                            android:id="@+id/time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:text="19:30"
+                            android:textSize="30sp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <!--요일 -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:text="월"
+                                android:textSize="16sp"
+                                android:layout_marginRight="5dp"
+                                android:textColor="@color/dark_green"
+                                android:textStyle="bold"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:text="화"
+                                android:textSize="16sp"
+                                android:layout_marginRight="5dp"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:text="수"
+                                android:textSize="16sp"
+                                android:layout_marginRight="5dp"
+                                android:textColor="@color/dark_green"
+                                android:textStyle="bold"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:text="목"
+                                android:textSize="16sp"
+                                android:layout_marginRight="5dp"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:text="금"
+                                android:textSize="16sp"
+                                android:layout_marginRight="5dp"
+                                android:textColor="@color/dark_green"
+                                android:textStyle="bold"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:text="토"
+                                android:textSize="16sp"
+                                android:layout_marginRight="5dp"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:text="일"
+                                android:textSize="16sp"
+                                android:layout_marginRight="5dp"
+                                />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/notification_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="문구문구 "
+                            android:textSize="16sp"/>
+
+                </LinearLayout><!--시간, 요일, 문구 -->
+
+                    <Switch
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:gravity="center" />
+
+                </LinearLayout><!--하나-->
+
+                <!-- 선 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_grey"
+                    android:layout_marginTop="5dp" />
+
+            </LinearLayout><!--목록-->
+
+        </ScrollView>
+
+    </LinearLayout><!--end 콘텐츠 공간-->
+</LinearLayout>

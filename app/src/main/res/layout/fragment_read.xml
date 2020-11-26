@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <!--스크롤뷰 테스트-->
+    <ScrollView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--스크롤뷰 테스트 : 스크롤 뷰는 하나의 자식만을 가진다-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+
+        android:orientation="vertical"
+        >
+        <!-- 1행 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="9"
+            >
+
+            <!--화면전환 테스트-->
+            <LinearLayout
+                android:id="@+id/read_book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"/>
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"
+                    />
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"/>
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+        </LinearLayout><!--1행 끝 -->
+
+
+
+        <!-- 2행 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="9"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"/>
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"
+                    />
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"/>
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+        </LinearLayout><!--2행 끝 -->
+
+
+        <!-- 3행 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="9"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"/>
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"
+                    />
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"/>
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+        </LinearLayout><!--3행 끝 -->
+
+        <!-- 4행 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="9"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"/>
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"
+                    />
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                >
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/book_fiftypeople"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"/>
+
+                <!--제목-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="피프티피플"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    />
+                <!--작가-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정세랑"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    />
+
+                <!--별점-->
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:rating="3"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_gravity="center"
+                    android:progressTint="@color/yellow" />
+            </LinearLayout>
+
+            </LinearLayout><!--4행 끝 -->
+
+
+        </LinearLayout>
+
+    </ScrollView><!--스크롤뷰 테스트-->
+
+

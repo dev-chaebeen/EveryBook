@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".BookInfo"
+    android:orientation="vertical"
+    >
+
+    <!-- 회색 바 -->
+    <LinearLayout
+        android:id="@+id/bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/grey"
+        android:orientation="horizontal"
+        >
+
+       <!-- &lt;!&ndash; 화살표 &ndash;&gt;
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:src="@drawable/ic_back"
+
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+
+            />-->
+
+        <!-- Calendar -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Calendar"
+            android:textSize="20sp"
+          />
+
+
+    </LinearLayout>
+
+
+
+    <!--회색바 아래 콘텐츠 공간-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+        <!-- 캘린더 -->
+        <CalendarView
+          android:layout_width="300dp"
+          android:layout_height="300dp"
+          android:layout_gravity="center"
+          >
+        </CalendarView>
+
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+        />
+
+        <!--Book List-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Book List"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            >
+        </TextView>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <!--그 날 읽은 책 목록 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <!--데이터 전달 테스트-->
+            <!--한 칸-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/memo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:backgroundTint="@color/grey"
+                app:cardCornerRadius="15dp">
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="left|center"
+
+                    android:background="@drawable/book_fiftypeople"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!--메모-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="85dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="5dp"
+
+                        android:gravity="left"
+                        android:text=" 피프티피플 "
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/memo_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text=" 메모메모 "
+                        android:textSize="10sp"
+                        />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView><!-- 한 칸-->
+
+            <!--한 칸-->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:backgroundTint="@color/grey"
+                app:cardCornerRadius="15dp">
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="left|center"
+
+                    android:background="@drawable/book_fiftypeople"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!--책 제목/작가/줄거리-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="85dp"
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="5dp"
+
+
+                        android:gravity="left"
+                        android:text=" 피프티피플 "
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:gravity="left"
+                        android:text=" 정세랑 "
+                        android:textSize="12sp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text=" 줄거리 "
+                        android:textSize="10sp"
+                        />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView><!-- 한 칸-->
+            <!--한 칸-->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:backgroundTint="@color/grey"
+                app:cardCornerRadius="15dp">
+
+                <!--표지-->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="left|center"
+
+                    android:background="@drawable/book_fiftypeople"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!--책 제목/작가/줄거리-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="85dp"
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="5dp"
+
+
+                        android:gravity="left"
+                        android:text=" 피프티피플 "
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:gravity="left"
+                        android:text=" 정세랑 "
+                        android:textSize="12sp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text=" 줄거리 "
+                        android:textSize="10sp"
+                        />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView><!-- 한 칸-->
+
+
+        </LinearLayout><!-- 목록-->
+
+        </ScrollView>
+
+
+    </LinearLayout><!--회색바 아래-->
+
+
+</LinearLayout>

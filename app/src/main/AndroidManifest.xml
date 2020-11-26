@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.everybooks">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EveryBooks">
+
+
+
+        <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".MainActivity"/>
+
+        <!--etc 메뉴-->
+        <activity android:name=".NotificationActivity" />
+        <activity android:name=".SelectBookActivity" />
+        <activity android:name=".CalendarActivity"/>
+        <activity android:name=".SearchVideoActivity" />
+        <activity android:name=".TranslateActivity"/>
+        
+        <!--profile 메뉴-->
+        <activity android:name=".EditProfileActivity"/>
+
+        <!--비밀번호 찾기, 가입하기-->
+        <activity android:name=".FindPasswordActivity"/>
+        <activity android:name=".SignUpActivity"/>
+
+        <!-- 알림 추가하기 -->
+        <activity android:name=".AddNotificationActivity"/>
+
+        <!--시간 재기-->
+        <activity android:name=".TimeRecordActivity"/>
+
+        <!--책 정보 수정-->
+        <activity android:name=".EditBookInfoActivity" />
+
+        <activity android:name=".EditMemoActivity"/>
+
+        <!--책 정보-->
+        <activity android:name=".ReadingBookInfoActivity"/>
+        <activity android:name=".ReadBookInfoActivity"/>
+
+        <activity android:name=".CreateMemoActivity"/>
+
+        <activity android:name=".CreateBookInfoActivity"/>
+        <activity android:name=".EditNotificationActivity"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.everybooks"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+    <uses-permission android:name="android.permission.CAMERA" /><!--카메라 권한-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /><!--읽기 권한-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /><!--쓰기 권한-->
+    <uses-feature android:name="android.hardware.camera" android:required="true"/><!--카메라 기능 사용-->
+
+</manifest>

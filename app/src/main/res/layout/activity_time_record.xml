@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".BookInfo"
+    android:orientation="vertical"
+    >
+
+    <!-- 회색 바 -->
+    <LinearLayout
+        android:id="@+id/bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/grey"
+        android:orientation="horizontal"
+        >
+
+        <!-- Time Record -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="150dp"
+
+            android:text="Time Record"
+            android:textSize="20sp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Save -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:gravity="right"
+            android:text="Save"
+            android:textSize="20sp"
+            android:layout_marginRight="20dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+
+    <!--회색바 아래 콘텐츠 공간-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+        <!--책 제목-->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="피프티피플"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            >
+        </TextView>
+
+        <!--책 이미지 -->
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@null"
+            android:src="@drawable/book_fiftypeople"
+            android:layout_gravity="center"
+
+            />
+
+        <!--책 정보-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            >
+            <!-- 작가 이름 -->
+            <TextView
+                android:id="@+id/writer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="right"
+                android:text="정세랑"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginRight="10dp"
+                >
+            </TextView>
+
+            <!--출판사 이름-->
+            <TextView
+                android:id="@+id/publisher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="창비"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginRight="10dp"
+                >
+            </TextView>
+
+            <!--출간연도-->
+            <TextView
+                android:id="@+id/publish_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+
+                android:text="2016"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                >
+            </TextView>
+
+        </LinearLayout><!-- end 책 정보(작가/출판사/출간연도) -->
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            />
+
+        <!--독서 시간-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="독서 시간"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                >
+            </TextView>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:textSize="40dp"
+            android:text="08:22:34"
+
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/btn_grey"
+
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            >
+        </TextView>
+
+
+        <!-- 버튼 2개 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+
+            <!-- START 버튼-->
+            <Button
+                android:id="@+id/btn_start"
+                android:layout_width="180dp"
+                android:layout_height="60dp"
+                android:text="START"
+                android:textSize="16dp"
+                android:layout_marginRight="10dp"
+
+                />
+
+            <!--STOP 버튼-->
+            <Button
+                android:id="@+id/btn_stop"
+                android:layout_width="180dp"
+                android:layout_height="60dp"
+                android:text="STOP"
+                android:textSize="16dp"
+                />
+        </LinearLayout>
+
+
+
+    </LinearLayout><!--회색바 아래-->
+
+
+</LinearLayout>

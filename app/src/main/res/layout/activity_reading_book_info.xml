@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+
+    <!-- 회색 바 -->
+    <LinearLayout
+        android:id="@+id/bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/grey"
+        >
+
+
+        <!-- Edit -->
+        <TextView
+            android:id="@+id/edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+
+            android:text="Edit"
+            android:textSize="20sp"
+            android:gravity="right"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <!--회색바 아래 콘텐츠 공간-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+        <!--책 제목-->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="피프티피플"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            >
+        </TextView>
+
+        <!--책 이미지 -->
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@null"
+            android:src="@drawable/book_fiftypeople"
+            android:layout_gravity="center"
+
+            />
+
+        <!--책 정보-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            >
+            <!-- 작가 이름 -->
+            <TextView
+                android:id="@+id/writer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="right"
+                android:text="정세랑"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginRight="10dp"
+                >
+            </TextView>
+
+            <!--출판사 이름-->
+            <TextView
+                android:id="@+id/publisher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="창비"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginRight="10dp"
+                >
+            </TextView>
+
+            <!--출간연도-->
+            <TextView
+                android:id="@+id/publish_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+
+                android:text="2016"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                >
+            </TextView>
+        </LinearLayout><!-- end 책 정보(작가/출판사/출간연도) -->
+
+        <!-- 버튼 2개 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+
+            <!--메모 버튼-->
+            <Button
+                android:id="@+id/btn_memo"
+                android:layout_width="180dp"
+                android:layout_height="50dp"
+                android:text="MEMO"
+                android:layout_marginRight="10dp"
+
+                />
+
+            <!--삭제 버튼-->
+            <Button
+                android:id="@+id/btn_delete"
+                android:layout_width="180dp"
+                android:layout_height="50dp"
+                android:text="DELETE" />
+        </LinearLayout>
+
+        <!--ReadFragment Date, ReadFragment Time-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            >
+
+            <!--Start Date-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="Start Date"
+                android:layout_weight="1"/>
+
+            <!--ReadFragment Time-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="Read Time"
+                android:layout_weight="1"
+                android:layout_marginLeft="25dp"
+                />
+
+        </LinearLayout>
+
+        <!--날짜랑 수정 아이콘, 읽은 시간 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            >
+
+            <!--Start Date-->
+            <TextView
+                android:id="@+id/start_date"
+                android:layout_width="90dp"
+                android:layout_height="30dp"
+                android:gravity="left"
+                android:text="2020.11.14" />
+
+            <!--수정 아이콘-->
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@null"
+                android:layout_gravity="left"
+                android:src="@drawable/icon_create" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:text="08:11:23"
+                android:layout_marginLeft="100dp" />
+
+            <!--수정 아이콘-->
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@null"
+                android:layout_gravity="left"
+                android:src="@drawable/icon_create" />
+
+        </LinearLayout><!--읽은날짜랑 수정 아이콘-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="Memo Lists"
+            android:layout_marginBottom="10dp"
+            >
+        </TextView>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <!-- 메모목록 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+
+        <!--한 메모 -->
+            <!-- 화면전환, 데이터 전달 테스트 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/memo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardBackgroundColor="@color/grey"
+            app:cardCornerRadius="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <!-- 메모 내용 -->
+                <TextView
+                    android:id="@+id/memo_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="left"
+                    android:text="진짜 50명 나오네" />
+
+                <!--메모 남긴 날짜-->
+                <TextView
+                    android:id="@+id/memo_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:gravity="right|bottom"
+                    android:text="2020.11.14 16:20"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!--한 메모 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardBackgroundColor="@color/grey"
+            app:cardCornerRadius="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <!-- 메모 내용 -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left"
+
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/memo_date2"
+
+                    android:text="강한영 /브리타 훈겐 / 문우남 / 한승조 / 강한영 / 김혁현 / 배윤나 / 이호 / 문영린 / 조희락 / 김의진/ 서진곤 / 권나은 / 홍우섭 / 정지선 / 오정빈 / 김인지 오수지 박현지 / 공운영 / 스티브 코티앙 / 김한나 / 박이삭 / 지현 / 최대환 / 양혜련 / 남세훈 / 이설아 / 그리고 사람들 / 작가의 말"
+                    />
+
+                <!--메모 남긴 날짜-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|bottom"
+                    android:text="2020.11.10 16:20"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/memo2"
+
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+
+                    />
+
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout><!--메모 목록-->
+
+        </ScrollView>
+
+    </LinearLayout><!--회색바 아래-->
+
+</LinearLayout>

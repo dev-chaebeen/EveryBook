@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:orientation="vertical"
+    >
+
+    <!--검색창-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="10dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+
+            >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:background="@null"
+                android:src="@drawable/ic_search">
+                ></ImageView>
+
+            <EditText
+                android:id="@+id/search"
+                android:layout_width="275dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:hint="Search Book"
+                android:layout_marginLeft="10dp"
+
+                />
+
+            <ImageView
+                android:id="@+id/mic"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:background="@null"
+                android:src="@drawable/ic_mic" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/spinner_container"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+      >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Book List"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/spinner_order"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinner_order"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:entries="@array/order"
+            android:gravity="right"
+            android:layout_marginLeft="150dp"
+
+            />
+
+    </LinearLayout>
+
+    <!--읽을 책/ 읽고있는 책/ 읽은 책-->
+   <LinearLayout
+       android:id="@+id/read_tab_list"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+
+       app:layout_constraintTop_toBottomOf="@+id/spinner_container"
+       app:layout_constraintLeft_toLeftOf="parent"
+       app:layout_constraintRight_toRightOf="parent"
+
+       >
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="50dp"
+           android:weightSum="9"
+           android:orientation="horizontal"
+           tools:ignore="MissingConstraints">
+
+           <Button
+               android:id="@+id/btn_to_read"
+               android:layout_width="match_parent"
+               android:layout_height="50dp"
+               android:layout_weight="3"
+               android:text="To READ" />
+
+           <Button
+               android:id="@+id/btn_reading"
+               android:layout_width="match_parent"
+               android:layout_height="50dp"
+               android:layout_weight="3"
+               android:text="READING" />
+
+
+           <Button
+               android:id="@+id/btn_read"
+               android:layout_width="match_parent"
+               android:layout_height="50dp"
+               android:layout_weight="3"
+               android:text="READ" />
+
+       </LinearLayout>
+    </LinearLayout>
+
+    <!--프레임 레이아웃 -->
+    <FrameLayout
+        android:id="@+id/home_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    />
+</LinearLayout>
+
+
+
+
+
+

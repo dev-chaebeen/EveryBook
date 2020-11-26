@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+
+    <!-- 회색 바 -->
+    <LinearLayout
+        android:id="@+id/bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/grey"
+        android:orientation="horizontal"
+        >
+
+        <!-- Search Video -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+
+            android:text="Search Video "
+            android:textSize="20dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout><!--end 회색바-->
+
+    <!--회색바 아래 콘텐츠 공간-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+        <!--검색창-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="10dp"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                >
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_search">
+                    ></ImageView>
+
+                <EditText
+                    android:id="@+id/search"
+                    android:layout_width="275dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:hint="Search Book"
+                    android:layout_marginLeft="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+
+                    />
+
+                <ImageView
+                    android:id="@+id/mic"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_mic" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--검색 결과 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:gravity="left"
+            >
+            <TextView
+                android:id="@+id/all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="총"
+                android:textSize="16sp"
+            />
+
+            <TextView
+                android:id="@+id/search_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="344"
+                android:textSize="16sp"
+                android:layout_toRightOf="@+id/all"
+                android:layout_marginLeft="5dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="건의 검색 결과"
+                android:textSize="16sp"
+                android:layout_toRightOf="@+id/search_num"
+                />
+
+        </RelativeLayout>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--검색 결과 목록 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <!--한 칸-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/video"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/grey"
+                    app:cardCornerRadius="15dp">
+
+                    <!--썸네일-->
+                    <ImageView
+                        android:id="@+id/img"
+                        android:layout_width="120dp"
+                        android:layout_height="90dp"
+                        android:layout_gravity="left|center"
+
+                        android:background="@drawable/thumbnail"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!--제목/채널 이름/내용-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="130dp"
+                        >
+
+                        <!--제목-->
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+
+
+                            android:gravity="left"
+                            android:text="ASMR 파리의 밤 분위기2 입체음향"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <!--채널 이름-->
+                        <TextView
+                            android:id="@+id/channel"
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:gravity="left"
+                            android:text=" asmr soupe "
+                            android:textSize="12sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="지난 라따뚜이 입체음향에서 앞 부분 재즈바에서 들려오는 소리가 너무 좋았다고 길게 듣고 싶다고 하신 분들이 많으셔서 비슷한 분위기로 또 제작해 봤어요. 지난 번 재즈곡은 노래가 중간에 끊어지기 때문에 반복하기가"
+                            android:textSize="10sp"
+                            />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView><!-- 한 칸-->
+
+                <!--한 칸-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/grey"
+                    app:cardCornerRadius="15dp">
+
+                    <!--썸네일-->
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="90dp"
+                        android:layout_gravity="left|center"
+
+                        android:background="@drawable/thumbnail"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!--제목/채널 이름/내용-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="130dp"
+                        >
+
+                        <!--제목-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+
+
+                            android:gravity="left"
+                            android:text="ASMR 파리의 밤 분위기2 입체음향"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <!--채널 이름-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:gravity="left"
+                            android:text=" asmr soupe "
+                            android:textSize="12sp"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="지난 라따뚜이 입체음향에서 앞 부분 재즈바에서 들려오는 소리가 너무 좋았다고 길게 듣고 싶다고 하신 분들이 많으셔서 비슷한 분위기로 또 제작해 봤어요. 지난 번 재즈곡은 노래가 중간에 끊어지기 때문에 반복하기가"
+                            android:textSize="10sp"
+                            />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView><!-- 한 칸-->
+
+                <!--한 칸-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/grey"
+                    app:cardCornerRadius="15dp">
+
+                    <!--썸네일-->
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="90dp"
+                        android:layout_gravity="left|center"
+
+                        android:background="@drawable/thumbnail"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!--제목/채널 이름/내용-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="130dp"
+                        >
+
+                        <!--제목-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+
+
+                            android:gravity="left"
+                            android:text="ASMR 파리의 밤 분위기2 입체음향"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <!--채널 이름-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:gravity="left"
+                            android:text=" asmr soupe "
+                            android:textSize="12sp"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="지난 라따뚜이 입체음향에서 앞 부분 재즈바에서 들려오는 소리가 너무 좋았다고 길게 듣고 싶다고 하신 분들이 많으셔서 비슷한 분위기로 또 제작해 봤어요. 지난 번 재즈곡은 노래가 중간에 끊어지기 때문에 반복하기가"
+                            android:textSize="10sp"
+                            />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView><!-- 한 칸-->
+
+                <!--한 칸-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/grey"
+                    app:cardCornerRadius="15dp">
+
+                    <!--썸네일-->
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="90dp"
+                        android:layout_gravity="left|center"
+
+                        android:background="@drawable/thumbnail"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!--제목/채널 이름/내용-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="130dp"
+                        >
+
+                        <!--제목-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+
+
+                            android:gravity="left"
+                            android:text="ASMR 파리의 밤 분위기2 입체음향"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <!--채널 이름-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:gravity="left"
+                            android:text=" asmr soupe "
+                            android:textSize="12sp"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="지난 라따뚜이 입체음향에서 앞 부분 재즈바에서 들려오는 소리가 너무 좋았다고 길게 듣고 싶다고 하신 분들이 많으셔서 비슷한 분위기로 또 제작해 봤어요. 지난 번 재즈곡은 노래가 중간에 끊어지기 때문에 반복하기가"
+                            android:textSize="10sp"
+                            />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView><!-- 한 칸-->
+
+                <!--한 칸-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/grey"
+                    app:cardCornerRadius="15dp">
+
+                    <!--썸네일-->
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="90dp"
+                        android:layout_gravity="left|center"
+
+                        android:background="@drawable/thumbnail"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!--제목/채널 이름/내용-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="130dp"
+                        >
+
+                        <!--제목-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+
+
+                            android:gravity="left"
+                            android:text="ASMR 파리의 밤 분위기2 입체음향"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <!--채널 이름-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:gravity="left"
+                            android:text=" asmr soupe "
+                            android:textSize="12sp"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="지난 라따뚜이 입체음향에서 앞 부분 재즈바에서 들려오는 소리가 너무 좋았다고 길게 듣고 싶다고 하신 분들이 많으셔서 비슷한 분위기로 또 제작해 봤어요. 지난 번 재즈곡은 노래가 중간에 끊어지기 때문에 반복하기가"
+                            android:textSize="10sp"
+
+                            />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView><!-- 한 칸-->
+
+
+            </LinearLayout><!--결과 목록-->
+
+        </ScrollView>
+
+    </LinearLayout><!--end 콘텐츠 공간-->
+</LinearLayout>

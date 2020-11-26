@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+     android:layout_width="match_parent"
+    android:orientation="vertical"
+
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+    >
+
+
+    <!--ProfileLogoutFragment-->
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Profile"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:textColor="@color/green"
+
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp"
+        ></TextView>
+
+    <!--등록된 이미지 -->
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:background="@null"
+        android:layout_gravity="center"
+        android:src="@drawable/icon_insert_photo" />
+
+    <!--닉네임-->
+    <TextView
+        android:id="@+id/nickname"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="Nickname"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        >
+    </TextView>
+
+    <!--프로필 수정-->
+    <LinearLayout
+        android:id="@+id/edit_profile"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+
+        android:layout_marginTop="40dp"
+        >
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:src="@drawable/ic_person"
+            >
+        </ImageView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="left"
+            android:text="Edit Profile"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <!-- 선 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_marginTop="5dp" />
+
+
+    <!--로그아웃-->
+    <LinearLayout
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        >
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:src="@drawable/ic_login"
+            >
+        </ImageView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="left"
+            android:text="Logout"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- 선 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_marginTop="5dp" />
+
+    <!-- 소통하기 -->
+<!--
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:text="소통하기"
+        ></TextView>
+-->
+
+    <!--피드백 보내기 -->
+    <LinearLayout
+        android:id="@+id/feedback"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        >
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:src="@drawable/ic_email"
+            >
+        </ImageView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="left"
+            android:text="Feedback"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <!-- 선 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_marginTop="5dp"
+        ></View>
+
+</LinearLayout>
