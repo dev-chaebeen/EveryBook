@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,8 +43,6 @@ public class ToReadFragment extends Fragment
         // 화면 생성
         view = inflater.inflate(R.layout.fragment_to_read, container, false);
 
-
-
         return view;
 
     }
@@ -58,7 +57,6 @@ public class ToReadFragment extends Fragment
         imageView_img = view.findViewById(R.id.img);
         textView_title = view.findViewById(R.id.title);
         textView_date = view.findViewById(R.id.content);
-
 
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         View.OnClickListener click = new View.OnClickListener()
@@ -106,4 +104,11 @@ public class ToReadFragment extends Fragment
         recyclerView.setAdapter(adapter);
     }
 
+
+    private void refresh()
+    {
+        // 프래그먼트 화면으로 돌아올 때 새로고침
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
 }

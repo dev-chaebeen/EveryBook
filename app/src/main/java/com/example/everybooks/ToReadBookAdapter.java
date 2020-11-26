@@ -1,6 +1,8 @@
 package com.example.everybooks;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,14 +35,23 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
             textView_title = itemView.findViewById(R.id.title);
             textView_insert_date = itemView.findViewById(R.id.insert_date);
 
-            // 각각의 아이템을 클릭하면 책 정보 수정 페이지로 화면 전환한다.
+            // 각각의 아이템을 클릭하면 책 데이터를 가지고 책 정보 수정 페이지로 화면 전환한다.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
 
+                        Book book = getItem(position);
                         Intent intent = new Intent(v.getContext(), EditBookInfoActivity.class);
+                        //intent.putExtra("img", book.getImg());
+                        intent.putExtra("title", book.getTitle());
+                        intent.putExtra("writer", book.getWriter());
+                        intent.putExtra("publisher", book.getPublisher());
+                        intent.putExtra("publishDate", book.getPublishDate());
+                        intent.putExtra("position", position);
+
+
                         v.getContext().startActivity(intent);
 
                     }
@@ -118,6 +129,9 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
         notifyItemRemoved(position);
     }
 
-
+    // 아이템 가져오는 메소드
+    public Book getItem(int position) {
+        return toReadBookList.get(position);
+    }
 
 }

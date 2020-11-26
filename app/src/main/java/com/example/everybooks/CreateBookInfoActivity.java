@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -97,7 +98,6 @@ public class CreateBookInfoActivity extends AppCompatActivity {
 
                         // 임시
                         Book book = new Book();
-
                         book.setImg(imageView_img_book.getDrawable());
                         book.setTitle(editText_title.getText().toString());
                         book.setWriter(editText_writer.getText().toString());

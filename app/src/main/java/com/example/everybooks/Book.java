@@ -1,12 +1,17 @@
 package com.example.everybooks;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 // 책 정보 객체 생성하는 클래스
 public class Book
 {
     // 일반 생성자
-    public Book(){}
+    public Book()
+    {
+        this.bookId = tempBookId+1;
+    }
 
     // 리사이클러뷰 생성자
     /*
