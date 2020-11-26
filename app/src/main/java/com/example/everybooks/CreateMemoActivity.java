@@ -26,7 +26,7 @@ public class CreateMemoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-       /* if(MainActivity.isLogin == false)   // 로그아웃된 상태라면
+       /* if(HomeToReadActivity.isLogin == false)   // 로그아웃된 상태라면
         {
             // 안내메세지 보여주고 로그인 화면으로 전환한다.
             Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
@@ -54,10 +54,23 @@ public class CreateMemoActivity extends AppCompatActivity {
                 switch (v.getId()) {
 
                     case R.id.save:
-                        // 수정버튼 눌렀을 대
+                        // 작성 버튼 눌렀을 때
+                        // 아이템 추가한다.
+                        MemoAdapter memoAdapter = new MemoAdapter();
+                        
+                        // todo bookId, 날짜 수정하기
+                        memoAdapter.addItem(1, editText_memo_text.getText().toString(), "2020.11.23 23:33:22");
+                        memoAdapter.notifyDataSetChanged(); // 변경되었음을 어댑터에 알려준다.
+
+                        finish();
+
                         break;
 
                     case R.id.cancel:
+                        // 작성하던 내용을 지우고 이전 화면으로 돌아간다.
+                        editText_memo_text.setText("");
+                        finish();
+
                         break;
 
                 }

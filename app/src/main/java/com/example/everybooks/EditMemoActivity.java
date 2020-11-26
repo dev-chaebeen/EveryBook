@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Iterator;
+
 public class EditMemoActivity extends AppCompatActivity
 {
 
@@ -26,7 +28,7 @@ public class EditMemoActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
-       /* if(MainActivity.isLogin == false)   // 로그아웃된 상태라면
+       /* if(HomeToReadActivity.isLogin == false)   // 로그아웃된 상태라면
         {
             // 안내메세지 보여주고 로그인 화면으로 전환한다.
             Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
@@ -48,6 +50,10 @@ public class EditMemoActivity extends AppCompatActivity
         textView_title = findViewById(R.id.title);
         editText_memo_text = findViewById(R.id.memo_text);
 
+
+        // 메모 아이디 받아두기
+        int memoId = getIntent().getIntExtra("memoId", 0);
+        
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
         {
@@ -55,10 +61,25 @@ public class EditMemoActivity extends AppCompatActivity
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.save:
-                        // 저장하면
+
+                        // save를 클릭하면 인텐트로 전달받은 memoId 가진 메모 객체 memoText 만 수정한다.
+                     
+
+                        //  해당하는 아이디를 가진 메모 객체를 찾아서 메모 내용을 변경해준다
+                        Memo memo = MemoAdapter.memoList.get(memoId);
+                        memo.setMemoText(editText_memo_text.getText().toString());
+
+                        MemoAdapter memoAdapter = new MemoAdapter();
+                        memoAdapter.notifyDataSetChanged(); // 어댑터에게 메모 내용이 변경된걸 알려준다.
+
+                        finish(); // 현재 액티비티 종료
+
+
                         break;
                     case R.id.cancel:
                         // 취소하면
+                        finish();
+
                         break;
                 }
             }
@@ -76,7 +97,7 @@ public class EditMemoActivity extends AppCompatActivity
 
         // 전달받은 데이터 받기
         String title = getIntent().getStringExtra("title");
-        String memo_text = getIntent().getStringExtra("memo_text");
+        String memo_text = getIntent().getStringExtra("memoText");
 
         // 배치하기
         textView_title.setText(title);
