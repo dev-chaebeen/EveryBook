@@ -16,7 +16,7 @@ import java.util.Calendar;
 public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookViewHolder> {
 
     // todo static 수정하기
-    static ArrayList<Book> ReadBookList = new ArrayList<>() ;
+    static ArrayList<Book> readBookList = new ArrayList<>() ;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -41,9 +41,23 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
 
+                        //test
+                        Book book = getItem(position);
                         Intent intent = new Intent(v.getContext(), ReadBookInfoActivity.class);
 
                         // todo 데이터 담고 이동하도록
+                        // readTime
+                        intent.putExtra("bookId", book.getBookId());
+                        intent.putExtra("title", book.getTitle());
+                        intent.putExtra("writer", book.getWriter());
+                        intent.putExtra("publisher", book.getPublisher());
+                        intent.putExtra("publishDate", book.getPublishDate());
+                        intent.putExtra("startDate", book.getStartDate());
+                        intent.putExtra("position", position);
+
+
+                        // 책 정보수정 화면에서 어떤 책을 수정하는지 구분하기 위해서 담은 데이터
+                        intent.putExtra("state", "reading");
                         v.getContext().startActivity(intent);
 
                     }
@@ -60,7 +74,7 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
     ReadBookAdapter(ArrayList<Book> ReadBookList) {
-        this.ReadBookList = ReadBookList;
+        this.readBookList = ReadBookList;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -75,7 +89,7 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(ReadBookAdapter.BookViewHolder holder, int position) {
-        Book book = ReadBookList.get(position);
+        Book book = readBookList.get(position);
 
         // holder.imageView_img.set...
         holder.imageView_img.setImageDrawable(book.getImg());
@@ -87,7 +101,7 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        return ReadBookList.size() ;
+        return readBookList.size() ;
     }
 
     // 아이템 추가 메소드
@@ -103,19 +117,19 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
         String today = year + "." + month + "." + date;
         book.setEndDate(today);
 
-        ReadBookList.add(0,book);
+        readBookList.add(0,book);
         notifyItemInserted(0);
     }
 
     // 아이템 삭제 메소드
     public void removeItem(int position)
     {
-        ReadBookList.remove(position);
+        readBookList.remove(position);
         notifyItemRemoved(position);
     }
 
     // 아이템 가져오는 메소드
     public Book getItem(int position) {
-        return ReadBookList.get(position);
+        return readBookList.get(position);
     }
 }

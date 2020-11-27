@@ -42,7 +42,7 @@ public class ToReadFragment extends Fragment
 
         // 화면 생성
         view = inflater.inflate(R.layout.fragment_to_read, container, false);
-        showItemList();
+
         return view;
 
     }
@@ -82,11 +82,11 @@ public class ToReadFragment extends Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // test
-         showItemList();
+
+        showItemList();
     }
 
-    private void showItemList()
+    public void showItemList()
     {
         // 리사이클러뷰 생성
         recyclerView = (RecyclerView) view.findViewById(R.id.to_read_book_list);

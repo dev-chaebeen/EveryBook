@@ -40,9 +40,11 @@ public class ReadBookInfoActivity extends AppCompatActivity
 
     RatingBar ratingBar_rate;       // 별점 
 
-    CardView cardView_memo;         // 메모 
     TextView textView_memo_text;    // 메모 내용
-    TextView textView_memo_date;    // 메모 날짜 
+    TextView textView_memo_date;    // 메모 날짜
+
+    // 인텐트로 수신하는 데이터
+    int position;
 
     @Override
     protected void onStart() {
@@ -80,17 +82,12 @@ public class ReadBookInfoActivity extends AppCompatActivity
         ratingBar_rate = findViewById(R.id.rate);
 
         listView = findViewById(R.id.read_memo_list);
-        cardView_memo = findViewById(R.id.memo);
         textView_memo_text = findViewById(R.id.memo_text);
         textView_memo_date = findViewById(R.id.memo_date);
 
         // 메모 리스트뷰 어댑터 객체 생성
         memoAdapter = new MemoAdapter();
-
-        // 어댑터에 아이템 추가
-       /* memoAdapter.addItem(1, 1,"첫번째 메모입니다", "2020.11.15 12:33:44");
-        memoAdapter.addItem(1,2,"두번째 메모입니다", "2020.11.15 12:33:44");
-        memoAdapter.addItem(1, 3,"세번째 메모입니다", "2020.11.15 12:33:44");*/
+        position = getIntent().getIntExtra("position",-1);
 
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
@@ -105,25 +102,22 @@ public class ReadBookInfoActivity extends AppCompatActivity
                         break;
 
                     case R.id.btn_delete:
-                        // 삭제하고 이전 화면으로 돌아가기(현재 액티비티 finish())
+                        // 책 삭제하고 이전 화면으로 돌아가기(현재 액티비티 finish())
+                        // 책을 삭제할 때 관련된 메모도 삭제해야한다.
 
                         break;
 
                     case R.id.edit :
                         // Edit 을 클릭하면 책 정보 수정화면으로 전환한다.
                         intent = new Intent(getApplicationContext(), EditBookInfoActivity.class);
+
+                        // 데이터를 담고
+
+                        // 책 상태 구분하기 위해서 데이터를 담아간다
+                        intent.putExtra("position", position);
+                        intent.putExtra("state", "reading");
                         startActivity(intent);
                         break;
-
-                    /*
-                    case R.id.memo :
-                        // 메모를 클릭하면 책 제목과 메모 내용을 담아서 메모 편집 화면으로 전환한다.
-
-                        intent = new Intent(getApplicationContext(), EditMemoActivity.class);
-                        intent.putExtra("title", getIntent().getStringExtra("title"));
-                        intent.putExtra("memo_text", textView_memo_text.getText().toString());
-                        startActivity(intent);
-                        */
 
                 }
             }
@@ -133,7 +127,6 @@ public class ReadBookInfoActivity extends AppCompatActivity
         button_memo.setOnClickListener(click);
         button_delete.setOnClickListener(click);
         textView_edit.setOnClickListener(click);
-        //cardView_memo.setOnClickListener(click);
 
     }// onCreate()
 

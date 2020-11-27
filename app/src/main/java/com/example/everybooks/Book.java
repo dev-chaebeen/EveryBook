@@ -1,7 +1,5 @@
 package com.example.everybooks;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 // 책 정보 객체 생성하는 클래스
@@ -46,7 +44,7 @@ public class Book
     private String state;
 
     private int pages;
-    private int time;
+    private int readTime;
     private int starNum;
     
 
@@ -123,12 +121,12 @@ public class Book
         this.pages = pages;
     }
 
-    public int getTime() {
-        return time;
+    public int getReadTime() {
+        return readTime;
     }
 
-    public void setTime(int time) {
-        this.time = time;
+    public void setReadTime(int readTime) {
+        this.readTime = readTime;
     }
 
     public int getBookId() {

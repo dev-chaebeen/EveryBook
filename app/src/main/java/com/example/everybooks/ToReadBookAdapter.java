@@ -40,7 +40,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
             textView_title = itemView.findViewById(R.id.title);
             textView_insert_date = itemView.findViewById(R.id.insert_date);
 
-            // 각각의 아이템을 클릭하면 책 데이터를 가지고 책 정보 수정 페이지로 화면 전환한다.
+            // 각각의 아이템을 클릭하면 책 데이터를 가지고 책 정보수정 화면으로 전환한다.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -55,6 +55,10 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                         intent.putExtra("publisher", book.getPublisher());
                         intent.putExtra("publishDate", book.getPublishDate());
                         intent.putExtra("position", position);
+
+                        // 책 정보수정 화면에서 어떤 책을 수정하는지 구분하기 위해서 담은 데이터
+                        intent.putExtra("state", "toRead"); 
+                        
 
                         v.getContext().startActivity(intent);
 
@@ -122,11 +126,6 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
     public ToReadBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-       /* Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
-
-        View view = inflater.inflate(R.layout.item_book, parent, false) ;
-        ToReadBookAdapter.ViewHolder viewHolder = new ToReadBookAdapter.ViewHolder(view) ;*/
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_to_read_book, parent, false);
 

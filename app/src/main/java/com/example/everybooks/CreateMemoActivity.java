@@ -54,12 +54,11 @@ public class CreateMemoActivity extends AppCompatActivity {
                 switch (v.getId()) {
 
                     case R.id.save:
-                        // 작성 버튼 눌렀을 때
-                        // 아이템 추가한다.
+                        // 작성 버튼 눌렀을 때 bookId 를 수신해서 메모 리스트에 추가한다.
+                        int bookId = getIntent().getIntExtra("bookId",-1);
+
                         MemoAdapter memoAdapter = new MemoAdapter();
-                        
-                        // todo bookId, 날짜 수정하기
-                        memoAdapter.addItem(1, editText_memo_text.getText().toString(), "2020.11.23 23:33:22");
+                        memoAdapter.addItem(bookId, editText_memo_text.getText().toString());
                         memoAdapter.notifyDataSetChanged(); // 변경되었음을 어댑터에 알려준다.
 
                         finish();

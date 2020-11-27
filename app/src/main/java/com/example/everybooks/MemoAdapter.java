@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MemoAdapter extends BaseAdapter
@@ -16,15 +17,27 @@ public class MemoAdapter extends BaseAdapter
     static List<Memo> memoList = new ArrayList<>();
 
     // 데이터 추가 메소드
-    public void addItem(int bookId, String memoText, String memoDate)
+    public void addItem(int bookId, String memoText)
     {
         Memo memo = new Memo();
         memo.setBookId(bookId);
-        //memo.setMemoId(memoId);
         memo.setMemoText(memoText);
-        memo.setMemoDate(memoDate);
 
-        memoList.add(memo);
+        //현재 년도, 월, 일
+        Calendar cal = Calendar.getInstance();
+
+        int year = cal.get ( cal.YEAR );
+        int month = cal.get ( cal.MONTH ) + 1 ;
+        int date = cal.get ( cal.DATE );
+        int hour = cal.get(cal.HOUR_OF_DAY);
+        int minute = cal.get(cal.MINUTE);
+        int second = cal.get(cal.SECOND);
+
+        String today = year + "." + month + "." + date + " " + hour + ":" + minute +":" + second;
+        memo.setMemoDate(today);
+
+        memoList.add(0, memo);
+        notifyDataSetChanged();
     }
 
     @Override

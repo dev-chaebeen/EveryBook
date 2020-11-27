@@ -20,7 +20,6 @@ public class EditBookInfoActivity extends AppCompatActivity
 {
     Intent intent;
     View.OnClickListener click;
-    ToReadBookAdapter adapter;
 
     // 뷰 요소 선언
     TextView textView_edit;
@@ -31,6 +30,10 @@ public class EditBookInfoActivity extends AppCompatActivity
     EditText editText_writer;
     EditText editText_publisher;
     EditText editText_publish_date;
+
+    // 전달받는 데이터 선언
+    int position;
+    String state;
 
 
 
@@ -73,9 +76,10 @@ public class EditBookInfoActivity extends AppCompatActivity
         editText_publish_date.setText(getIntent().getStringExtra("publishDate"));
 
         // 전달받은 아이템 아이디 저장
-        int position = getIntent().getIntExtra("position",-1);
+        position = getIntent().getIntExtra("position",-1);
+        state = getIntent().getStringExtra("state");
 
-        adapter = new ToReadBookAdapter();
+
 
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
@@ -95,14 +99,44 @@ public class EditBookInfoActivity extends AppCompatActivity
                         String publisher = editText_publisher.getText().toString();
                         String publishDate = editText_publish_date.getText().toString();
 
-                        Book book = ToReadBookAdapter.toReadBookList.get(position);
+                        // 전달받은 책의 상태에 따라 다른 어댑터 이용
+                        if(state.equals("toRead"))
+                        {
+                            ToReadBookAdapter adapter = new ToReadBookAdapter();
+                            Book book = ToReadBookAdapter.toReadBookList.get(position);
 
-                        book.setTitle(title);
-                        book.setWriter(writer);
-                        book.setPublisher(publisher);
-                        book.setPublishDate(publishDate);
+                            book.setTitle(title);
+                            book.setWriter(writer);
+                            book.setPublisher(publisher);
+                            book.setPublishDate(publishDate);
 
-                        adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
+                        }
+                        else if(state.equals("reading"))
+                        {
+                            ReadingBookAdapter adapter = new ReadingBookAdapter();
+                            Book book = ReadingBookAdapter.readingBookList.get(position);
+
+                            book.setTitle(title);
+                            book.setWriter(writer);
+                            book.setPublisher(publisher);
+                            book.setPublishDate(publishDate);
+
+                            adapter.notifyDataSetChanged();
+                        }
+                        else if(state.equals("read"))
+                        {
+                            ReadBookAdapter adapter = new ReadBookAdapter();
+                            Book book = ReadBookAdapter.readBookList.get(position);
+
+                            book.setTitle(title);
+                            book.setWriter(writer);
+                            book.setPublisher(publisher);
+                            book.setPublishDate(publishDate);
+
+                            adapter.notifyDataSetChanged();
+                        }
+
 
                         intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
@@ -120,7 +154,24 @@ public class EditBookInfoActivity extends AppCompatActivity
                                     public void onClick(DialogInterface dialog, int which)
                                     {
                                         // 확인 클릭했을 때 해당 책 삭제한다.
-                                        adapter.removeItem(position);
+
+                                        // 전달받은 책의 상태에 따라 다른 어댑터 이용
+                                        if(state.equals("toRead"))
+                                        {
+                                            ToReadBookAdapter adapter = new ToReadBookAdapter();
+                                            adapter.removeItem(position);
+                                        }
+                                        else if(state.equals("reading"))
+                                        {
+                                            ReadingBookAdapter adapter = new ReadingBookAdapter();
+                                            adapter.removeItem(position);
+                                        }
+                                        else if(state.equals("read"))
+                                        {
+                                            ReadBookAdapter adapter = new ReadBookAdapter();
+                                            adapter.removeItem(position);
+                                        }
+
                                         dialog.dismiss();
 
                                         intent = new Intent(getApplicationContext(), MainActivity.class);
