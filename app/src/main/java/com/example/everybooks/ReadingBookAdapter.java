@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,9 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     // todo static 수정하기
     static ArrayList<Book> readingBookList = new ArrayList<>();
 
+    RatingBar ratingBar;
     int position;
+    Book book;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -47,7 +50,8 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                     position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
 
-                        Book book = getItem(position);
+                        //Book book = getItem(position);
+                        book = getItem(position);
                         Intent intent = new Intent(v.getContext(), ReadingBookInfoActivity.class);
 
                         // todo 데이터 담고 이동하도록
@@ -74,31 +78,27 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                 @Override
                 public boolean onLongClick(View v) {
 
-
-
-                    //
+                    ShowDialog(v);
+                    /*
                     //AlertDialog.Builder builder = new AlertDialog.Builder(ToReadBookAdapter.this);
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-
-                   /* RatingBar ratingBar = new RatingBar(v.getContext());
-                    ratingBar.setMax(5);
-                    ratingBar.setNumStars(1);
-                    ratingBar.setStepSize(1);
-                    */
 
                     Dialog dialog = new Dialog(v.getContext());
                     dialog.setContentView(R.layout.rating_dialog);
 
-                    RatingBar ratingBar = (RatingBar)dialog.findViewById(R.id.rate);
+                    //ratingBar = (RatingBar)dialog.findViewById(R.id.rate);
                     builder.setTitle(" 독서를 마칠까요? \n 별점을 입력해주세요.");
 
                     // view 는 하나의 부모 뷰에만 추가될 수 있는데 다이얼로그를 여러번 띄우면
                     // 중복으로 view 가 참조되어 에러를 일으킨다.
                     // 따라서 뷰의 참조 여부를 확인한 후 setView() 메소드를 사용한다.
                     if (ratingBar.getParent() != null)
+                    {
                         ((ViewGroup) ratingBar.getParent()).removeView(ratingBar);
+                    }
 
                     builder.setView(ratingBar);
+
 
                     builder.setPositiveButton("확인",
                         new DialogInterface.OnClickListener() {
@@ -107,7 +107,8 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                                 // 읽는 책 → 읽은 책 리스트로 이동시킨다.
                                 // 해당하는 책을 찾아서 readBookList 에 추가하고 readingBookList 에서 삭제한다.
                                 position = getAdapterPosition();
-                                Book book = getItem(position);
+                                //Book book = getItem(position);
+                                book = getItem(position);
 
                                 ReadBookAdapter readBookAdapter = new ReadBookAdapter();
                                 readBookAdapter.addItem(book);
@@ -240,4 +241,59 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     }
 
 
+    public void ShowDialog(View v)
+    {
+        final AlertDialog.Builder popDialog = new AlertDialog.Builder(v.getContext());
+
+        LinearLayout linearLayout = new LinearLayout(v.getContext());
+        final RatingBar rating = new RatingBar(v.getContext());
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        rating.setLayoutParams(lp);
+        rating.setNumStars(4);
+        rating.setStepSize(1);
+
+        //add ratingBar to linearLayout
+        linearLayout.addView(rating);
+
+        popDialog.setIcon(android.R.drawable.btn_star_big_on);
+        popDialog.setTitle("Add Rating: ");
+
+        //add linearLayout to dailog
+        popDialog.setView(linearLayout);
+
+        rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                System.out.println("Rated val:"+v);
+            }
+        });
+
+
+        // Button OK
+        popDialog.setPositiveButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        dialog.dismiss();
+                    }
+
+                })
+
+                // Button Cancel
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        popDialog.create();
+        popDialog.show();
+
+    }
 }
