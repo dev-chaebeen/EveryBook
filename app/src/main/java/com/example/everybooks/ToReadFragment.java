@@ -1,6 +1,7 @@
 package com.example.everybooks;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +95,7 @@ public class ToReadFragment extends Fragment
         recyclerView.setHasFixedSize(true);
         adapter = new ToReadBookAdapter(ToReadBookAdapter.toReadBookList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        recyclerView.addItemDecoration(new RecyclerViewDecoration(10));
 
         recyclerView.setAdapter(adapter);
     }
