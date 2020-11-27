@@ -92,9 +92,9 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
         Book book = readBookList.get(position);
 
         // holder.imageView_img.set...
-        holder.imageView_img.setImageDrawable(book.getImg());
+       // holder.imageView_img.setImageDrawable(book.getImg());
         holder.textView_title.setText(book.getTitle());
-        //holder.ratingBar_rate.setRating(book.getStarNum());
+        holder.ratingBar_rate.setRating(book.getStarNum());
 
     }
 

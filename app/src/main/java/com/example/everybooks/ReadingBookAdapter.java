@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,9 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
 
     // todo static 수정하기
     static ArrayList<Book> readingBookList = new ArrayList<>();
+
+    int position;
+
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -39,7 +43,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
 
                         Book book = getItem(position);
@@ -66,24 +70,69 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
             });
 
 
-            /*itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
 
                     //AlertDialog.Builder builder = new AlertDialog.Builder(ToReadBookAdapter.this);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    final RatingBar ratingBar = new RatingBar(v.getContext());
+                    ratingBar.setNumStars(5);
+                    ratingBar.setStepSize(1);
+                    ratingBar.setRating(1);
+
+
+                    builder.setTitle("별점을 주세요.");
+                    builder.setView(ratingBar);
+
+                    builder.setPositiveButton("확인",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which)
+                                        {
+                                            // 별점을 입력받고
+
+
+                                            // 읽는 책 → 읽은 책 리스트로 이동시킨다.
+                                            // 해당하는 책을 찾아서 readBookList 에 추가하고 readingBookList 에서 삭제한다.
+                                            position = getAdapterPosition();
+                                            Book book = getItem(position);
+
+                                            ReadBookAdapter readBookAdapter = new ReadBookAdapter();
+                                            readBookAdapter.addItem(book);
+
+                                            removeItem(position);
+
+                                            dialog.dismiss();
+
+                                        }
+                                    });
+                    builder.setNegativeButton("취소",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    // 취소 클릭했을 때
+                                    Toast.makeText(v.getContext(), "취소" ,Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    builder.show();
+                    /*
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("독서를 시작할까요?");
+                    builder.setMessage("독서를 마무리할까요?");
                     builder.setPositiveButton("확인",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which)
                                 {
-                                    // 읽을 책 → 읽는 책 리스트로 이동시킨다.
-                                    // 해당하는 책을 찾아서 readingBookList에 추가하고 toReadbookList에서 삭제한다.
+                                    // 별점을 입력받고
+
+
+                                    // 읽는 책 → 읽은 책 리스트로 이동시킨다.
+                                    // 해당하는 책을 찾아서 readBookList 에 추가하고 readingBookList 에서 삭제한다.
                                     position = getAdapterPosition();
                                     Book book = getItem(position);
 
-                                    ReadingBookAdapter readingBookAdapter = new ReadingBookAdapter();
-                                    readingBookAdapter.addItem(book);
+                                    ReadBookAdapter readBookAdapter = new ReadBookAdapter();
+                                    readBookAdapter.addItem(book);
 
                                     removeItem(position);
 
@@ -101,11 +150,11 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                             });
 
                     builder.show();
-
+                    */
                     return true; // 롱클릭 이벤트 이후 클릭이벤트 발생 xx
 
                 }
-            });*/
+            });
 
 
         }
@@ -176,4 +225,6 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     public Book getItem(int position) {
         return readingBookList.get(position);
     }
+
+
 }
