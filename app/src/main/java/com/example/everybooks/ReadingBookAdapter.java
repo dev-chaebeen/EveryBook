@@ -82,7 +82,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                     ratingBar.setRating(1);
 
 
-                    builder.setTitle("별점을 주세요.");
+                    builder.setTitle("별점을 입력해주세요.");
                     builder.setView(ratingBar);
 
                     builder.setPositiveButton("확인",

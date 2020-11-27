@@ -121,7 +121,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                         // 책 삭제하고 이전 화면으로 돌아가기(현재 액티비티 finish())
                         // 책 삭제할 때 관련된 메모도 삭제해야한다.
                         AlertDialog.Builder builder = new AlertDialog.Builder(ReadingBookInfoActivity.this);
-                        builder.setMessage("책을 삭제하시겠습니까?.");
+                        builder.setMessage("책을 삭제하시겠습니까?\n 메모도 함께 삭제됩니다. ");
                         builder.setPositiveButton("확인",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which)

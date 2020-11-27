@@ -95,7 +95,7 @@ public class ToReadFragment extends Fragment
         recyclerView.setHasFixedSize(true);
         adapter = new ToReadBookAdapter(ToReadBookAdapter.toReadBookList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        recyclerView.addItemDecoration(new RecyclerViewDecoration(10));
+       // recyclerView.addItemDecoration(new RecyclerViewDecoration(10));
 
         recyclerView.setAdapter(adapter);
     }

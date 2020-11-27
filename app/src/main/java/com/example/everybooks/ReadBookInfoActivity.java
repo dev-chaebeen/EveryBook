@@ -103,7 +103,40 @@ public class ReadBookInfoActivity extends AppCompatActivity
 
                     case R.id.btn_delete:
                         // 책 삭제하고 이전 화면으로 돌아가기(현재 액티비티 finish())
-                        // 책을 삭제할 때 관련된 메모도 삭제해야한다.
+                        // 책 삭제할 때 관련된 메모도 삭제해야한다.
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ReadBookInfoActivity.this);
+                        builder.setMessage("책을 삭제하시겠습니까?\n 메모도 함께 삭제됩니다. ");
+                        builder.setPositiveButton("확인",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // 확인 클릭했을 때 해당 책을 삭제한다.
+                                        ReadBookAdapter adapter = new ReadBookAdapter();
+                                        adapter.removeItem(position);
+
+                                        dialog.dismiss();
+
+                                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+
+                                        finish();
+
+                                    }
+                                });
+
+                        builder.setNegativeButton("취소",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // 취소 클릭했을 때
+                                        Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
+
+                                        finish();
+                                    }
+                                });
+
+                        builder.show();
+
 
                         break;
 

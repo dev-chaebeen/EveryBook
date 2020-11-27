@@ -148,7 +148,7 @@ public class EditBookInfoActivity extends AppCompatActivity
                     case R.id.delete :
                         // delete 클릭했을 때 수행할 동작
                         AlertDialog.Builder builder = new AlertDialog.Builder(EditBookInfoActivity.this);
-                        builder.setMessage("책을 삭제하시겠습니까?.");
+                        builder.setMessage("책을 삭제하시겠습니까?");
                         builder.setPositiveButton("확인",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which)
