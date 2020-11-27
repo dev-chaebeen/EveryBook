@@ -89,6 +89,7 @@ public class EditBookInfoActivity extends AppCompatActivity
                         // todo 이미지 추가하기
 
                         // edit 클릭했을 때 입력받은 값들을 저장해서 그 값으로 수정해준다.
+
                         String title = editText_title.getText().toString();
                         String writer = editText_writer.getText().toString();
                         String publisher = editText_publisher.getText().toString();

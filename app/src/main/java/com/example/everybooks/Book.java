@@ -35,7 +35,7 @@ public class Book
     static int tempBookId = 1;
 
     private int bookId;
-    private Drawable img;       // 표지
+    private int img;       // 표지
     private String title;       // 제목
     private String writer;      // 작가
     private String publisher;   // 출판사
@@ -51,11 +51,11 @@ public class Book
     
 
     // getter / setter
-    public Drawable getImg() {
+    public int getImg() {
         return img;
     }
 
-    public void setImg(Drawable img) {
+    public void setImg(int img) {
         this.img = img;
     }
 

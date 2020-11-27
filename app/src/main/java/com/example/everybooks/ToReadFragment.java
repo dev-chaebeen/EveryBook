@@ -83,7 +83,7 @@ public class ToReadFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // test
-       // showItemList();
+         showItemList();
     }
 
     private void showItemList()

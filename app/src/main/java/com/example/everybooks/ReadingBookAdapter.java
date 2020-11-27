@@ -30,7 +30,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
             // 뷰 객체에 대한 참조. (hold strong reference)
             imageView_img = itemView.findViewById(R.id.img);
             textView_title = itemView.findViewById(R.id.title);
-            textView_start_date = itemView.findViewById(R.id.insert_date);
+            textView_start_date = itemView.findViewById(R.id.start_date);
 
             // 각각의 아이템을 클릭하면 책 정보 수정 페이지로 화면 전환한다.
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +75,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         Book book = readingBookList.get(position);
 
         // holder.imageView_img.set...
+        holder.imageView_img.setImageResource(book.getImg());
         holder.textView_title.setText(book.getTitle());
         holder.textView_start_date.setText(book.getInsertDate());
 

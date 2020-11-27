@@ -77,15 +77,12 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                                     // 해당하는 책을 찾아서 readingBookList에 추가하고 toReadbookList에서 삭제한다.
                                     Book book = getItem(position);
 
-                                   // ReadingBookAdapter readingBookAdapter = new ReadingBookAdapter();
-                                   // readingBookAdapter.addItem(book);
+                                    ReadingBookAdapter readingBookAdapter = new ReadingBookAdapter();
+                                    readingBookAdapter.addItem(book);
 
-                                    // test
-                                    //ReadingBookAdapter.readingBookList.add(0,book);
-                                    //ReadingBookAdapter readingBookAdapter = new ReadingBookAdapter();
-                                    //readingBookAdapter.notifyItemInserted(0);
 
-                                    removeItem(position);
+
+                                    //removeItem(position);
 
                                     dialog.dismiss();
 

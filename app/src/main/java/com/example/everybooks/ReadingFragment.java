@@ -37,7 +37,6 @@ public class ReadingFragment extends Fragment
 
         // 임시로 리스트에 데이터 넣기 , 임시데이터 한번만 데이터 생성되도록 onCreate()에 위치
 
-
         return view;
 
     }// end onCreate();
@@ -82,7 +81,7 @@ public class ReadingFragment extends Fragment
         recyclerView = (RecyclerView) view.findViewById(R.id.reading_book_list);
 
         recyclerView.setHasFixedSize(true);
-        adapter = new ToReadBookAdapter(ReadingBookAdapter.readingBookList);
+        adapter = new ReadingBookAdapter(ReadingBookAdapter.readingBookList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
         recyclerView.setAdapter(adapter);
