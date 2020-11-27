@@ -64,7 +64,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     @Override
     public ReadingBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_to_read_book, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_reading_book, parent, false);
 
         return new BookViewHolder(view);
     }
@@ -75,9 +75,9 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         Book book = readingBookList.get(position);
 
         // holder.imageView_img.set...
-        holder.imageView_img.setImageResource(book.getImg());
+        holder.imageView_img.setImageDrawable(book.getImg());
         holder.textView_title.setText(book.getTitle());
-        holder.textView_start_date.setText(book.getInsertDate());
+        holder.textView_start_date.setText(book.getStartDate());
 
     }
 

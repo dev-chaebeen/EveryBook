@@ -75,14 +75,13 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                                 {
                                     // 읽을 책 → 읽는 책 리스트로 이동시킨다.
                                     // 해당하는 책을 찾아서 readingBookList에 추가하고 toReadbookList에서 삭제한다.
+                                    position = getAdapterPosition();
                                     Book book = getItem(position);
 
                                     ReadingBookAdapter readingBookAdapter = new ReadingBookAdapter();
                                     readingBookAdapter.addItem(book);
 
-
-
-                                    //removeItem(position);
+                                    removeItem(position);
 
                                     dialog.dismiss();
 

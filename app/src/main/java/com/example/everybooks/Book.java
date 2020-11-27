@@ -35,27 +35,27 @@ public class Book
     static int tempBookId = 1;
 
     private int bookId;
-    private int img;       // 표지
-    private String title;       // 제목
-    private String writer;      // 작가
-    private String publisher;   // 출판사
-    private String publishDate;// 출간일
-    private String insertDate; // 등록일
-    private String startDate;  // 독서 시작일
-    private String endDate;    // 독서 마감일
-    private String state;       // 상태 : to_read, reading, read
+    private Drawable img;
+    private String title;
+    private String writer;
+    private String publisher;
+    private String publishDate;
+    private String insertDate;
+    private String startDate;
+    private String endDate;
+    private String state;
 
-    private int pages;          // 페이지수
-    private int time;           // 기록한 시간
+    private int pages;
+    private int time;
     private int starNum;
     
 
     // getter / setter
-    public int getImg() {
+    public Drawable getImg() {
         return img;
     }
 
-    public void setImg(int img) {
+    public void setImg(Drawable img) {
         this.img = img;
     }
 

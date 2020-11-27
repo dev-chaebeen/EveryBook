@@ -66,17 +66,8 @@ public class ReadingFragment extends Fragment
 
             }
         });*/
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        showItemList();
-    }
-
-    private void showItemList()
-    {
+        // test
         // 리사이클러뷰 생성
         recyclerView = (RecyclerView) view.findViewById(R.id.reading_book_list);
 
@@ -84,6 +75,19 @@ public class ReadingFragment extends Fragment
         adapter = new ReadingBookAdapter(ReadingBookAdapter.readingBookList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        showItemList();
+
+    }
+
+    private void showItemList()
+    {
         recyclerView.setAdapter(adapter);
     }
 }
