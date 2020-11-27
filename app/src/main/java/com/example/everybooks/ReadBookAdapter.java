@@ -18,8 +18,11 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
     // todo static 수정하기
     static ArrayList<Book> readBookList = new ArrayList<>() ;
 
+    int position;
+
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
+
         ImageView imageView_img;
         TextView textView_title;
         RatingBar ratingBar_rate;
@@ -34,11 +37,11 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
             ratingBar_rate = itemView.findViewById(R.id.rate);
 
 
-            // 각각의 아이템을 클릭하면 책 정보 수정 페이지로 화면 전환한다.
+            // 각각의 아이템을 클릭하면 책 정보 페이지로 화면 전환한다.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
 
                         //test
@@ -53,11 +56,12 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
                         intent.putExtra("publisher", book.getPublisher());
                         intent.putExtra("publishDate", book.getPublishDate());
                         intent.putExtra("startDate", book.getStartDate());
+                        intent.putExtra("endDate", book.getEndDate());
                         intent.putExtra("position", position);
 
 
                         // 책 정보수정 화면에서 어떤 책을 수정하는지 구분하기 위해서 담은 데이터
-                        intent.putExtra("state", "reading");
+                        intent.putExtra("state", "read");
                         v.getContext().startActivity(intent);
 
                     }
@@ -91,11 +95,9 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
     public void onBindViewHolder(ReadBookAdapter.BookViewHolder holder, int position) {
         Book book = readBookList.get(position);
 
-        // holder.imageView_img.set...
-       // holder.imageView_img.setImageDrawable(book.getImg());
+        holder.imageView_img.setImageDrawable(book.getImg());
         holder.textView_title.setText(book.getTitle());
         holder.ratingBar_rate.setRating(book.getStarNum());
-
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

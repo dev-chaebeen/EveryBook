@@ -39,7 +39,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
             textView_title = itemView.findViewById(R.id.title);
             textView_start_date = itemView.findViewById(R.id.start_date);
 
-            // 각각의 아이템을 클릭하면 책 정보 수정 페이지로 화면 전환한다.
+            // 각각의 아이템을 클릭하면 책 정보  페이지로 화면 전환한다.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -59,7 +59,6 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                         intent.putExtra("publishDate", book.getPublishDate());
                         intent.putExtra("startDate", book.getStartDate());
                         intent.putExtra("position", position);
-
 
                         // 책 정보수정 화면에서 어떤 책을 수정하는지 구분하기 위해서 담은 데이터
                         intent.putExtra("state", "reading");
@@ -81,39 +80,36 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                     ratingBar.setStepSize(1);
                     ratingBar.setRating(1);
 
-
-                    builder.setTitle("별점을 입력해주세요.");
+                    builder.setTitle(" 독서를 마칠까요? \n 별점을 입력해주세요.");
                     builder.setView(ratingBar);
 
                     builder.setPositiveButton("확인",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which)
-                                        {
-                                            // 별점을 입력받고
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // 읽는 책 → 읽은 책 리스트로 이동시킨다.
+                                // 해당하는 책을 찾아서 readBookList 에 추가하고 readingBookList 에서 삭제한다.
+                                position = getAdapterPosition();
+                                Book book = getItem(position);
 
+                                ReadBookAdapter readBookAdapter = new ReadBookAdapter();
+                                readBookAdapter.addItem(book);
 
-                                            // 읽는 책 → 읽은 책 리스트로 이동시킨다.
-                                            // 해당하는 책을 찾아서 readBookList 에 추가하고 readingBookList 에서 삭제한다.
-                                            position = getAdapterPosition();
-                                            Book book = getItem(position);
+                                removeItem(position);
 
-                                            ReadBookAdapter readBookAdapter = new ReadBookAdapter();
-                                            readBookAdapter.addItem(book);
+                                dialog.dismiss();
 
-                                            removeItem(position);
+                            }
+                        });
 
-                                            dialog.dismiss();
-
-                                        }
-                                    });
                     builder.setNegativeButton("취소",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    // 취소 클릭했을 때
-                                    Toast.makeText(v.getContext(), "취소" ,Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // 취소 클릭했을 때
+                                Toast.makeText(v.getContext(), "취소" ,Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
                     builder.show();
                     /*

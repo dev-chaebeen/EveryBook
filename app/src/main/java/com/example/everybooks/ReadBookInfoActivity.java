@@ -25,26 +25,33 @@ public class ReadBookInfoActivity extends AppCompatActivity
     MemoAdapter memoAdapter;
 
     // 뷰 요소 선언
-    TextView textView_edit; // Edit
-    Button button_memo;     // MEMO 버튼 
-    Button button_delete;   // DELETE 버튼 
+    TextView textView_edit;
+    Button button_memo;
+    Button button_delete;
 
-    TextView textView_title;        // 책 제목
-    ImageView imageView_img;        // 책 표지
-    TextView textView_writer;       // 작가
-    TextView textView_publisher;    // 출판사
-    TextView textView_publish_date; // 출판일
-    TextView textView_start_date;   // 독서 시작일 
-    TextView textView_end_date;     // 독서 마감일 
-    TextView textView_time;         // 독서 시간 
+    TextView textView_title;
+    ImageView imageView_img;
+    TextView textView_writer;
+    TextView textView_publisher;
+    TextView textView_publish_date;
+    TextView textView_start_date;
+    TextView textView_end_date;
+    TextView textView_time;
 
-    RatingBar ratingBar_rate;       // 별점 
+    RatingBar ratingBar_rate;
 
-    TextView textView_memo_text;    // 메모 내용
-    TextView textView_memo_date;    // 메모 날짜
+    TextView textView_memo_text;
+    TextView textView_memo_date;
 
     // 인텐트로 수신하는 데이터
     int position;
+    int bookId;
+    String title;
+    String writer;
+    String publisher;
+    String publishDate;
+    String startDate;
+    String endDate;
 
     @Override
     protected void onStart() {
@@ -87,7 +94,18 @@ public class ReadBookInfoActivity extends AppCompatActivity
 
         // 메모 리스트뷰 어댑터 객체 생성
         memoAdapter = new MemoAdapter();
+
+        // 데이터 받아오기
         position = getIntent().getIntExtra("position",-1);
+        bookId = getIntent().getIntExtra("bookId", -1);
+        title = getIntent().getStringExtra("title");
+        writer = getIntent().getStringExtra("writer");
+        publisher = getIntent().getStringExtra("publisher");
+        publishDate = getIntent().getStringExtra("publishDate");
+        startDate = getIntent().getStringExtra("startDate");
+        endDate = getIntent().getStringExtra("endDate");
+
+
 
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
@@ -145,10 +163,15 @@ public class ReadBookInfoActivity extends AppCompatActivity
                         intent = new Intent(getApplicationContext(), EditBookInfoActivity.class);
 
                         // 데이터를 담고
+                        // img
+                        intent.putExtra("title", title);
+                        intent.putExtra("writer", writer);
+                        intent.putExtra("publisher", publisher);
+                        intent.putExtra("publishDate", publishDate);
 
                         // 책 상태 구분하기 위해서 데이터를 담아간다
                         intent.putExtra("position", position);
-                        intent.putExtra("state", "reading");
+                        intent.putExtra("state", "read");
                         startActivity(intent);
                         break;
 
@@ -166,6 +189,14 @@ public class ReadBookInfoActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        // 수신한 책 데이터 배치하기
+        textView_title.setText(title);
+        textView_writer.setText(writer);
+        textView_publisher.setText(publisher);
+        textView_publish_date.setText(publishDate);
+        textView_start_date.setText(startDate);
+        textView_end_date.setText(endDate);
 
         //리스트뷰에 어댑터를 붙여서 사용자에게 내용이 보이도록 한다.
         listView.setAdapter(memoAdapter);
