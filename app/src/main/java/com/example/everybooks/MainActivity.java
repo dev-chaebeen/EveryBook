@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentTransaction fragmentTransaction;
 
     Intent intent;
+    ToReadBookAdapter adapter;
 
     // fragment 뷰들
     private HomeFragment homeFragment;
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity
         profileLogoutFragment = new ProfileLogoutFragment();
         profileFragment = new ProfileFragment();
 
+        adapter = new ToReadBookAdapter();
+
         setFragment(HOME);// 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
 
 
@@ -84,6 +87,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        // 메인 액티비티가 전면에 나올때마다 새로고침한다.
+        refresh();
 
         // 하단 네비 바 아이템 클릭하면 해당하는 프래그먼트로 변경
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
@@ -124,6 +130,7 @@ public class MainActivity extends AppCompatActivity
                 // HOME 클릭하면 HOME 프래그먼트로 전환
                 fragmentTransaction.replace(R.id.main_frame, homeFragment);
                 fragmentTransaction.commit();
+
                 break;
 
             case RECORD :
@@ -189,5 +196,11 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
         toast = Toast.makeText(this, "또 기록하러 와주세요 ", Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    // 새로고침
+    public void refresh()
+    {
+        adapter.notifyDataSetChanged();
     }
 }

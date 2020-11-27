@@ -11,11 +11,12 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookViewHolder> {
 
     // todo static 수정하기
-    static ArrayList<Book> ReadBookList = null ;
+    static ArrayList<Book> ReadBookList = new ArrayList<>() ;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -54,6 +55,9 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
 
     }
 
+    // 기본 생성자
+    ReadBookAdapter(){}
+
     // 생성자에서 데이터 리스트 객체를 전달받음.
     ReadBookAdapter(ArrayList<Book> ReadBookList) {
         this.ReadBookList = ReadBookList;
@@ -62,11 +66,6 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
     public ReadBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-       /* Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
-
-        View view = inflater.inflate(R.layout.item_book, parent, false) ;
-        ToReadBookAdapter.ViewHolder viewHolder = new ToReadBookAdapter.ViewHolder(view) ;*/
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_to_read_book, parent, false);
 
@@ -90,5 +89,32 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
         return ReadBookList.size() ;
     }
 
+    // 아이템 추가 메소드
+    public void addItem(Book book)
+    {
+        //현재 년도, 월, 일
+        Calendar cal = Calendar.getInstance();
 
+        int year = cal.get ( cal.YEAR );
+        int month = cal.get ( cal.MONTH ) + 1 ;
+        int date = cal.get ( cal.DATE ) ;
+
+        String today = year + "." + month + "." + date;
+        book.setEndDate(today);
+
+        ReadBookList.add(0,book);
+        notifyItemInserted(0);
+    }
+
+    // 아이템 삭제 메소드
+    public void removeItem(int position)
+    {
+        ReadBookList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    // 아이템 가져오는 메소드
+    public Book getItem(int position) {
+        return ReadBookList.get(position);
+    }
 }

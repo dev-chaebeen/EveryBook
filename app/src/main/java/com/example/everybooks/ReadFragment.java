@@ -29,7 +29,7 @@ public class ReadFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         // 화면 생성
-        view = inflater.inflate(R.layout.fragment_book_list, container, false);
+        view = inflater.inflate(R.layout.fragment_read_book, container, false);
 
         // 리사이클러뷰 생성
         recyclerView = (RecyclerView) view.findViewById(R.id.read_book_list);

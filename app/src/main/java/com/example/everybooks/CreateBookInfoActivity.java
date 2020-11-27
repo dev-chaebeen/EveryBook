@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -103,10 +104,13 @@ public class CreateBookInfoActivity extends AppCompatActivity {
                         book.setWriter(editText_writer.getText().toString());
                         book.setPublisher(editText_publisher.getText().toString());
                         book.setPublishDate(editText_publish_date.getText().toString());
-                        book.setInsertDate("2020.11.12");
+
 
                         adapter = new ToReadBookAdapter();
                         adapter.addItem(book);
+
+                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
 
                         finish();
 

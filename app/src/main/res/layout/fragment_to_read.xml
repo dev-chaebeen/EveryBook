@@ -12,7 +12,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/to_read_book_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constrainedHeight="true">
 
     </androidx.recyclerview.widget.RecyclerView>
 

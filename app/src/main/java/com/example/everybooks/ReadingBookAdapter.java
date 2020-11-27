@@ -10,11 +10,12 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.BookViewHolder> {
 
     // todo static 수정하기
-    static ArrayList<Book> ReadingBookList = null ;
+    static ArrayList<Book> readingBookList = new ArrayList<>();
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -49,22 +50,19 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
 
         }
 
-
     }
 
+    // 기본 생성자
+    ReadingBookAdapter(){}
+
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    ReadingBookAdapter(ArrayList<Book> ReadingBookList) {
-        this.ReadingBookList = ReadingBookList;
+    ReadingBookAdapter(ArrayList<Book> readingBookList) {
+        this.readingBookList = readingBookList;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
     public ReadingBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-       /* Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
-
-        View view = inflater.inflate(R.layout.item_book, parent, false) ;
-        ToReadBookAdapter.ViewHolder viewHolder = new ToReadBookAdapter.ViewHolder(view) ;*/
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_to_read_book, parent, false);
 
@@ -74,7 +72,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(ReadingBookAdapter.BookViewHolder holder, int position) {
-        Book book = ReadingBookList.get(position);
+        Book book = readingBookList.get(position);
 
         // holder.imageView_img.set...
         holder.textView_title.setText(book.getTitle());
@@ -85,6 +83,36 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        return ReadingBookList.size() ;
+        return readingBookList.size() ;
+    }
+
+
+    // 아이템 추가 메소드
+    public void addItem(Book book)
+    {
+        //현재 년도, 월, 일
+        Calendar cal = Calendar.getInstance();
+
+        int year = cal.get ( cal.YEAR );
+        int month = cal.get ( cal.MONTH ) + 1 ;
+        int date = cal.get ( cal.DATE ) ;
+
+        String today = year + "." + month + "." + date;
+        book.setStartDate(today);
+
+        readingBookList.add(0, book);
+        notifyItemInserted(0);
+    }
+
+    // 아이템 삭제 메소드
+    public void removeItem(int position)
+    {
+        readingBookList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    // 아이템 가져오는 메소드
+    public Book getItem(int position) {
+        return readingBookList.get(position);
     }
 }

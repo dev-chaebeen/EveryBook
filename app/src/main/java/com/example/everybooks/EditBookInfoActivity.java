@@ -1,5 +1,7 @@
 package com.example.everybooks;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -101,13 +103,45 @@ public class EditBookInfoActivity extends AppCompatActivity
 
                         adapter.notifyDataSetChanged();
 
+                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+
                         finish();
+
                         break;
 
                     case R.id.delete :
                         // delete 클릭했을 때 수행할 동작
-                        adapter.removeItem(position);
-                        finish();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(EditBookInfoActivity.this);
+                        builder.setMessage("책을 삭제하시겠습니까?.");
+                        builder.setPositiveButton("확인",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // 확인 클릭했을 때 해당 책 삭제한다.
+                                        adapter.removeItem(position);
+                                        dialog.dismiss();
+
+                                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+
+                                        finish();
+
+                                    }
+                                });
+
+                        builder.setNegativeButton("취소",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // 취소 클릭했을 때
+                                        Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
+
+                                        finish();
+                                    }
+                                });
+
+                        builder.show();
 
                         break;
                 }
@@ -120,12 +154,6 @@ public class EditBookInfoActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
 
-
-
-    }
 }
