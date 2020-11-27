@@ -1,11 +1,13 @@
 package com.example.everybooks;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -22,7 +24,6 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     static ArrayList<Book> readingBookList = new ArrayList<>();
 
     int position;
-
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -50,7 +51,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                         Intent intent = new Intent(v.getContext(), ReadingBookInfoActivity.class);
 
                         // todo 데이터 담고 이동하도록
-                        //intent.putExtra("img", book.getImg());
+                        // intent.putExtra("img", book.getImg());
                         // readTime
                         intent.putExtra("bookId", book.getBookId());
                         intent.putExtra("title", book.getTitle());
@@ -73,14 +74,30 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                 @Override
                 public boolean onLongClick(View v) {
 
-                    //AlertDialog.Builder builder = new AlertDialog.Builder(ToReadBookAdapter.this);
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    final RatingBar ratingBar = new RatingBar(v.getContext());
-                    ratingBar.setNumStars(5);
-                    ratingBar.setStepSize(1);
-                    ratingBar.setRating(1);
 
+
+                    //
+                    //AlertDialog.Builder builder = new AlertDialog.Builder(ToReadBookAdapter.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+
+                   /* RatingBar ratingBar = new RatingBar(v.getContext());
+                    ratingBar.setMax(5);
+                    ratingBar.setNumStars(1);
+                    ratingBar.setStepSize(1);
+                    */
+
+                    Dialog dialog = new Dialog(v.getContext());
+                    dialog.setContentView(R.layout.rating_dialog);
+
+                    RatingBar ratingBar = (RatingBar)dialog.findViewById(R.id.rate);
                     builder.setTitle(" 독서를 마칠까요? \n 별점을 입력해주세요.");
+
+                    // view 는 하나의 부모 뷰에만 추가될 수 있는데 다이얼로그를 여러번 띄우면
+                    // 중복으로 view 가 참조되어 에러를 일으킨다.
+                    // 따라서 뷰의 참조 여부를 확인한 후 setView() 메소드를 사용한다.
+                    if (ratingBar.getParent() != null)
+                        ((ViewGroup) ratingBar.getParent()).removeView(ratingBar);
+
                     builder.setView(ratingBar);
 
                     builder.setPositiveButton("확인",

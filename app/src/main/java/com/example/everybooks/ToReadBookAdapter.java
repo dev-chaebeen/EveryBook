@@ -174,7 +174,6 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
         book.setInsertDate(today);
 
         toReadBookList.add(0,book);
-        //notifyDataSetChanged();
         notifyItemInserted(0);
     }
 

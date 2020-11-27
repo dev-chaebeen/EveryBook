@@ -4,12 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,7 +102,6 @@ public class CreateBookInfoActivity extends AppCompatActivity {
                         book.setWriter(editText_writer.getText().toString());
                         book.setPublisher(editText_publisher.getText().toString());
                         book.setPublishDate(editText_publish_date.getText().toString());
-
 
                         adapter = new ToReadBookAdapter();
                         adapter.addItem(book);

@@ -1,6 +1,7 @@
 package com.example.everybooks;
 
 import android.os.Bundle;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,28 +20,29 @@ import java.util.ArrayList;
 public class ReadingFragment extends Fragment
 {
     private View view;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
 
     //  뷰 요소 선언
     ImageView imageView_img;
     TextView textView_title;
     TextView textView_start_date;
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         // 화면 생성
         view = inflater.inflate(R.layout.fragment_reading, container, false);
 
         return view;
 
-    }// end onCreate();
+    }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
 
         // 뷰 요소 초기화
@@ -48,7 +50,6 @@ public class ReadingFragment extends Fragment
         textView_title = view.findViewById(R.id.title);
         textView_start_date = view.findViewById(R.id.start_date);
 
-        // test
         // 리사이클러뷰 생성
         recyclerView = (RecyclerView) view.findViewById(R.id.reading_book_list);
 
@@ -60,10 +61,12 @@ public class ReadingFragment extends Fragment
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
 
-        recyclerView.setAdapter(adapter);
+        // test 없어도 되는지
+        //recyclerView.setAdapter(adapter);
 
     }
 
