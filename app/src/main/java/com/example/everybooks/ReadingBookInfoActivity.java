@@ -147,7 +147,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                         // 취소 클릭했을 때
                                         Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
 
-                                        finish();
                                     }
                                 });
 

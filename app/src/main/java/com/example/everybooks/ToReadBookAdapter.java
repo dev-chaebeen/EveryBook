@@ -20,6 +20,7 @@ import java.util.Calendar;
 public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.BookViewHolder> {
 
     private int position;
+    Book book;
 
     // todo static 수정하기
     static ArrayList<Book> toReadBookList = new ArrayList<>();
@@ -47,7 +48,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                     position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
 
-                        Book book = getItem(position);
+                        book = getItem(position);
                         Intent intent = new Intent(v.getContext(), EditBookInfoActivity.class);
                         //intent.putExtra("img", book.getImg());
                         intent.putExtra("title", book.getTitle());
@@ -55,10 +56,8 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                         intent.putExtra("publisher", book.getPublisher());
                         intent.putExtra("publishDate", book.getPublishDate());
                         intent.putExtra("position", position);
+                        intent.putExtra("state", book.getState());
 
-                        // 책 정보수정 화면에서 어떤 책을 수정하는지 구분하기 위해서 담은 데이터
-                        intent.putExtra("state", "toRead"); 
-                        
 
                         v.getContext().startActivity(intent);
 
@@ -172,7 +171,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
 
         String today = year + "." + month + "." + date;
         book.setInsertDate(today);
-
+        book.setState("toRead");
         toReadBookList.add(0,book);
         notifyItemInserted(0);
     }

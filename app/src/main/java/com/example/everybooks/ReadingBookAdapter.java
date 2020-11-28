@@ -50,7 +50,6 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                     position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
 
-                        //Book book = getItem(position);
                         book = getItem(position);
                         Intent intent = new Intent(v.getContext(), ReadingBookInfoActivity.class);
 
@@ -64,9 +63,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                         intent.putExtra("publishDate", book.getPublishDate());
                         intent.putExtra("startDate", book.getStartDate());
                         intent.putExtra("position", position);
-
-                        // 책 정보수정 화면에서 어떤 책을 수정하는지 구분하기 위해서 담은 데이터
-                        intent.putExtra("state", "reading");
+                        intent.putExtra("state", book.getState());
                         v.getContext().startActivity(intent);
 
                     }
@@ -78,7 +75,8 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                 @Override
                 public boolean onLongClick(View v) {
 
-                    ShowDialog(v);
+                    position = getAdapterPosition();
+                    ShowDialog(v, position);
                     /*
                     //AlertDialog.Builder builder = new AlertDialog.Builder(ToReadBookAdapter.this);
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
@@ -223,7 +221,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
 
         String today = year + "." + month + "." + date;
         book.setStartDate(today);
-
+        book.setState("reading");
         readingBookList.add(0, book);
         notifyItemInserted(0);
     }
@@ -241,53 +239,61 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     }
 
 
-    public void ShowDialog(View v)
+    public void ShowDialog(View v, int position)
     {
         final AlertDialog.Builder popDialog = new AlertDialog.Builder(v.getContext());
 
         LinearLayout linearLayout = new LinearLayout(v.getContext());
-        final RatingBar rating = new RatingBar(v.getContext());
+        ratingBar = new RatingBar(v.getContext());
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        rating.setLayoutParams(lp);
-        rating.setNumStars(4);
-        rating.setStepSize(1);
+        ratingBar.setLayoutParams(lp);
+        ratingBar.setNumStars(5);
+        ratingBar.setStepSize(1);
 
         //add ratingBar to linearLayout
-        linearLayout.addView(rating);
+        linearLayout.addView(ratingBar);
 
-        popDialog.setIcon(android.R.drawable.btn_star_big_on);
-        popDialog.setTitle("Add Rating: ");
+        //popDialog.setIcon(android.R.drawable.btn_star_big_on);
+        popDialog.setTitle("독서를 마치겠습니까?\n별점을 입력해주세요. ");
 
         //add linearLayout to dailog
         popDialog.setView(linearLayout);
 
-        rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                System.out.println("Rated val:"+v);
+
             }
         });
 
 
         // Button OK
-        popDialog.setPositiveButton(android.R.string.ok,
+        popDialog.setPositiveButton("확인",
                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        // 해당하는 책을 찾아서 입력받은 별점을 세팅하고 읽는 책 → 읽은 책 리스트로 이동시킨다.
+                        book = getItem(position);
+                        book.setStarNum((int)ratingBar.getRating());
+                        ReadBookAdapter readBookAdapter = new ReadBookAdapter();
+                        readBookAdapter.addItem(book);
 
-
+                        removeItem(position);
                         dialog.dismiss();
                     }
 
                 })
 
                 // Button Cancel
-                .setNegativeButton("Cancel",
+                .setNegativeButton("취소",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                Toast.makeText(v.getContext(), "취소" ,Toast.LENGTH_SHORT).show();
                                 dialog.cancel();
                             }
                         });

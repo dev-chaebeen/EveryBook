@@ -19,12 +19,14 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
     static ArrayList<Book> readBookList = new ArrayList<>() ;
 
     int position;
+    Book book;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView_img;
         TextView textView_title;
+        TextView textView_writer;
         RatingBar ratingBar_rate;
 
         // 생성자
@@ -34,6 +36,7 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
             // 뷰 객체에 대한 참조. (hold strong reference)
             imageView_img = itemView.findViewById(R.id.img);
             textView_title = itemView.findViewById(R.id.title);
+            textView_writer = itemView.findViewById(R.id.writer);
             ratingBar_rate = itemView.findViewById(R.id.rate);
 
 
@@ -44,8 +47,7 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
                     position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
 
-                        //test
-                        Book book = getItem(position);
+                        book = getItem(position);
                         Intent intent = new Intent(v.getContext(), ReadBookInfoActivity.class);
 
                         // todo 데이터 담고 이동하도록
@@ -58,10 +60,8 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
                         intent.putExtra("startDate", book.getStartDate());
                         intent.putExtra("endDate", book.getEndDate());
                         intent.putExtra("position", position);
-
-
-                        // 책 정보수정 화면에서 어떤 책을 수정하는지 구분하기 위해서 담은 데이터
-                        intent.putExtra("state", "read");
+                        intent.putExtra("starNum", book.getStarNum());
+                        intent.putExtra("state", book.getState());
                         v.getContext().startActivity(intent);
 
                     }
@@ -97,6 +97,7 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
 
         holder.imageView_img.setImageDrawable(book.getImg());
         holder.textView_title.setText(book.getTitle());
+        holder.textView_writer.setText(book.getWriter());
         holder.ratingBar_rate.setRating(book.getStarNum());
     }
 
@@ -118,6 +119,7 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
 
         String today = year + "." + month + "." + date;
         book.setEndDate(today);
+        book.setState("read");
 
         readBookList.add(0,book);
         notifyItemInserted(0);

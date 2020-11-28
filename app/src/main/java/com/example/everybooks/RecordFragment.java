@@ -49,8 +49,8 @@ public class RecordFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         //  뷰 요소 초기화
-        button_memo = (Button) view.findViewById(R.id.btn_memo);
-        button_chart = (Button) view.findViewById(R.id.btn_chart);
+        button_memo =  view.findViewById(R.id.btn_memo);
+        button_chart = view.findViewById(R.id.btn_chart);
 
 
         // btn_memo 클릭 이벤트

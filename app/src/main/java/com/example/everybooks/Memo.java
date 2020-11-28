@@ -3,11 +3,11 @@ package com.example.everybooks;
 public class Memo
 {
     int bookId;
-    //int memoId;
+    int memoId;
     String memoText;
     String memoDate;
 
-   /*
+
    public int getMemoId() {
         return memoId;
     }
@@ -15,7 +15,6 @@ public class Memo
     public void setMemoId(int memoId) {
         this.memoId = memoId;
     }
-    */
 
     public int getBookId() {
         return bookId;

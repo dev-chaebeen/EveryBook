@@ -24,6 +24,11 @@ public class EditMemoActivity extends AppCompatActivity
     Intent intent;
     View.OnClickListener click;
 
+    // 인텐트로 전달받는 데이터
+    String title;
+    String memoText;
+    int memoId;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -51,9 +56,11 @@ public class EditMemoActivity extends AppCompatActivity
         editText_memo_text = findViewById(R.id.memo_text);
 
 
-        // 메모 아이디 받아두기
-        int memoId = getIntent().getIntExtra("memoId", 0);
-        
+        // 인텐트로 전달받은 데이터 수신
+        memoId = getIntent().getIntExtra("memoId", 0);
+        title = getIntent().getStringExtra("title");
+        memoText = getIntent().getStringExtra("memoText");
+
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
         {
@@ -70,7 +77,9 @@ public class EditMemoActivity extends AppCompatActivity
                         memo.setMemoText(editText_memo_text.getText().toString());
 
                         MemoAdapter memoAdapter = new MemoAdapter();
-                        memoAdapter.notifyDataSetChanged(); // 어댑터에게 메모 내용이 변경된걸 알려준다.
+                        memoAdapter.notifyDataSetChanged();
+                        AllMemoAdapter allmemoAdapter = new AllMemoAdapter();
+                        allmemoAdapter.notifyDataSetChanged();// 어댑터에게 메모 내용이 변경된걸 알려준다.
 
                         finish(); // 현재 액티비티 종료
 
@@ -95,13 +104,9 @@ public class EditMemoActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        // 전달받은 데이터 받기
-        String title = getIntent().getStringExtra("title");
-        String memo_text = getIntent().getStringExtra("memoText");
-
         // 배치하기
         textView_title.setText(title);
-        editText_memo_text.setText(memo_text);
+        editText_memo_text.setText(memoText);
 
     }// end onResume()
 }

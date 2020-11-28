@@ -12,11 +12,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class AllMemoFragment extends Fragment
 {
     Intent intent;
     View view;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
 
     // 뷰 요소 선언 
     CardView memo;
@@ -39,13 +45,24 @@ public class AllMemoFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         // 뷰 요소 초기화
-        memo = view.findViewById(R.id.memo);
+        //memo = view.findViewById(R.id.memo);
         title = view.findViewById(R.id.title);
         memo_text = view.findViewById(R.id.memo_text);
         memo_date = view.findViewById(R.id.memo_date);
 
+        // 리사이클러 뷰 생성
+        recyclerView = view.findViewById(R.id.all_memo_list);
+
+        recyclerView.setHasFixedSize(true);
+        adapter = new AllMemoAdapter(MemoAdapter.memoList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        recyclerView.setAdapter(adapter);
+
+
+
         // 한 메모를 클릭하면
-        memo.setOnClickListener(new View.OnClickListener() {
+        /*memo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -57,6 +74,21 @@ public class AllMemoFragment extends Fragment
                 intent.putExtra("memo_date", memo_date.getText().toString());   // 메모 날짜
                 startActivity(intent);
             }
-        });
+        });*/
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
+        recyclerView = view.findViewById(R.id.all_memo_list);
+
+        recyclerView.setHasFixedSize(true);
+        adapter = new AllMemoAdapter(MemoAdapter.memoList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        recyclerView.setAdapter(adapter);
+
     }
 }

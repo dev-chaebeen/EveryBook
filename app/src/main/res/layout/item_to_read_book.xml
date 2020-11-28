@@ -29,7 +29,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:text="피프티피플"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -46,7 +45,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="2020.11.16"
             android:textSize="12sp" />
     </LinearLayout>
 

@@ -27,6 +27,7 @@ public class ReadFragment extends Fragment
     // 뷰 요소 선언
     ImageView imageView_img;
     TextView textView_title;
+    TextView textView_writer;
     RatingBar ratingBar_rate;
 
     @Nullable
@@ -47,6 +48,7 @@ public class ReadFragment extends Fragment
         imageView_img = view.findViewById(R.id.img);
         textView_title = view.findViewById(R.id.title);
         ratingBar_rate = view.findViewById(R.id.rate);
+        textView_writer = view.findViewById(R.id.writer);
 
         // 리사이클러뷰 생성
         recyclerView = (RecyclerView) view.findViewById(R.id.read_book_list);

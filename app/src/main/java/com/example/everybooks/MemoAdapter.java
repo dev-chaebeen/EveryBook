@@ -14,7 +14,7 @@ import java.util.List;
 public class MemoAdapter extends BaseAdapter
 {
     // todo static 수정하기
-    static List<Memo> memoList = new ArrayList<>();
+    static ArrayList<Memo> memoList = new ArrayList<>();
 
     // 데이터 추가 메소드
     public void addItem(int bookId, String memoText)

@@ -46,12 +46,14 @@ public class ReadBookInfoActivity extends AppCompatActivity
     // 인텐트로 수신하는 데이터
     int position;
     int bookId;
+    int starNum;
     String title;
     String writer;
     String publisher;
     String publishDate;
     String startDate;
     String endDate;
+    String state;
 
     @Override
     protected void onStart() {
@@ -104,6 +106,8 @@ public class ReadBookInfoActivity extends AppCompatActivity
         publishDate = getIntent().getStringExtra("publishDate");
         startDate = getIntent().getStringExtra("startDate");
         endDate = getIntent().getStringExtra("endDate");
+        starNum = getIntent().getIntExtra("starNum",-1);
+        state = getIntent().getStringExtra("state");
 
 
 
@@ -149,7 +153,6 @@ public class ReadBookInfoActivity extends AppCompatActivity
                                         // 취소 클릭했을 때
                                         Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
 
-                                        finish();
                                     }
                                 });
 
@@ -168,10 +171,8 @@ public class ReadBookInfoActivity extends AppCompatActivity
                         intent.putExtra("writer", writer);
                         intent.putExtra("publisher", publisher);
                         intent.putExtra("publishDate", publishDate);
-
-                        // 책 상태 구분하기 위해서 데이터를 담아간다
                         intent.putExtra("position", position);
-                        intent.putExtra("state", "read");
+                        intent.putExtra("state", state);
                         startActivity(intent);
                         break;
 
@@ -197,6 +198,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
         textView_publish_date.setText(publishDate);
         textView_start_date.setText(startDate);
         textView_end_date.setText(endDate);
+        ratingBar_rate.setRating(starNum);
 
         //리스트뷰에 어댑터를 붙여서 사용자에게 내용이 보이도록 한다.
         listView.setAdapter(memoAdapter);

@@ -7,6 +7,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/all_memo_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+      />
+
+    <!--
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,8 +21,6 @@
         tools:layout_editor_absoluteY="0dp"
         >
 
-
-        <!-- 책리스트 container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -23,8 +28,8 @@
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!--메모-->
-            <!--화면 전환, 데이터 전달 테스트 -->
+            &lt;!&ndash;메모&ndash;&gt;
+            &lt;!&ndash;화면 전환, 데이터 전달 테스트 &ndash;&gt;
             <androidx.cardview.widget.CardView
                 android:id="@+id/memo"
                 android:layout_width="match_parent"
@@ -33,7 +38,7 @@
                 android:backgroundTint="@color/grey"
                 app:cardCornerRadius="15dp">
 
-                <!--표지-->
+                &lt;!&ndash;표지&ndash;&gt;
                 <ImageView
                     android:id="@+id/img"
                     android:layout_width="90dp"
@@ -46,7 +51,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!--책 제목-->
+                &lt;!&ndash;책 제목&ndash;&gt;
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="match_parent"
@@ -88,9 +93,9 @@
                     app:layout_constraintRight_toRightOf="parent" />
 
 
-            </androidx.cardview.widget.CardView><!-- 메모-->
+            </androidx.cardview.widget.CardView>&lt;!&ndash; 메모&ndash;&gt;
 
-            <!--메모-->
+            &lt;!&ndash;메모&ndash;&gt;
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,7 +103,7 @@
                 android:backgroundTint="@color/grey"
                 app:cardCornerRadius="15dp">
 
-                <!--책 제목/작가-->
+                &lt;!&ndash;책 제목/작가&ndash;&gt;
                 <ImageView
                     android:layout_width="90dp"
                     android:layout_height="120dp"
@@ -148,9 +153,9 @@
                     app:layout_constraintRight_toRightOf="parent" />
 
 
-            </androidx.cardview.widget.CardView><!-- 메모-->
+            </androidx.cardview.widget.CardView>&lt;!&ndash; 메모&ndash;&gt;
 
-        </LinearLayout><!--메모 목록-->
-    </ScrollView>
+        </LinearLayout>&lt;!&ndash;메모 목록&ndash;&gt;
+    </ScrollView>-->
 
 </LinearLayout>
