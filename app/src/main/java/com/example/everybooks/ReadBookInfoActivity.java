@@ -213,9 +213,9 @@ public class ReadBookInfoActivity extends AppCompatActivity
 
                 // todo 추후에 bookId 로 해당하는 책 제목 가져오도록 고치기
                 intent.putExtra("title", textView_title.getText());
-                intent.putExtra("memoId", position);  // 선택한 아이템의 아이디 얻어오기
-
+                intent.putExtra("position", position);  // 선택한 아이템의 아이디 얻어오기
                 Memo memo = (Memo)memoAdapter.getItem(position);
+                intent.putExtra("memoId", memo.getMemoId());
                 intent.putExtra("memoText", memo.getMemoText());
 
                 startActivity(intent);
@@ -253,7 +253,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
 
                 builder.show();
 
-                return true; // 롱클릭 이벤트 이후 클릭이벤트 발생 xx
+                return true; // 롱클릭 이벤트 이후 클릭이벤트 발생하지 않도록 true 반환
             }
         });
 

@@ -71,99 +71,14 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
             });
 
 
+            // 책을 길게 클릭하면 별점을 입력받는 다이얼로그를 띄운다.
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
 
                     position = getAdapterPosition();
                     ShowDialog(v, position);
-                    /*
-                    //AlertDialog.Builder builder = new AlertDialog.Builder(ToReadBookAdapter.this);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-
-                    Dialog dialog = new Dialog(v.getContext());
-                    dialog.setContentView(R.layout.rating_dialog);
-
-                    //ratingBar = (RatingBar)dialog.findViewById(R.id.rate);
-                    builder.setTitle(" 독서를 마칠까요? \n 별점을 입력해주세요.");
-
-                    // view 는 하나의 부모 뷰에만 추가될 수 있는데 다이얼로그를 여러번 띄우면
-                    // 중복으로 view 가 참조되어 에러를 일으킨다.
-                    // 따라서 뷰의 참조 여부를 확인한 후 setView() 메소드를 사용한다.
-                    if (ratingBar.getParent() != null)
-                    {
-                        ((ViewGroup) ratingBar.getParent()).removeView(ratingBar);
-                    }
-
-                    builder.setView(ratingBar);
-
-
-                    builder.setPositiveButton("확인",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                // 읽는 책 → 읽은 책 리스트로 이동시킨다.
-                                // 해당하는 책을 찾아서 readBookList 에 추가하고 readingBookList 에서 삭제한다.
-                                position = getAdapterPosition();
-                                //Book book = getItem(position);
-                                book = getItem(position);
-
-                                ReadBookAdapter readBookAdapter = new ReadBookAdapter();
-                                readBookAdapter.addItem(book);
-
-                                removeItem(position);
-
-                                dialog.dismiss();
-
-                            }
-                        });
-
-                    builder.setNegativeButton("취소",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                // 취소 클릭했을 때
-                                Toast.makeText(v.getContext(), "취소" ,Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                    builder.show();
-                    /*
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("독서를 마무리할까요?");
-                    builder.setPositiveButton("확인",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    // 별점을 입력받고
-
-
-                                    // 읽는 책 → 읽은 책 리스트로 이동시킨다.
-                                    // 해당하는 책을 찾아서 readBookList 에 추가하고 readingBookList 에서 삭제한다.
-                                    position = getAdapterPosition();
-                                    Book book = getItem(position);
-
-                                    ReadBookAdapter readBookAdapter = new ReadBookAdapter();
-                                    readBookAdapter.addItem(book);
-
-                                    removeItem(position);
-
-                                    dialog.dismiss();
-
-                                }
-                            });
-                    builder.setNegativeButton("취소",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    // 취소 클릭했을 때
-                                    Toast.makeText(v.getContext(), "취소" ,Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                    builder.show();
-                    */
-                    return true; // 롱클릭 이벤트 이후 클릭이벤트 발생 xx
+                    return true; // 롱클릭 이벤트 이후 클릭 이벤트 발생하지 않도록 true 반환
 
                 }
             });
@@ -258,7 +173,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         linearLayout.addView(ratingBar);
 
         //popDialog.setIcon(android.R.drawable.btn_star_big_on);
-        popDialog.setTitle("독서를 마치겠습니까?\n별점을 입력해주세요. ");
+        popDialog.setTitle("독서를 마칠까요?\n별점을 입력해주세요. ");
 
         //add linearLayout to dailog
         popDialog.setView(linearLayout);

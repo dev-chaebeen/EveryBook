@@ -205,10 +205,10 @@ public class ReadingBookInfoActivity extends AppCompatActivity
             {
                 intent = new Intent(getApplicationContext(), EditMemoActivity.class);
 
-                intent.putExtra("title", textView_title.getText());
-                intent.putExtra("memoId", position);  // 선택한 아이템의 아이디 얻어오기
-
                 Memo memo = (Memo)memoAdapter.getItem(position);
+                intent.putExtra("title", textView_title.getText());
+                intent.putExtra("memoId", memo.getMemoId());  // 선택한 아이템의 아이디 얻어오기
+                intent.putExtra("position", position);
                 intent.putExtra("memoText", memo.getMemoText());
 
                 startActivity(intent);

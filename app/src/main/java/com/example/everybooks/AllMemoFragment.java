@@ -77,18 +77,11 @@ public class AllMemoFragment extends Fragment
         });*/
     }
 
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-
-        recyclerView = view.findViewById(R.id.all_memo_list);
-
-        recyclerView.setHasFixedSize(true);
-        adapter = new AllMemoAdapter(MemoAdapter.memoList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    public void onResume() {
+        super.onResume();
 
         recyclerView.setAdapter(adapter);
-
     }
 }

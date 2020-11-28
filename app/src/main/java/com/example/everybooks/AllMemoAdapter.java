@@ -1,5 +1,7 @@
 package com.example.everybooks;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,6 +55,8 @@ public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHold
 
                         // todo 데이터 담고 이동하도록
                         // readTime
+                        intent.putExtra("memoId", memo.getMemoId());
+                        intent.putExtra("position", position);
                         intent.putExtra("bookId", memo.getBookId());
                         intent.putExtra("title", textView_title.getText().toString());
                         intent.putExtra("memoText", textView_memo_text.getText().toString());
@@ -59,6 +64,42 @@ public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHold
                         v.getContext().startActivity(intent);
 
                     }
+                }
+            });
+
+            // 아이템을 길게 클릭하면
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setMessage("메모를 삭제하시겠습니까?.");
+                    builder.setPositiveButton("확인",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    // 확인 클릭했을 때 해당 메모 삭제한다.
+                                    MemoAdapter.memoList.remove(memo.getMemoId());
+
+                                    // 아래 method를 호출하지 않을 경우, 삭제된 item이 화면에 계속 보여진다.
+                                   notifyDataSetChanged();
+                                    dialog.dismiss();
+
+                                }
+                            });
+                    builder.setNegativeButton("취소",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    // 취소 클릭했을 때
+                                    Toast.makeText( v.getContext(), "취소" ,Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    builder.show();
+
+                    return true; // 롱클릭 이벤트 이후 클릭 이벤트 발생하지 않도록 true 반환
+
                 }
             });
         }

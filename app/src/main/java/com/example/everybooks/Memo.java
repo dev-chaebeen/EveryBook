@@ -3,7 +3,7 @@ package com.example.everybooks;
 public class Memo
 {
     int bookId;
-    int memoId;
+    static int memoId;
     String memoText;
     String memoDate;
 

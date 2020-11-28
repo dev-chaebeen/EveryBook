@@ -23,6 +23,17 @@ public class MemoAdapter extends BaseAdapter
         memo.setBookId(bookId);
         memo.setMemoText(memoText);
 
+        if(Memo.memoId == 0)
+        {
+            memo.setMemoId(0);
+            Memo.memoId = Memo.memoId + 1;
+        }
+        else
+        {
+            memo.setMemoId(Memo.memoId);
+        }
+
+
         //현재 년도, 월, 일
         Calendar cal = Calendar.getInstance();
 
@@ -46,7 +57,8 @@ public class MemoAdapter extends BaseAdapter
     }
 
     @Override
-    public Object getItem(int position) {
+    public Object getItem(int position)
+    {
         return memoList.get(position);
     }
 
