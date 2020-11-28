@@ -79,11 +79,11 @@ public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHold
                                 public void onClick(DialogInterface dialog, int which)
                                 {
                                     // 확인 클릭했을 때 해당 메모 삭제한다.
-                                    MemoAdapter.memoList.remove(memo.getMemoId());
+                                    MemoAdapter.memoList.remove(position);
 
                                     // 아래 method를 호출하지 않을 경우, 삭제된 item이 화면에 계속 보여진다.
                                    notifyDataSetChanged();
-                                    dialog.dismiss();
+                                   dialog.dismiss();
 
                                 }
                             });
