@@ -74,7 +74,7 @@
                     android:layout_width="275dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:hint="Search Book"
+                    android:hint="Search Video"
                     android:layout_marginLeft="10dp"
                     app:layout_constraintStart_toStartOf="parent"
 

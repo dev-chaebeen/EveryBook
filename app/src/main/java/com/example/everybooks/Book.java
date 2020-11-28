@@ -46,6 +46,7 @@ public class Book
     private int pages;
     private int readTime;
     private int starNum;
+    private String plot;
     
 
     // getter / setter
@@ -159,5 +160,13 @@ public class Book
 
     public void setStarNum(int starNum) {
         this.starNum = starNum;
+    }
+
+    public String getPlot() {
+        return plot;
+    }
+
+    public void setPlot(String plot) {
+        this.plot = plot;
     }
 }

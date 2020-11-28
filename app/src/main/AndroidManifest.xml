@@ -59,6 +59,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             />
         <activity android:name=".EditNotificationActivity"/>
+        <activity android:name=".SearchBookActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -25,35 +25,27 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
-
+            android:layout_weight="5"
             >
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:background="@null"
-                android:src="@drawable/ic_search">
-                ></ImageView>
-
-            <EditText
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/search"
-                android:layout_width="275dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:hint="Search Book"
-                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="left"
+                app:iconifiedByDefault="false"
+                app:queryHint="Search Book"
+                android:layout_weight="4"/>
 
-                />
 
             <ImageView
                 android:id="@+id/mic"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
                 android:background="@null"
-                android:src="@drawable/ic_mic" />
+                android:src="@drawable/ic_mic"
+                android:layout_weight="1"/>
         </LinearLayout>
 
     </LinearLayout>
