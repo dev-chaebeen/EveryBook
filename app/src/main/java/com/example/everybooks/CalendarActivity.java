@@ -3,18 +3,23 @@ package com.example.everybooks;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
 
 public class CalendarActivity extends AppCompatActivity
 {
     Intent intent;
+    ListView listView;
+    CalendarAdapter adapter;
 
     // 뷰 요소 선언
     TextView textView_title;        // 책 제목
@@ -42,23 +47,16 @@ public class CalendarActivity extends AppCompatActivity
         setContentView(R.layout.activity_calendar);
 
         // 뷰 요소 초기화
-        textView_title = findViewById(R.id.title);
+      /*  textView_title = findViewById(R.id.title);
         textView_memo_text = findViewById(R.id.memo_text);
-        cardView_memo = findViewById(R.id.memo);
+        cardView_memo = findViewById(R.id.memo);*/
 
-        // 한 메모 클릭하면
-        cardView_memo.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                // 인텐트 생성해서 데이터를 담고 메모 편집 액티비티로 화면 전환한다.
-                intent = new Intent(getApplicationContext(), EditMemoActivity.class);
-                intent.putExtra("title", textView_title.getText().toString());          // 책 제목
-                intent.putExtra("memo_text", textView_memo_text.getText().toString());  // 메모 내용
-                startActivity(intent);
-            }
-        });
-        
+        // 어댑터 객체 생성
+        adapter = new CalendarAdapter();
+        listView =  findViewById(R.id.calendar_book_list);
+
+        //리스트뷰에 어댑터를 붙여서 사용자에게 내용이 보이도록 한다.
+        listView.setAdapter(adapter);
+
     }
 }

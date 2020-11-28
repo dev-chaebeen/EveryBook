@@ -18,18 +18,6 @@
         android:orientation="horizontal"
         >
 
-       <!-- &lt;!&ndash; 화살표 &ndash;&gt;
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@null"
-            android:src="@drawable/ic_back"
-
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-
-            />-->
-
         <!-- Calendar -->
         <TextView
             android:layout_width="match_parent"
@@ -83,19 +71,25 @@
             >
         </TextView>
 
+
+        <ListView
+            android:id="@+id/calendar_book_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+        <!--
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <!--그 날 읽은 책 목록 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
 
-            <!--데이터 전달 테스트-->
-            <!--한 칸-->
+            &lt;!&ndash;데이터 전달 테스트&ndash;&gt;
+            &lt;!&ndash;한 칸&ndash;&gt;
             <androidx.cardview.widget.CardView
                 android:id="@+id/memo"
                 android:layout_width="match_parent"
@@ -104,7 +98,7 @@
                 android:backgroundTint="@color/grey"
                 app:cardCornerRadius="15dp">
 
-                <!--표지-->
+                &lt;!&ndash;표지&ndash;&gt;
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -115,7 +109,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!--메모-->
+                &lt;!&ndash;메모&ndash;&gt;
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
@@ -144,9 +138,9 @@
                         />
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView><!-- 한 칸-->
+            </androidx.cardview.widget.CardView>&lt;!&ndash; 한 칸&ndash;&gt;
 
-            <!--한 칸-->
+            &lt;!&ndash;한 칸&ndash;&gt;
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -154,7 +148,7 @@
                 android:backgroundTint="@color/grey"
                 app:cardCornerRadius="15dp">
 
-                <!--표지-->
+                &lt;!&ndash;표지&ndash;&gt;
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -165,7 +159,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!--책 제목/작가/줄거리-->
+                &lt;!&ndash;책 제목/작가/줄거리&ndash;&gt;
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
@@ -201,8 +195,8 @@
                         />
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView><!-- 한 칸-->
-            <!--한 칸-->
+            </androidx.cardview.widget.CardView>&lt;!&ndash; 한 칸&ndash;&gt;
+            &lt;!&ndash;한 칸&ndash;&gt;
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -210,7 +204,7 @@
                 android:backgroundTint="@color/grey"
                 app:cardCornerRadius="15dp">
 
-                <!--표지-->
+                &lt;!&ndash;표지&ndash;&gt;
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="100dp"
@@ -221,7 +215,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!--책 제목/작가/줄거리-->
+                &lt;!&ndash;책 제목/작가/줄거리&ndash;&gt;
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
@@ -257,12 +251,12 @@
                         />
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView><!-- 한 칸-->
+            </androidx.cardview.widget.CardView>&lt;!&ndash; 한 칸&ndash;&gt;
 
 
-        </LinearLayout><!-- 목록-->
+        </LinearLayout>&lt;!&ndash; 목록&ndash;&gt;
 
-        </ScrollView>
+        </ScrollView>-->
 
 
     </LinearLayout><!--회색바 아래-->
