@@ -70,18 +70,17 @@ public class MemoAdapter extends BaseAdapter
        final int index = position;
        final Context context = parent.getContext();
 
-        // item_memo 레이아웃을 inflate 하여 convertView 참조 획득
+       // 재활용할 뷰가 null 인 경우에만 inflate 한다.(xml에 정의되어있는 view를 실제 view 객체로 만든다.)
         if(convertView == null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_memo, parent, false);
         }
 
-        // 화면에 표시될 View(Layout이 inflate 된)으로부터 위젯에 대한 참조 획득
+        // 뷰 요소 초기화
         TextView textView_memo_text = convertView.findViewById(R.id.memo_text);
         TextView textView_memo_date = convertView.findViewById(R.id.memo_date);
 
-        // 메모 하나 얻기
         Memo memo = memoList.get(position);
 
         // 뷰 요소에 나타내주기
