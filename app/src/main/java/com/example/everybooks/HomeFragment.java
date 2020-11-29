@@ -1,31 +1,16 @@
 package com.example.everybooks;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-
 
 public class HomeFragment extends Fragment
 {
@@ -40,13 +25,11 @@ public class HomeFragment extends Fragment
     Spinner spinner_order;
     ImageView imageView_mic;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         view = inflater.inflate(R.layout.fragment_home, container, false);
-
         getChildFragmentManager().beginTransaction().add(R.id.home_frame, new ToReadFragment()).commit();
 
         // 뷰 요소 초기화
@@ -58,54 +41,57 @@ public class HomeFragment extends Fragment
         imageView_mic = view.findViewById(R.id.mic);
 
         return view;
-
     }
 
-
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
 
-
         // To Read / Reading / Read 버튼을 클릭하면 해당하는 리스트를 보여줄 수 있도록 클릭이벤트를 등록한다.
-        button_to_read.setOnClickListener(new View.OnClickListener() {
+        button_to_read.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 getChildFragmentManager().beginTransaction().replace(R.id.home_frame, new ToReadFragment()).commit();
             }
         });
 
-        button_reading.setOnClickListener(new View.OnClickListener() {
+        button_reading.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 getChildFragmentManager().beginTransaction().replace(R.id.home_frame, new ReadingFragment()).commit();
             }
         });
 
-        button_read.setOnClickListener(new View.OnClickListener() {
+        button_read.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 getChildFragmentManager().beginTransaction().replace(R.id.home_frame, new ReadFragment()).commit();
-
             }
         });
 
         // 검색창에 키워드를 입력하고 검색 버튼을 누르면 검색 결과화면으로 이동한다.
-        searchView_search.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+        searchView_search.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener()
+        {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(String query)
+            {
                 intent = new Intent(getContext(), SearchBookActivity.class);
                 startActivity(intent);
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String newText)
+            {
                 return false;
             }
         });
-
-
     }
-
 }

@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,22 +21,8 @@ public class NotificationActivity extends AppCompatActivity
     ListView listView;
     NotificationAdapter adapter;
 
-    
     // 인텐트
     Intent intent;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        /*if(MainActivity.isLogin == false)   // 로그아웃된 상태라면
-        {
-            // 안내메세지 보여주고 로그인 화면으로 전환한다.
-            Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-            intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        }*/
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -52,54 +36,45 @@ public class NotificationActivity extends AppCompatActivity
         listView = findViewById(R.id.notification_list);
         adapter = new NotificationAdapter();
 
-
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         View.OnClickListener click = new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-
+            public void onClick(View v)
+            {
+                switch (v.getId())
+                {
                     case R.id.add :
                         // Add 클릭했을 때 알림 추가하는 화면으로 전환 
                         intent = new Intent(getApplicationContext(), AddNotificationActivity.class);
                         startActivity(intent);
                         break;
-
-                    /*case R.id.notification :
-                        // notification 클릭했을 때 알림 시간과 알림문구 데이터를 담아서 알림 편집 화면으로 전환
-                        intent = new Intent(getApplicationContext(), EditNotificationActivity.class);
-                        intent.putExtra("time", textView_time.getText().toString());
-                        intent.putExtra("notification_text", textView_notification_text.getText().toString());
-                        startActivity(intent);
-                        break;*/
                 }
             }
         };
 
         // 각 요소가 클릭되면 동작 수행
         textView_add.setOnClickListener(click);
-        //linearLayout_notification.setOnClickListener(click);
 
-
-        // 임시로 데이터를 넣어둔다.
+        // 임시로 데이터를 넣어준다.
         Notification noti = new Notification();
         noti.setHour(14);
         noti.setMinute(30);
         noti.setText("알림 문구 설정");
-
         NotificationAdapter.notiList.add(noti);
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         //리스트뷰에 어댑터를 붙여서 사용자에게 메모가 보이도록 한다.
         listView.setAdapter(adapter);
 
         // 알림을 클릭하면 알림 데이터를 가지고 알림 편집 화면으로 이동한다.
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id)
             {
@@ -110,40 +85,40 @@ public class NotificationActivity extends AppCompatActivity
                 intent.putExtra("hour", noti.getHour());
                 intent.putExtra("minute", noti.getMinute());
                 intent.putExtra("text", noti.getText());
-
                 startActivity(intent);
             }
         });
 
         // 각 메모를 길게 클릭하면 삭제하겠냐고 확인하는 문구가 뜬다.
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(NotificationActivity.this);
                 builder.setMessage("알림을 삭제하시겠습니까?.");
                 builder.setPositiveButton("확인",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                // 확인 클릭했을 때 해당 알림을 삭제하고 삭제 결과를 리스트뷰에 반영하기 위해 어댑터를 새로고침한다.
-                                NotificationAdapter.notiList.remove(position);
-                                adapter.notifyDataSetChanged();
-                                dialog.dismiss();
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            // 확인 클릭했을 때 해당 알림을 삭제하고 삭제 결과를 리스트뷰에 반영하기 위해 어댑터를 새로고침한다.
+                            NotificationAdapter.notiList.remove(position);
+                            adapter.notifyDataSetChanged();
+                            dialog.dismiss();
 
-                            }
-                        });
+                        }
+                    });
+
                 builder.setNegativeButton("취소",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                // 취소 클릭했을 때
-                                Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            // 취소 클릭했을 때
+                            Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
                 builder.show();
-
                 return true; // 롱클릭 이벤트 이후 클릭이벤트 발생하지 않도록 true 반환
             }
         });

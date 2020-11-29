@@ -58,6 +58,7 @@
             android:layout_height="60dp"
             android:hint="Password"
             android:layout_marginBottom="16dp"
+            android:inputType="textPassword"
             >
         </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>

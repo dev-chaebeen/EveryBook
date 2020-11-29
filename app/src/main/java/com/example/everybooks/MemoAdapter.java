@@ -6,10 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class MemoAdapter extends BaseAdapter
 {
@@ -32,7 +30,6 @@ public class MemoAdapter extends BaseAdapter
         {
             memo.setMemoId(Memo.memoId);
         }
-
 
         //현재 년도, 월, 일
         Calendar cal = Calendar.getInstance();
@@ -68,8 +65,8 @@ public class MemoAdapter extends BaseAdapter
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
        final int index = position;
        final Context context = parent.getContext();
 

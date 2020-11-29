@@ -20,13 +20,12 @@ public class ProfileLogoutFragment extends Fragment
     private View view;
 
     // 뷰 요소 선언
-    LinearLayout linearLayout_edit_profile; // 프로필 편집
-    LinearLayout linearLayout_login;        // 로그인
-    LinearLayout linearLayout_feedback;     // 피드백 보내기
+    LinearLayout linearLayout_edit_profile;
+    LinearLayout linearLayout_login;
+    LinearLayout linearLayout_feedback;
 
     Intent intent;
     View.OnClickListener click;
-
 
     @Nullable
     @Override
@@ -34,15 +33,14 @@ public class ProfileLogoutFragment extends Fragment
 
         // 화면 생성
         view = inflater.inflate(R.layout.fragment_profile, container, false);
-
         return view;
 
     }// end onCreate
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
-
 
         // 뷰 요소 초기화
         linearLayout_edit_profile = view.findViewById(R.id.edit_profile);
@@ -82,66 +80,10 @@ public class ProfileLogoutFragment extends Fragment
         linearLayout_feedback.setOnClickListener(click);
 
     }
-}// end class
+}
 
 
 
 
 
 
-
-
-
-
-
-
-
- /* // 기본 리스트뷰
-        // 리스트뷰 지정
-        final String[] LIST_MENU = {"Edit Profile", "Login", "Feedback"} ;
-
-        // 리스트뷰 생성
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, LIST_MENU);    // 어댑터를 생성해서
-        ListView listView = (ListView) view.findViewById(R.id.profile_list) ;   // 지정된 리스트뷰에
-        listView.setAdapter(adapter) ;  // 뿌려준다.
-
-        // 상수 지정
-        final int EDIT_PROFILE = 0;
-        final int LOGIN = 1;
-        final int FEEDBACK = 2;
-
-        // 클릭한 값에 따라 화면 전환
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Intent intent;
-
-                switch(position)
-                {
-                    case EDIT_PROFILE :
-                        intent = new Intent(getActivity(), EditProfileActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    case LOGIN :
-                        intent = new Intent(getActivity(), LoginActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    case FEEDBACK :
-                        // 메일 보내기
-                        intent = new Intent(Intent.ACTION_SEND);
-                        intent.setType("plain/text");
-                        String[] address = {"chxxbeen@gmail.com"};
-                        intent.putExtra(Intent.EXTRA_EMAIL, address);                               // 받는 사람
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "everyBooks 피드백입니다.");     // 보내질 이메일 제목
-                        intent.putExtra(Intent.EXTRA_TEXT, "피드백을 보내주세요.");             // 보내질 이메일 내용
-                        startActivity(intent);
-
-                        break;
-
-
-                }
-            }
-        });*/

@@ -1,7 +1,5 @@
 package com.example.everybooks;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -9,12 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class SearchVideoAdapter extends RecyclerView.Adapter<SearchVideoAdapter.BookViewHolder> {
 
@@ -42,7 +36,7 @@ public class SearchVideoAdapter extends RecyclerView.Adapter<SearchVideoAdapter.
             textView_channel = itemView.findViewById(R.id.channel);
             textView_description = itemView.findViewById(R.id.description);
 
-            // 각각의 아이템을 클릭하면 인텐트를 이용해 유튜브 실행한다.
+            // 각각의 아이템을 클릭하면 인텐트를 이용해 유튜브를 실행한다.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -57,15 +51,13 @@ public class SearchVideoAdapter extends RecyclerView.Adapter<SearchVideoAdapter.
         }
     }
 
-    // 기본 생성자
     SearchVideoAdapter(){}
 
-    // 생성자에서 데이터 리스트 객체를 전달받음.
     SearchVideoAdapter(ArrayList<Video> searchVideoList) {
         this.searchVideoList = searchVideoList;
     }
 
-    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
+    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴하는 메소드
     @Override
     public SearchVideoAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -74,7 +66,7 @@ public class SearchVideoAdapter extends RecyclerView.Adapter<SearchVideoAdapter.
         return new BookViewHolder(view);
     }
 
-    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
+    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시하는 메소드
     @Override
     public void onBindViewHolder(SearchVideoAdapter.BookViewHolder holder, int position) {
         Video video = searchVideoList.get(position);
@@ -86,7 +78,6 @@ public class SearchVideoAdapter extends RecyclerView.Adapter<SearchVideoAdapter.
 
     }
 
-    // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
         return searchVideoList.size() ;
@@ -102,8 +93,6 @@ public class SearchVideoAdapter extends RecyclerView.Adapter<SearchVideoAdapter.
         this.position = position;
     }
 
-
-    // 아이템 가져오는 메소드
     public Video getItem(int position) {
         return searchVideoList.get(position);
     }

@@ -56,23 +56,10 @@ public class ReadBookInfoActivity extends AppCompatActivity
     String state;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        /*if(HomeToReadActivity.isLogin == false)   // 로그아웃된 상태라면
-        {
-            // 안내메세지 보여주고 로그인 화면으로 전환한다.
-            Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-            intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        }*/
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-        // 화면 구성
         setContentView(R.layout.activity_read_book_info);
 
         // 뷰 요소 초기화
@@ -109,14 +96,14 @@ public class ReadBookInfoActivity extends AppCompatActivity
         starNum = getIntent().getIntExtra("starNum",-1);
         state = getIntent().getStringExtra("state");
 
-
-
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
+            public void onClick(View v)
+            {
+                switch (v.getId())
+                {
                     case R.id.btn_memo:
                         // MEMO 버튼을 클릭하면 메모 작성 화면으로 전환한다
                         intent = new Intent(getApplicationContext(), CreateMemoActivity.class);
@@ -124,48 +111,43 @@ public class ReadBookInfoActivity extends AppCompatActivity
                         break;
 
                     case R.id.btn_delete:
-                        // 책 삭제하고 이전 화면으로 돌아가기(현재 액티비티 finish())
+                        // 책을 삭제하고 이전 화면으로 돌아간다.
                         // 책 삭제할 때 관련된 메모도 삭제해야한다.
                         AlertDialog.Builder builder = new AlertDialog.Builder(ReadBookInfoActivity.this);
                         builder.setMessage("책을 삭제하시겠습니까?\n 메모도 함께 삭제됩니다. ");
                         builder.setPositiveButton("확인",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which)
-                                    {
-                                        // 확인 클릭했을 때 해당 책을 삭제한다.
-                                        ReadBookAdapter adapter = new ReadBookAdapter();
-                                        adapter.removeItem(position);
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    // 확인 클릭했을 때 해당 책을 삭제한다.
+                                    ReadBookAdapter adapter = new ReadBookAdapter();
+                                    adapter.removeItem(position);
 
-                                        dialog.dismiss();
+                                    dialog.dismiss();
 
-                                        intent = new Intent(getApplicationContext(), MainActivity.class);
-                                        startActivity(intent);
+                                    intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
 
-                                        finish();
+                                    finish();
 
-                                    }
-                                });
+                                }
+                            });
 
                         builder.setNegativeButton("취소",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which)
-                                    {
-                                        // 취소 클릭했을 때
-                                        Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
-
-                                    }
-                                });
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
                         builder.show();
-
-
                         break;
 
                     case R.id.edit :
-                        // Edit 을 클릭하면 책 정보 수정화면으로 전환한다.
+                        // Edit 을 클릭하면 책 정보를 담고 책 정보 수정화면으로 전환한다.
                         intent = new Intent(getApplicationContext(), EditBookInfoActivity.class);
 
-                        // 데이터를 담고
                         // img
                         intent.putExtra("title", title);
                         intent.putExtra("writer", writer);
@@ -175,7 +157,6 @@ public class ReadBookInfoActivity extends AppCompatActivity
                         intent.putExtra("state", state);
                         startActivity(intent);
                         break;
-
                 }
             }
         };
@@ -185,10 +166,11 @@ public class ReadBookInfoActivity extends AppCompatActivity
         button_delete.setOnClickListener(click);
         textView_edit.setOnClickListener(click);
 
-    }// onCreate()
+    }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         // 수신한 책 데이터 배치하기
@@ -199,21 +181,16 @@ public class ReadBookInfoActivity extends AppCompatActivity
         textView_start_date.setText(startDate);
         textView_end_date.setText(endDate);
         ratingBar_rate.setRating(starNum);
-
-        //리스트뷰에 어댑터를 붙여서 사용자에게 내용이 보이도록 한다.
         listView.setAdapter(memoAdapter);
 
-        // 각 메모를 클릭하면 책 제목(추후 bookId 로 대체), 메모아이디, 메모 내용  데이터를 담아서
-        // 메모 편집 화면으로 이동한다.
+        // 각 메모를 클릭하면 책 제목, 메모아이디, 메모 내용 데이터를 인텐트에 담아서 메모 편집 화면으로 이동한다.
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id)
             {
                 intent = new Intent(getApplicationContext(), EditMemoActivity.class);
-
-                // todo 추후에 bookId 로 해당하는 책 제목 가져오도록 고치기
                 intent.putExtra("title", textView_title.getText());
-                intent.putExtra("position", position);  // 선택한 아이템의 아이디 얻어오기
+                intent.putExtra("position", position);
                 Memo memo = (Memo)memoAdapter.getItem(position);
                 intent.putExtra("memoId", memo.getMemoId());
                 intent.putExtra("memoText", memo.getMemoText());
@@ -223,7 +200,8 @@ public class ReadBookInfoActivity extends AppCompatActivity
         });
 
         // 각 메모를 길게 클릭하면 삭제하겠냐고 확인하는 문구가 뜬다.
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -233,10 +211,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        // 확인 클릭했을 때 해당 메모 삭제한다.
                         MemoAdapter.memoList.remove(position);
-
-                        // 아래 method를 호출하지 않을 경우, 삭제된 item이 화면에 계속 보여진다.
                         memoAdapter.notifyDataSetChanged();
                         dialog.dismiss();
 
@@ -246,7 +221,6 @@ public class ReadBookInfoActivity extends AppCompatActivity
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        // 취소 클릭했을 때
                         Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -256,19 +230,5 @@ public class ReadBookInfoActivity extends AppCompatActivity
                 return true; // 롱클릭 이벤트 이후 클릭이벤트 발생하지 않도록 true 반환
             }
         });
-
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-
-
-        // 당일 날짜와 시간 받아오기
-        //  SimpleDateFormat date = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss");
-        // String dateStr = date.format(date);
-
     }
 }

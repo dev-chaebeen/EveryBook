@@ -1,7 +1,6 @@
 package com.example.everybooks;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,17 +38,15 @@ public class ToReadFragment extends Fragment
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        // 화면 생성
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         view = inflater.inflate(R.layout.fragment_to_read, container, false);
-
         return view;
-
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
 
         // 뷰 요소 초기화
@@ -63,7 +60,8 @@ public class ToReadFragment extends Fragment
         View.OnClickListener click = new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 switch (v.getId())
                 {
                     case R.id.add_book:
@@ -75,15 +73,13 @@ public class ToReadFragment extends Fragment
             }
         };
 
-        // 각 요소가 클릭되면
         floatingActionButton_add_book.setOnClickListener(click);
-
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
-
         showItemList();
     }
 
@@ -95,16 +91,7 @@ public class ToReadFragment extends Fragment
         recyclerView.setHasFixedSize(true);
         adapter = new ToReadBookAdapter(ToReadBookAdapter.toReadBookList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-       // recyclerView.addItemDecoration(new RecyclerViewDecoration(10));
-
         recyclerView.setAdapter(adapter);
     }
 
-
-    private void refresh()
-    {
-        // 프래그먼트 화면으로 돌아올 때 새로고침
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
-    }
 }

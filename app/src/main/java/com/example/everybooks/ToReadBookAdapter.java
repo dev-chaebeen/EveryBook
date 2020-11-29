@@ -3,8 +3,6 @@ package com.example.everybooks;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,26 +15,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.BookViewHolder> {
-
+public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.BookViewHolder>
+{
     private int position;
     Book book;
 
     // todo static 수정하기
     static ArrayList<Book> toReadBookList = new ArrayList<>();
 
-
-    // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView_img;
         TextView textView_title;
         TextView textView_insert_date;
 
-        // 생성자
         BookViewHolder(View itemView) {
             super(itemView) ;
 
-            // 뷰 객체에 대한 참조. (hold strong reference)
+           // 뷰 요소 초기화
             imageView_img = itemView.findViewById(R.id.img);
             textView_title = itemView.findViewById(R.id.title);
             textView_insert_date = itemView.findViewById(R.id.insert_date);
@@ -57,8 +52,6 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                         intent.putExtra("publishDate", book.getPublishDate());
                         intent.putExtra("position", position);
                         intent.putExtra("state", book.getState());
-
-
                         v.getContext().startActivity(intent);
 
                     }
@@ -73,56 +66,46 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     builder.setMessage("독서를 시작할까요?");
                     builder.setPositiveButton("확인",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    // 읽을 책 → 읽는 책 리스트로 이동시킨다.
-                                    // 해당하는 책을 찾아서 readingBookList에 추가하고 toReadbookList에서 삭제한다.
-                                    position = getAdapterPosition();
-                                    Book book = getItem(position);
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // 읽을 책 → 읽는 책 리스트로 이동시킨다.
+                                // 해당하는 책을 찾아서 readingBookList에 추가하고 toReadbookList에서 삭제한다.
+                                position = getAdapterPosition();
+                                Book book = getItem(position);
 
-                                    ReadingBookAdapter readingBookAdapter = new ReadingBookAdapter();
-                                    readingBookAdapter.addItem(book);
+                                ReadingBookAdapter readingBookAdapter = new ReadingBookAdapter();
+                                readingBookAdapter.addItem(book);
 
-                                    removeItem(position);
+                                removeItem(position);
 
-                                    dialog.dismiss();
+                                dialog.dismiss();
 
-                                }
-                            });
+                            }
+                        });
                     builder.setNegativeButton("취소",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    // 취소 클릭했을 때
-                                    Toast.makeText(v.getContext(), "취소" ,Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // 취소 클릭했을 때
+                                Toast.makeText(v.getContext(), "취소" ,Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
                     builder.show();
-
-                    return true; // 롱클릭 이벤트 이후 클릭이벤트 발생 xx
-
+                    return true; // 롱클릭 이벤트 이후 클릭이벤트 발생하지 않도록 true 반환
                 }
             });
-
-
         }
-
-
     }
 
-    // 기본 생성자
     ToReadBookAdapter(){}
 
-    // 생성자에서 데이터 리스트 객체를 전달받음.
     ToReadBookAdapter(ArrayList<Book> toReadBookList) {
         this.toReadBookList = toReadBookList;
     }
 
-
-
-    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
+    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴하는 메소드
     @Override
     public ToReadBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -131,7 +114,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
         return new BookViewHolder(view);
     }
 
-    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
+    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시하는 메소드
     @Override
     public void onBindViewHolder(ToReadBookAdapter.BookViewHolder holder, int position) {
         Book book = toReadBookList.get(position);
@@ -142,12 +125,11 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
 
     }
 
-    // getItemCount() - 전체 데이터 갯수 리턴.
+    // getItemCount() - 전체 데이터 갯수 리턴하는 메소드
     @Override
     public int getItemCount() {
         return toReadBookList.size() ;
     }
-
 
     public int getPosition(int position)
     {
@@ -162,7 +144,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     // 아이템 추가 메소드
     public void addItem(Book book)
     {
-        //현재 년도, 월, 일
+        //현재 년도, 월, 일을 책 등록일에 저장한다.
         Calendar cal = Calendar.getInstance();
 
         int year = cal.get ( cal.YEAR );

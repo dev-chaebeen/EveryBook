@@ -3,10 +3,7 @@ package com.example.everybooks;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,21 +32,6 @@ public class EditBookInfoActivity extends AppCompatActivity
     int position;
     String state;
 
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        /*if(MainActivity.isLogin == false)   // 로그아웃된 상태라면
-        {
-            // 안내메세지 보여주고 로그인 화면으로 전환한다.
-            Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-            intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        }*/
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -67,39 +49,33 @@ public class EditBookInfoActivity extends AppCompatActivity
         editText_publisher = findViewById(R.id.publisher);
         editText_publish_date = findViewById(R.id.publish_date);
 
-
-        // 처음 액티비티 생성될 때는 인텐트로 전달받은 데이터 보여주기
+        // 처음 액티비티 생성될 때는 인텐트로 전달받은 책 정보를 보여준다.
         ImageView_img.setImageResource(getIntent().getIntExtra("img",0));
         editText_title.setText(getIntent().getStringExtra("title"));
         editText_writer.setText(getIntent().getStringExtra("writer"));
         editText_publisher.setText(getIntent().getStringExtra("publisher"));
         editText_publish_date.setText(getIntent().getStringExtra("publishDate"));
 
-        // 전달받은 아이템 아이디 저장
+        // 전달받은 데이터 저장
         position = getIntent().getIntExtra("position",-1);
         state = getIntent().getStringExtra("state");
 
-
-
-        // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-
+            public void onClick(View v)
+            {
+                switch (v.getId())
+                {
                     case R.id.edit :
 
-                        // todo 이미지 추가하기
-
-                        // edit 클릭했을 때 입력받은 값들을 저장해서 그 값으로 수정해준다.
-
+                        // edit 을 클릭하면 사용자에게 입력받은 값을 저장해서 그 값으로 책의 정보를 수정한다.
+                        // 전달받은 책의 상태에 적합한 리스트에 책이 저장되도록 한다.
                         String title = editText_title.getText().toString();
                         String writer = editText_writer.getText().toString();
                         String publisher = editText_publisher.getText().toString();
                         String publishDate = editText_publish_date.getText().toString();
 
-                        // 전달받은 책의 상태에 따라 다른 어댑터 이용
                         if(state.equals("toRead"))
                         {
                             ToReadBookAdapter adapter = new ToReadBookAdapter();
@@ -137,61 +113,56 @@ public class EditBookInfoActivity extends AppCompatActivity
                             adapter.notifyDataSetChanged();
                         }
 
-
                         intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
-
                         finish();
 
                         break;
 
                     case R.id.delete :
-                        // delete 클릭했을 때 수행할 동작
+
+                        // delete 를 클릭하면 책을 삭제한다.
+                        // 책의 상태에 따라 알맞은 리스트에서 삭제되도록 한다.
                         AlertDialog.Builder builder = new AlertDialog.Builder(EditBookInfoActivity.this);
                         builder.setMessage("책을 삭제하시겠습니까?");
                         builder.setPositiveButton("확인",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which)
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    if(state.equals("toRead"))
                                     {
-                                        // 확인 클릭했을 때 해당 책 삭제한다.
-
-                                        // 전달받은 책의 상태에 따라 다른 어댑터 이용
-                                        if(state.equals("toRead"))
-                                        {
-                                            ToReadBookAdapter adapter = new ToReadBookAdapter();
-                                            adapter.removeItem(position);
-                                        }
-                                        else if(state.equals("reading"))
-                                        {
-                                            ReadingBookAdapter adapter = new ReadingBookAdapter();
-                                            adapter.removeItem(position);
-                                        }
-                                        else if(state.equals("read"))
-                                        {
-                                            ReadBookAdapter adapter = new ReadBookAdapter();
-                                            adapter.removeItem(position);
-                                        }
-
-                                        dialog.dismiss();
-
-                                        intent = new Intent(getApplicationContext(), MainActivity.class);
-                                        startActivity(intent);
-
-                                        finish();
-
+                                        ToReadBookAdapter adapter = new ToReadBookAdapter();
+                                        adapter.removeItem(position);
                                     }
-                                });
+                                    else if(state.equals("reading"))
+                                    {
+                                        ReadingBookAdapter adapter = new ReadingBookAdapter();
+                                        adapter.removeItem(position);
+                                    }
+                                    else if(state.equals("read"))
+                                    {
+                                        ReadBookAdapter adapter = new ReadBookAdapter();
+                                        adapter.removeItem(position);
+                                    }
+
+                                    dialog.dismiss();
+
+                                    intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+
+                                    finish();
+
+                                }
+                            });
 
                         builder.setNegativeButton("취소",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which)
-                                    {
-                                        // 취소 클릭했을 때
-                                        Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
-
-                                        finish();
-                                    }
-                                });
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            });
 
                         builder.show();
 

@@ -11,25 +11,15 @@ public class Book
         this.bookId = tempBookId+1;
     }
 
-    // 리사이클러뷰 생성자
-    /*
-    public Book(int bookId, String title, String insertDate)
-    {
-        this.bookId = bookId;
-        this.title = title;
-        this.insertDate = insertDate;
-    }
-    */
-
     // 리사이클러뷰 임시 생성자
     public Book(String title, String insertDate)
     {
-        this.bookId = tempBookId+1;
+        this.bookId = tempBookId + 1;
         this.title = title;
         this.insertDate = insertDate;
     }
 
-    // 임시 북 아이디
+    // 임시 아이디
     static int tempBookId = 1;
 
     private int bookId;

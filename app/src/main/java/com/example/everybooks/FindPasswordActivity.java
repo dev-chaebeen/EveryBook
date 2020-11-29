@@ -13,12 +13,10 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class FindPasswordActivity extends AppCompatActivity
 {
-    // 뷰 요소 구성
-    TextInputEditText textInputEditText_nickname;   // 닉네임
-    TextInputEditText textInputEditText_email;      // 이메일
-    Button button_send;                             // send 버튼
-    Intent intent;
-
+    // 뷰 요소 선언
+    TextInputEditText textInputEditText_nickname;
+    TextInputEditText textInputEditText_email;
+    Button button_send;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -34,9 +32,11 @@ public class FindPasswordActivity extends AppCompatActivity
         button_send = findViewById(R.id.send);
 
         // send 버튼 누르면 수행할 동작
-        button_send.setOnClickListener(new View.OnClickListener() {
+        button_send.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
 
             }
         });

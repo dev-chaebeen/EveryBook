@@ -29,7 +29,6 @@ public class NotificationAdapter extends BaseAdapter
             noti.setNotiId(Notification.notiId);
         }
 
-
         notiList.add(0, noti);
         notifyDataSetChanged();
     }
@@ -51,19 +50,18 @@ public class NotificationAdapter extends BaseAdapter
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
        final int index = position;
        final Context context = parent.getContext();
 
-        // item_notification 레이아웃을 inflate 하여 convertView 참조 획득
         if(convertView == null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_notification, parent, false);
         }
 
-        // 화면에 표시될 View(Layout이 inflate 된)으로부터 위젯에 대한 참조 획득
+        // 뷰 요소 초기화
         TextView textView_notification_time = convertView.findViewById(R.id.notification_time);
         TextView textView_mon = convertView.findViewById(R.id.mon);
         TextView textView_tue = convertView.findViewById(R.id.tue);
@@ -75,7 +73,7 @@ public class NotificationAdapter extends BaseAdapter
         TextView textView_notification_text = convertView.findViewById(R.id.notification_text);
         Switch switch_on = convertView.findViewById(R.id.notification_switch);
 
-        // 알림 하나 얻기
+        // 알림 객체 얻기
         Notification noti = notiList.get(position);
 
         // 뷰 요소에 나타내주기

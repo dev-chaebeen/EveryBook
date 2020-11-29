@@ -15,34 +15,19 @@ import androidx.appcompat.app.AppCompatActivity;
 public class EditProfileActivity extends AppCompatActivity
 {
     // 뷰 요소 선언
-    TextView textView_user_nickname;        // 유저 현재 닉네임
-    TextView textView_user_email;           // 유저 메일
+    TextView textView_user_nickname;
+    TextView textView_user_email;
 
-    LinearLayout linearLayout_edit_photo;   // 사진 수정
-    LinearLayout linearLayout_edit_nickname;// 닉네임 수정
-    LinearLayout linearLayout_withdraw;     // 탈퇴하기
+    LinearLayout linearLayout_edit_photo;
+    LinearLayout linearLayout_edit_nickname;
+    LinearLayout linearLayout_withdraw;
 
     View.OnClickListener click;
-    Intent intent;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-       /* if(MainActivity.isLogin == false)   // 로그아웃된 상태라면
-        {
-            // 안내메세지 보여주고 로그인 화면으로 전환한다.
-            Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-            intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        }*/
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
         // 화면 구성
         setContentView(R.layout.activity_edit_profile);
 
@@ -93,19 +78,6 @@ public class EditProfileActivity extends AppCompatActivity
         // 유저 닉네임, 이메일 정보 가져오기
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // 다이얼로그 떠있을 때 액티비티 생명주기 test
-        // → 다이얼로그로 액티비티가 가려질 때 onPause() 호출하지 않는다.
-        // Toast.makeText( getApplicationContext(), "onPause()" ,Toast.LENGTH_LONG).show();
-
-        // 변경할 닉네임 저장해두기
-
-
-    }
-
     void editNickname()
     {
         // 닉네임 입력받을 EditText
@@ -119,24 +91,25 @@ public class EditProfileActivity extends AppCompatActivity
         builder.setMessage("변경할 닉네임을 입력해주세요.");  // 다이얼로그 내용
         builder.setView(editText);
         builder.setPositiveButton("입력",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        // 입력 클릭했을 때
-                        // 변경한 닉네임 저장
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    // 입력 클릭했을 때
+                    // 변경한 닉네임 저장
 
-                        // test 바꾼 닉네임 출력
-                        Toast.makeText(getApplicationContext(),editText.getText().toString() ,Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    // test 바꾼 닉네임 출력
+                    Toast.makeText(getApplicationContext(),editText.getText().toString() ,Toast.LENGTH_SHORT).show();
+                }
+            });
         builder.setNegativeButton("취소",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        // 취소 클릭했을 때
-                        Toast.makeText( getApplicationContext(), "변경 취소" ,Toast.LENGTH_SHORT).show();
-                    }
-                });
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    // 취소 클릭했을 때
+                    Toast.makeText( getApplicationContext(), "변경 취소" ,Toast.LENGTH_SHORT).show();
+                }
+            });
+
         builder.show();
     }
 

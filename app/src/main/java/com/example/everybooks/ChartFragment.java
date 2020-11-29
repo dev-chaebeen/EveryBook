@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.BarData;
@@ -23,7 +21,7 @@ public class ChartFragment extends Fragment
 {
     private View view;
 
-    // 뷰 요소
+    // 뷰 요소 선언
     BarChart chart;
 
     @Nullable
@@ -32,14 +30,13 @@ public class ChartFragment extends Fragment
     {
         // 화면 생성
         view = inflater.inflate(R.layout.fragment_chart, container, false);
-
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
-
         // 뷰 요소 초기화
         chart = view.findViewById(R.id.barchart);
     }
@@ -65,7 +62,6 @@ public class ChartFragment extends Fragment
         month.add("11월");
         month.add("12월");
 
-
         // 차트에 출력할 독서 권수
         ArrayList NumOfBooks = new ArrayList();
 
@@ -82,7 +78,6 @@ public class ChartFragment extends Fragment
         NumOfBooks.add(new BarEntry(6, 9));
         NumOfBooks.add(new BarEntry(1, 10));
         NumOfBooks.add(new BarEntry(29, 11));
-
 
         // 데이터 담기
         BarDataSet bardataset = new BarDataSet(NumOfBooks, "Number Of Books");

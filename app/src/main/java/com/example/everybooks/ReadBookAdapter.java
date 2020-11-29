@@ -41,7 +41,8 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
 
 
             // 각각의 아이템을 클릭하면 책 정보 페이지로 화면 전환한다.
-            itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
                 public void onClick(View v) {
                     position = getAdapterPosition();
@@ -63,14 +64,10 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
                         intent.putExtra("starNum", book.getStarNum());
                         intent.putExtra("state", book.getState());
                         v.getContext().startActivity(intent);
-
                     }
                 }
             });
-
         }
-
-
     }
 
     // 기본 생성자
@@ -86,13 +83,13 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
     public ReadBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_read_book, parent, false);
-
         return new BookViewHolder(view);
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
-    public void onBindViewHolder(ReadBookAdapter.BookViewHolder holder, int position) {
+    public void onBindViewHolder(ReadBookAdapter.BookViewHolder holder, int position)
+    {
         Book book = readBookList.get(position);
 
         holder.imageView_img.setImageDrawable(book.getImg());

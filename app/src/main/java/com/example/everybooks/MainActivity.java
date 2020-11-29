@@ -4,24 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity
 {
-
     // 로그인 여부 구별하는 변수
     static boolean isLogin = false;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    Intent intent;
     ToReadBookAdapter adapter;
 
     // fragment 뷰들
@@ -42,25 +37,6 @@ public class MainActivity extends AppCompatActivity
     final int PROFILE = 3;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        // test
-        //Toast.makeText(getApplicationContext(), "여기 왔니?", Toast.LENGTH_SHORT).show();
-
-       /* if(MainActivity.isLogin == false)   // 로그아웃된 상태라면
-        {
-            // 안내메세지 보여주고 로그인 화면으로 전환한다.
-            Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-            intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-            finish();
-
-        }*/
-
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -76,16 +52,14 @@ public class MainActivity extends AppCompatActivity
         etcFragment = new EtcFragment();
         profileLogoutFragment = new ProfileLogoutFragment();
         profileFragment = new ProfileFragment();
-
         adapter = new ToReadBookAdapter();
 
         setFragment(HOME);// 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
-
-
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         // 메인 액티비티가 전면에 나올때마다 새로고침한다.
@@ -122,7 +96,6 @@ public class MainActivity extends AppCompatActivity
     {
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        // Transaction → 실제적인 프레그먼트교체가 이루어질때 프레그먼트를 가져와서 트랜잭션을 하려는 행위를 말한다.
 
         switch (fragmentNum)
         {
@@ -158,7 +131,7 @@ public class MainActivity extends AppCompatActivity
                     fragmentTransaction.replace(R.id.main_frame, profileLogoutFragment);
                     fragmentTransaction.commit();
                 }
-                break;
+            break;
         }
     }
 
@@ -192,7 +165,8 @@ public class MainActivity extends AppCompatActivity
     }// end onBackPressed()
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
         toast = Toast.makeText(this, "또 기록하러 와주세요 ", Toast.LENGTH_SHORT);
         toast.show();

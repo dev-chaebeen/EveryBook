@@ -12,30 +12,33 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.BookViewHolder> {
-
+public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.BookViewHolder>
+{
     ArrayList<Book> selectBookList = ReadingBookAdapter.readingBookList;
 
     int position;
     Book book;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
-    public class BookViewHolder extends RecyclerView.ViewHolder {
+    public class BookViewHolder extends RecyclerView.ViewHolder
+    {
+        // 뷰 요소 선언
         ImageView imageView_img;
         TextView textView_title;
         TextView textView_start_date;
 
-        // 생성자
-        BookViewHolder(View itemView) {
+        BookViewHolder(View itemView)
+        {
             super(itemView) ;
 
-            // 뷰 객체에 대한 참조. (hold strong reference)
+            // 뷰 요소 초기화
             imageView_img = itemView.findViewById(R.id.img);
             textView_title = itemView.findViewById(R.id.title);
             textView_start_date = itemView.findViewById(R.id.start_date);
 
-            // 각각의 아이템을 클릭하면 책 정보  페이지로 화면 전환한다.
-            itemView.setOnClickListener(new View.OnClickListener() {
+            // 각각의 아이템을 클릭하면 인텐트에 책 정보를 담아서 시간 측정 화면으로 전환한다.
+            itemView.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
                 public void onClick(View v) {
                     position = getAdapterPosition();
@@ -44,7 +47,6 @@ public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.Bo
                         book = getItem(position);
                         Intent intent = new Intent(v.getContext(), TimeRecordActivity.class);
 
-                        // todo 데이터 담고 이동하도록
                         // intent.putExtra("img", book.getImg());
                         // readTime
                         intent.putExtra("bookId", book.getBookId());
@@ -60,30 +62,24 @@ public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.Bo
                     }
                 }
             });
-
-
         }
-
     }
 
-    // 기본 생성자
     SelectBookAdapter(){}
 
-    // 생성자에서 데이터 리스트 객체를 전달받음.
     SelectBookAdapter(ArrayList<Book> selectBookList) {
         this.selectBookList = selectBookList;
     }
 
-    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
+    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴하는 메소드
     @Override
     public SelectBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_reading_book, parent, false);
-
         return new BookViewHolder(view);
     }
 
-    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
+    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시하는 메소드
     @Override
     public void onBindViewHolder(SelectBookAdapter.BookViewHolder holder, int position) {
         Book book = selectBookList.get(position);
@@ -95,7 +91,7 @@ public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.Bo
 
     }
 
-    // getItemCount() - 전체 데이터 갯수 리턴.
+    // getItemCount() - 전체 데이터 갯수 리턴하는 메소드
     @Override
     public int getItemCount() {
         return selectBookList.size() ;
@@ -105,15 +101,6 @@ public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.Bo
     // 아이템 추가 메소드
     public void addItem(Book book)
     {
-        //현재 년도, 월, 일
-        Calendar cal = Calendar.getInstance();
-
-        int year = cal.get ( cal.YEAR );
-        int month = cal.get ( cal.MONTH ) + 1 ;
-        int date = cal.get ( cal.DATE ) ;
-
-        String today = year + "." + month + "." + date;
-        book.setStartDate(today);
         book.setState("reading");
         selectBookList.add(0, book);
         notifyItemInserted(0);

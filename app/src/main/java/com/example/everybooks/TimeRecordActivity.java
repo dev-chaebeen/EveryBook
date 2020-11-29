@@ -13,32 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 public class TimeRecordActivity extends AppCompatActivity
 {
     // 뷰 요소 선언
-    TextView textView_title;        // 책 제목
-    ImageView imageView_img;        // 책 표지
-    TextView textView_writer;       // 작가
-    TextView textView_publisher;    // 출판사
-    TextView textView_publish_date; // 출판일
-    TextView textView_time;         // 독서 시간
-    Button button_start;            // START 버튼
-    Button button_stop;             // STOP 버튼
-
-    Intent intent;
+    TextView textView_title;
+    ImageView imageView_img;
+    TextView textView_writer;
+    TextView textView_publisher;
+    TextView textView_publish_date;
+    TextView textView_time;
+    Button button_start;
+    Button button_stop;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-       /* if(MainActivity.isLogin == false)   // 로그아웃된 상태라면
-        {
-            // 안내메세지 보여주고 로그인 화면으로 전환한다.
-            Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-            intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        }*/
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         // 화면 생성

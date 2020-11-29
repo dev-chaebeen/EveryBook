@@ -5,12 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,11 +14,11 @@ import androidx.fragment.app.Fragment;
 public class EtcFragment extends Fragment
 {
     // 뷰 요소 선언
-    LinearLayout linearLayout_notification; // 알림
-    LinearLayout linearLayout_time_record;  // 시간 기록
-    LinearLayout linearLayout_calendar;     // 캘린더
-    LinearLayout linearLayout_asmr_video;   // asmr 비디오
-    LinearLayout linearLayout_translate;    // 번역
+    LinearLayout linearLayout_notification;
+    LinearLayout linearLayout_time_record;
+    LinearLayout linearLayout_calendar;
+    LinearLayout linearLayout_asmr_video;
+    LinearLayout linearLayout_translate;
 
     View.OnClickListener click;
     Intent intent;
@@ -49,8 +44,7 @@ public class EtcFragment extends Fragment
         linearLayout_asmr_video = view.findViewById(R.id.asmr_video);
         linearLayout_translate = view.findViewById(R.id.translate);
 
-
-        // 각 요소를 클릭하면 수행할 동작 지정해두기
+        // 각 메뉴를 클릭하면 해당하는 화면으로 전환한다.
         click = new View.OnClickListener()
         {
             @Override

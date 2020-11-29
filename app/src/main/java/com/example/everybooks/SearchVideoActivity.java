@@ -1,17 +1,13 @@
 package com.example.everybooks;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,32 +16,16 @@ import java.util.ArrayList;
 public class SearchVideoActivity extends AppCompatActivity
 {
     // 뷰 요소 선언
-    //EditText editText_search;       // 검색 텍스트
-    ImageView imageView_mic;        // 마이크 이미지
-    TextView textView_search_num;   // 검색 결과 수
+    SearchView searchView_search;
+    TextView textView_search_num;
 
-   // CardView cardView_video;        // 영상
-    ImageView imageView_img;        // 영상 썸네일
-    TextView textView_title;        // 영상 제목
-    TextView textView_channel;      // 채널 이름
-    TextView textView_description;  // 영상 설명 
+    ImageView imageView_img;
+    TextView textView_title;
+    TextView textView_channel;
+    TextView textView_description;
 
-    Intent intent;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        /*if(MainActivity.isLogin == false)   // 로그아웃된 상태라면
-        {
-            // 안내메세지 보여주고 로그인 화면으로 전환한다.
-            Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-            intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        }*/
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,11 +35,8 @@ public class SearchVideoActivity extends AppCompatActivity
         setContentView(R.layout.activity_search_video);
 
         // 뷰 요소 초기화
-       // editText_search = findViewById(R.id.search);
-        imageView_mic = findViewById(R.id.mic);
         textView_search_num = findViewById(R.id.search_num);
-
-        //cardView_video = findViewById(R.id.video);
+        searchView_search = findViewById(R.id.search);
         imageView_img = findViewById(R.id.img);
         textView_title = findViewById(R.id.title);
         textView_channel = findViewById(R.id.channel);
@@ -80,16 +57,21 @@ public class SearchVideoActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(adapter);
 
-        
-/*        // 비디오 클릭하면 유튜브 재생
-        cardView_video.setOnClickListener(new View.OnClickListener() {
+        // 검색창에 키워드를 입력하고 검색 버튼을 누르면 검색 결과화면을 보여준다.
+        searchView_search.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener()
+        {
             @Override
-            public void onClick(View v) {
-                intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("https://www.youtube.com/watch?v=gShDtRwTLXw"));
-                intent.setPackage("com.google.android.youtube");
-                startActivity(intent);
+            public boolean onQueryTextSubmit(String query)
+            {
+                // 검색 키워드 제출하면 수행할 동작
+                return true;
             }
-        });*/
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                return false;
+            }
+        });
     }
 }
