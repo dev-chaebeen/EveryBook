@@ -246,7 +246,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
 
                 builder.show();
 
-                return true; // 롱클릭 이벤트 이후 클릭이벤트 발생 xx
+                return true; // 롱클릭 이벤트 이후 클릭이벤트 발생하지 않도록 true 반환 
             }
         });
 

@@ -17,22 +17,6 @@
         android:orientation="horizontal"
         >
 
-      <!--  &lt;!&ndash; 화살표 &ndash;&gt;
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@null"
-            android:src="@drawable/ic_back"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-
-            android:layout_marginStart="10dp" />-->
-
         <!-- Notification -->
         <TextView
             android:layout_width="wrap_content"
@@ -76,18 +60,24 @@
         >
 
 
-        <ScrollView
+        <ListView
+            android:id="@+id/notification_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <!--<ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!--목록 -->
+            &lt;!&ndash;목록 &ndash;&gt;
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 >
 
-                <!-- 하나 -->
+                &lt;!&ndash; 하나 &ndash;&gt;
                 <LinearLayout
                     android:id="@+id/notification"
                   android:layout_width="match_parent"
@@ -96,12 +86,12 @@
                     android:layout_marginTop="20dp"
                     >
 
-                    <!-- 시간이랑 요일 -->
+                    &lt;!&ndash; 시간이랑 요일 &ndash;&gt;
                     <LinearLayout
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <!--시간 -->
+                        &lt;!&ndash;시간 &ndash;&gt;
                         <TextView
                             android:id="@+id/time"
                             android:layout_width="wrap_content"
@@ -110,7 +100,7 @@
                             android:textSize="30sp"
                             android:layout_marginBottom="10dp"/>
 
-                        <!--요일 -->
+                        &lt;!&ndash;요일 &ndash;&gt;
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -181,7 +171,7 @@
                             android:text="문구문구 "
                             android:textSize="16sp"/>
 
-                </LinearLayout><!--시간, 요일, 문구 -->
+                </LinearLayout>&lt;!&ndash;시간, 요일, 문구 &ndash;&gt;
 
                     <Switch
                         android:layout_width="match_parent"
@@ -189,18 +179,18 @@
                         android:layout_gravity="center"
                         android:gravity="center" />
 
-                </LinearLayout><!--하나-->
+                </LinearLayout>&lt;!&ndash;하나&ndash;&gt;
 
-                <!-- 선 -->
+                &lt;!&ndash; 선 &ndash;&gt;
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/light_grey"
                     android:layout_marginTop="5dp" />
 
-            </LinearLayout><!--목록-->
+            </LinearLayout>&lt;!&ndash;목록&ndash;&gt;
 
-        </ScrollView>
+        </ScrollView>-->
 
     </LinearLayout><!--end 콘텐츠 공간-->
 </LinearLayout>

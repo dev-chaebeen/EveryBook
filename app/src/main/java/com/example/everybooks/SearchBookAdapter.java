@@ -34,7 +34,7 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
         BookViewHolder(View itemView) {
             super(itemView) ;
 
-            // 뷰 객체에 대한 참조. (hold strong reference)
+            // 뷰 객체에 대한 참조.
             imageView_img = itemView.findViewById(R.id.img);
             textView_title = itemView.findViewById(R.id.title);
             textView_writer = itemView.findViewById(R.id.writer);
@@ -53,8 +53,8 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
                                 {
                                     // 읽을 책 리스트에 추가한다.
                                     position = getAdapterPosition();
-                                    Book book = getItem(position);
-                                    addItem(book);
+                                    //Book book = getItem(position);
+                                    //addItem(book);
 
                                     dialog.dismiss();
 

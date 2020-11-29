@@ -10,14 +10,17 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class SelectBookActivity extends AppCompatActivity
 {
     Intent intent;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
 
     // 뷰 요소 선언
-    LinearLayout select_book;       // 책
     ImageView imageView_img;        // 책 표지
     TextView textView_title;        // 책 제목
     TextView textView_start_date;   // 독서 시작일
@@ -42,21 +45,20 @@ public class SelectBookActivity extends AppCompatActivity
         setContentView(R.layout.activity_select_book);
 
         // 뷰 요소 초기화
-        select_book = findViewById(R.id.select_book);
         imageView_img = findViewById(R.id.img);
         textView_title = findViewById(R.id.title);
         textView_start_date = findViewById(R.id.start_date);
 
-        // 특정한 책을 클릭하면
-        select_book.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                intent = new Intent(getApplicationContext(),TimeRecordActivity.class);
-                startActivity(intent);
-            }
-        });
+        // 리사이클러뷰 생성
+        recyclerView = (RecyclerView) findViewById(R.id.select_book_list);
+
+        recyclerView.setHasFixedSize(true);
+        adapter = new SelectBookAdapter(ReadingBookAdapter.readingBookList);
+        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+
+        recyclerView.setAdapter(adapter);
+
+
     }
 
 }

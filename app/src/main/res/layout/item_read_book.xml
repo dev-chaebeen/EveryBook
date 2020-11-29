@@ -47,6 +47,8 @@
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:layout_gravity="center"
             android:progressTint="@color/yellow" />
+
+
     </LinearLayout>
 
 
