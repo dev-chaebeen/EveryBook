@@ -81,7 +81,7 @@ public class NotificationActivity extends AppCompatActivity
                 intent = new Intent(getApplicationContext(), EditNotificationActivity.class);
 
                 Notification noti = (Notification) adapter.getItem(position);
-                intent.putExtra("notiId", noti.getNotiId());
+                intent.putExtra("position", position);
                 intent.putExtra("hour", noti.getHour());
                 intent.putExtra("minute", noti.getMinute());
                 intent.putExtra("text", noti.getText());

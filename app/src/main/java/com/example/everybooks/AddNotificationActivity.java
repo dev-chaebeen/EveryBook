@@ -11,12 +11,17 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Calendar;
+
 public class AddNotificationActivity extends AppCompatActivity
 {
     // 뷰 요소 선언
     TextView textView_save;
     TextView textView_time;
     EditText notification_text;
+
+    int hour;
+    int min;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -38,6 +43,16 @@ public class AddNotificationActivity extends AppCompatActivity
                 switch (v.getId()) {
                     case R.id.save:
                         // Save 클릭하면 사용자에게 입력받은 데이터를 알림 리스트에 저장한다.
+                        Notification noti = new Notification();
+                        noti.setHour(hour);
+                        noti.setMinute(min);
+                        noti.setText(notification_text.getText().toString());
+
+                        NotificationAdapter notificationAdapter = new NotificationAdapter();
+                        notificationAdapter.addItem(noti);
+
+                        finish();
+
                         break;
                     case R.id.time :
                         // 시간 클릭하면 타임피커 다이얼로그가 등장해서 설정할 시간을 입력받는다.
@@ -50,6 +65,15 @@ public class AddNotificationActivity extends AppCompatActivity
         textView_save.setOnClickListener(click);
         textView_time.setOnClickListener(click);
 
+        // 초기 시간을 현재 시간으로 보여준다.
+        Calendar cal = Calendar.getInstance();
+        hour = cal.HOUR_OF_DAY;
+        min = cal.MINUTE;
+
+        textView_time.setText(hour + ":" + min);
+
+
+
     }
 
     private void dialogTimePicker(){
@@ -58,10 +82,15 @@ public class AddNotificationActivity extends AppCompatActivity
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         textView_time.setText(hourOfDay +":"+minute);
+                        hour = hourOfDay;
+                        min = minute;
                     }
                 };
+
+        //현재 시간으로 타임피커 초기값을 설정한다.
+        Calendar cal = Calendar.getInstance();
         TimePickerDialog alert = new TimePickerDialog(this,
-                mTimeSetListener, 0, 0, true);
+                mTimeSetListener, cal.HOUR_OF_DAY, cal.MINUTE, true);
         alert.show();
     }
 }
