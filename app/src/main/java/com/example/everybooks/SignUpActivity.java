@@ -74,6 +74,8 @@ public class SignUpActivity extends AppCompatActivity
                 }
                 else
                 {
+
+
                     // 정상적으로 입력하고 클릭한 경우 유저 객체를 생성해서 사용자가 입력한 값을 담은 다음
                     user = new User();
                     user.setImg(img);
@@ -81,21 +83,36 @@ public class SignUpActivity extends AppCompatActivity
                     user.setEmail(email);
                     user.setPassword(password);
                     
-                   // 객체를 json 형태로 바꾼다.
+                   // json 형태로 바꾼 객체를 String 변수인 userString 에 저장한다..
                     String userString = user.toJSON();
 
-                    // userInfo 라는 SharedPreferences 파일에
-                    // 키 : 입력받은 email
-                    // 값 : img, nickname, email, password 데이터를 저장한다.
                     SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = userInfo.edit();
-                    editor.putString(email, userString);
-                    editor.commit();
+                    String userInfoString = userInfo.getString(email, "false");
 
-                    // 입력받은 이메일 데이터를 담아 로그인 화면으로 전환한다.
-                    intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    intent.putExtra("email", textInputEditText_email.getText().toString());
-                    startActivity(intent);
+                    // 이미 등록된 이메일인 경우
+                    if(userInfoString!="false")
+                    {
+                        Toast.makeText(getApplicationContext(), "이미 등록된 이메일입니다.", Toast.LENGTH_SHORT).show();
+                        textInputEditText_email.setText("");
+                    }
+                    else
+                    {
+                        // 등록되지 않은 이메일인 경우
+                        // userInfo 라는 SharedPreferences 파일에
+                        // 키 : 입력받은 email
+                        // 값 : img, nickname, email, password 데이터를 저장한다.
+
+                        SharedPreferences.Editor editor = userInfo.edit();
+                        editor.putString(email, userString);
+                        editor.commit();
+
+                        // 입력받은 이메일 데이터를 담아 로그인 화면으로 전환한다.
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.putExtra("email", textInputEditText_email.getText().toString());
+                        startActivity(intent);
+                        finish();
+                    }
+
                 }
 
             }
