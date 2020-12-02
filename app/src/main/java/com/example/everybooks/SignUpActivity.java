@@ -29,6 +29,15 @@ public class SignUpActivity extends AppCompatActivity
 
     Intent intent;
 
+    // 회원가입
+    User user;
+    Drawable img;
+    String nickname;
+    String email;
+    String password;
+    String confirmPassword;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -51,12 +60,11 @@ public class SignUpActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-
-                Drawable img = imageView_add_photo.getDrawable();
-                String nickname = textInputEditText_nickname.getText().toString();
-                String email = textInputEditText_email.getText().toString();
-                String password = textInputEditText_password.getText().toString();
-                String confirmPassword = textInputEditText_confirm_password.getText().toString();
+                img = imageView_add_photo.getDrawable();
+                nickname = textInputEditText_nickname.getText().toString();
+                email = textInputEditText_email.getText().toString();
+                password = textInputEditText_password.getText().toString();
+                confirmPassword = textInputEditText_confirm_password.getText().toString();
 
                 // 비밀번호와 비밀번호 확인에 입력한 값이 같지 않으면 비밀번호가 일치하지 않는다는 안내를 한다.
                 if(!password.equals(confirmPassword))
@@ -67,13 +75,13 @@ public class SignUpActivity extends AppCompatActivity
                 else
                 {
                     // 정상적으로 입력하고 클릭한 경우 유저 객체를 생성해서 사용자가 입력한 값을 담은 다음
-                    User user = new User();
+                    user = new User();
                     user.setImg(img);
                     user.setNickname(nickname);
                     user.setEmail(email);
                     user.setPassword(password);
                     
-                    // 객체를 json 형태로 바꾼다.
+                   // 객체를 json 형태로 바꾼다.
                     String userString = user.toJSON();
 
                     // userInfo 라는 SharedPreferences 파일에
@@ -84,12 +92,14 @@ public class SignUpActivity extends AppCompatActivity
                     editor.putString(email, userString);
                     editor.commit();
 
+                    // 입력받은 이메일 데이터를 담아 로그인 화면으로 전환한다.
                     intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    intent.putExtra("email",textInputEditText_email.getText().toString());
+                    intent.putExtra("email", textInputEditText_email.getText().toString());
                     startActivity(intent);
                 }
 
             }
         });
     }
+
 }

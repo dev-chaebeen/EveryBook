@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.everybooks.data.User;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -75,26 +76,25 @@ public class LoginActivity extends AppCompatActivity
 
                     case R.id.login:
 
-                        // todo
-                        // 기존에 등록된 아이디인지 확인한다
-                        // 등록된 아이디와 일치하면 비밀번호와 일치하는지 확인한다.
-
-                        // userInfo 파일을 불러와서 입력받은 아이디가 존재하는지 확인한다.
+                        // userInfo 파일을 불러와서 입력받은 이메일이 존재하는지 확인한다.
                         SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
-
                         String userInfoString = userInfo.getString(textInputEditText_email.getText().toString(), "false");
 
+                        //  입력받은 이메일이 존재하지 않는다면 안내 메세지로 알려준다.
                         if(userInfoString.equals("false"))
                         {
-                            Toast.makeText(getApplicationContext(), "존재하지 않는 아이디입니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "존재하지 않는 이메일입니다.", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
                             try {
 
+                                // 입력받은 이메일이 존재한다면 해당하는 패스워드 정보를 가져온다.
                                 JSONObject jsonObject = new JSONObject(userInfoString);
                                 String password = jsonObject.getString("password");
 
+                                // 입력받은 패스워드와 저장되어있는 패스워드가 일치하면 로그인 시킨 뒤
+                                // 자동로그인이 가능하도록 autoLogin 파일에 입력받은 이메일과 패스워드를 저장하고 메인 화면으로 전환한다.
                                 if(textInputEditText_password.getText().toString().equals(password))
                                 {
                                     MainActivity.isLogin = true;
@@ -107,14 +107,16 @@ public class LoginActivity extends AppCompatActivity
                                     startActivity(intent);
                                     finish();
                                 }
+                                else
+                                {
+                                    Toast.makeText(LoginActivity.this, "비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                                }
 
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
-
-
 
                         break;
 
@@ -153,15 +155,55 @@ public class LoginActivity extends AppCompatActivity
         // 등록된 아이디와 일치하면 비밀번호와 일치하는지 확인한다.
         if(loginEmail != null && loginPassword != null)
         {
-            if(loginEmail.equals("chxxbeen@gmail.com")&& loginPassword.equals("123"))
-            {
-                MainActivity.isLogin = true;
-                Toast.makeText(LoginActivity.this, "자동 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
-                intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+            SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
+            String userInfoString = userInfo.getString(loginEmail, "false");
 
-                finish();// 현재 액티비티 종료
+            if(userInfoString.equals("false"))
+            {
+                // 로그인 화면으로 전환
+                intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else
+            {
+                try {
+
+                    // 입력받은 이메일이 존재한다면 해당하는 패스워드 정보를 가져온다.
+                    JSONObject jsonObject = new JSONObject(userInfoString);
+                    String password = jsonObject.getString("password");
+
+                    // 입력받은 패스워드와 저장되어있는 패스워드가 일치하면 로그인 시킨 뒤
+                    // 자동로그인이 가능하도록 autoLogin 파일에 입력받은 이메일과 패스워드를 저장한다.
+                    if(loginPassword.equals(password))
+                    {
+                        MainActivity.isLogin = true;
+                        Toast.makeText(LoginActivity.this, "자동 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else
+                    {
+                        // 로그인 화면으로 전환
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
+
+
+        //  입력받은 이메일이 존재하지 않는다면 안내 메세지로 알려준다.
+
+
+
+
     }
 }
