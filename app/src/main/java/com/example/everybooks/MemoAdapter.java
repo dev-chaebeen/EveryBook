@@ -9,6 +9,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.example.everybooks.data.Memo;
+
+
 public class MemoAdapter extends BaseAdapter
 {
     // todo static 수정하기
@@ -21,7 +24,8 @@ public class MemoAdapter extends BaseAdapter
         memo.setBookId(bookId);
         memo.setMemoText(memoText);
 
-        if(Memo.memoId == 0)
+        // 생성자에서 증가시킨다
+      /*  if(Memo.memoId == 0)
         {
             memo.setMemoId(0);
             Memo.memoId = Memo.memoId + 1;
@@ -29,7 +33,7 @@ public class MemoAdapter extends BaseAdapter
         else
         {
             memo.setMemoId(Memo.memoId);
-        }
+        }*/
 
         //현재 년도, 월, 일
         Calendar cal = Calendar.getInstance();

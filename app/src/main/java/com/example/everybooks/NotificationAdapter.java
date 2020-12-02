@@ -8,8 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.everybooks.data.Notification;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class NotificationAdapter extends BaseAdapter
 {
@@ -19,6 +20,9 @@ public class NotificationAdapter extends BaseAdapter
     // 데이터 추가 메소드
     public void addItem(Notification noti)
     {
+        // 현재 알림 아이디가 0이라면 0을 저장하고 1을 증가시킨다.
+        // 왜냐하면 리스트의 포지션과 아이디의 값을 맞추기 위해서 ???
+        /*
         if(Notification.notiId == 0)
         {
             noti.setNotiId(0);
@@ -28,6 +32,12 @@ public class NotificationAdapter extends BaseAdapter
         {
             noti.setNotiId(Notification.notiId);
         }
+
+         */
+
+/*        noti.setNotiId(Notification.notiId);
+        Notification.notiId +=1;*/
+
 
         notiList.add(0, noti);
         notifyDataSetChanged();
@@ -86,7 +96,7 @@ public class NotificationAdapter extends BaseAdapter
         textView_sat.setText("토");
         textView_sun.setText("일");
         textView_notification_text.setText(noti.getText());
-        switch_on.setChecked(noti.isOn);
+        //switch_on.setChecked(noti.isOn);
 
         return convertView;
     }

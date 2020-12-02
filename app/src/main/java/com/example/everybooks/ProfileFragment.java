@@ -1,6 +1,8 @@
 package com.example.everybooks;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,13 +60,24 @@ public class ProfileFragment extends Fragment
                         break;
 
                     case R.id.logout :
-                        // 로그아웃 시키고
+                        // 로그아웃을 클릭하면
+                        // 로그인 여부를 false 로 초기화하고 sharedPreference (autoLogin) 에 저장되어있는
+                        // 모든 정보(로그인했던 아이디와 비밀번호)를 지우고 로그인 화면으로 전환한다.
+                        MainActivity.isLogin = false;
+                        SharedPreferences autoLogin = v.getContext().getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = autoLogin.edit();
+                        editor.clear();
+                        editor.commit();
+                        Toast.makeText(v.getContext(), "로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
+
+                        intent = new Intent(v.getContext(), LoginActivity.class);
+                        startActivity(intent);
 
                         break;
 
                     case R.id.feedback :
 
-                        // 메일 보내기
+                        // feedback 을 클릭하면 메일을 보낼 수 있는 앱을 선택할 수 있다.
                         intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("plain/text");
                         String[] address = {"chxxbeen@gmail.com"};

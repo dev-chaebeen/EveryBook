@@ -6,10 +6,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.everybooks.data.Notification;
 
 import java.util.Calendar;
 
@@ -35,7 +36,6 @@ public class AddNotificationActivity extends AppCompatActivity
         textView_time = findViewById(R.id.time);
         notification_text = findViewById(R.id.notification_text);
 
-        // notification List 에 추가되도록 하기
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         View.OnClickListener click = new View.OnClickListener() {
             @Override
@@ -71,8 +71,6 @@ public class AddNotificationActivity extends AppCompatActivity
         min = cal.MINUTE;
 
         textView_time.setText(hour + ":" + min);
-
-
 
     }
 

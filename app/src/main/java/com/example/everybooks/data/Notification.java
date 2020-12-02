@@ -1,7 +1,8 @@
-package com.example.everybooks;
+package com.example.everybooks.data;
 
 public class Notification
 {
+    //todo static 수정
     static int notiId;
     String text;
     String[] days;
@@ -9,6 +10,13 @@ public class Notification
     int minute;
 
     boolean isOn;
+
+    // 객체를 구분하는 id를 객체마다 가지도록 하기 위해서
+    // 객체를 생성할 때마다 notiId 가 1씩 증가하도록 한다.
+    public Notification()
+    {
+        this.notiId = notiId+1;
+    }
 
     public int getNotiId() {
         return notiId;

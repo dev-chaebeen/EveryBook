@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.everybooks.data.Notification;
+
 public class NotificationActivity extends AppCompatActivity
 {
     // 뷰 요소 선언

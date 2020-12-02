@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.everybooks.data.Video;
+
 import java.util.ArrayList;
 
 public class SearchVideoAdapter extends RecyclerView.Adapter<SearchVideoAdapter.BookViewHolder> {

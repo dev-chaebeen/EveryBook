@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.everybooks.data.Book;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 

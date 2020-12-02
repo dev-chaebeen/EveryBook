@@ -12,6 +12,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.everybooks.data.Book;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -31,7 +34,6 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         TextView textView_title;
         TextView textView_start_date;
 
-        // 생성자
         BookViewHolder(View itemView)
         {
             super(itemView) ;
@@ -85,6 +87,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     ReadingBookAdapter(){}
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
+    // todo 이유 작성
     ReadingBookAdapter(ArrayList<Book> readingBookList) {
         this.readingBookList = readingBookList;
     }
@@ -157,7 +160,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         ratingBar.setLayoutParams(lp);
         ratingBar.setNumStars(5);
         ratingBar.setStepSize(1);
-
+        // todo 세팅하는 이유 설명, 남을 위해서 주석을 작성하도록 하기
         linearLayout.addView(ratingBar);
         popDialog.setTitle("독서를 마칠까요?\n별점을 입력해주세요. ");
         popDialog.setView(linearLayout);

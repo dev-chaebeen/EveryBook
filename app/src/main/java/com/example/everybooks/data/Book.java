@@ -1,11 +1,12 @@
-package com.example.everybooks;
+package com.example.everybooks.data;
 
 import android.graphics.drawable.Drawable;
 
 // 책 정보 객체 생성하는 클래스
 public class Book
 {
-    // 일반 생성자
+    // 객체를 구분하는 id를 객체마다 가지도록 하기 위해서
+    // 객체를 생성할 때마다 bookId 가 1씩 증가하도록 한다.
     public Book()
     {
         this.bookId = tempBookId+1;
@@ -20,6 +21,7 @@ public class Book
     }
 
     // 임시 아이디
+    //todo static 수정
     static int tempBookId = 1;
 
     private int bookId;

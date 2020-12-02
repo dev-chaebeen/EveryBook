@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.everybooks.data.Book;
+
 import java.util.ArrayList;
 
 public class CalendarAdapter extends BaseAdapter

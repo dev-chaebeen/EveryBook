@@ -15,7 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+
+import com.example.everybooks.data.Memo;
 
 public class ReadBookInfoActivity extends AppCompatActivity
 {

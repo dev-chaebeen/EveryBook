@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.everybooks.data.Memo;
+
 import java.util.ArrayList;
 
 public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHolder>
