@@ -39,7 +39,7 @@ public class SearchBookActivity extends AppCompatActivity
         Book book = new Book();
         book.setTitle("검색한책");
         book.setWriter("검색한책작가");
-        book.setPlot("줄거리");
+        //book.setPlot("줄거리");
         list.add(book);
 
         // 리사이클러뷰 생성

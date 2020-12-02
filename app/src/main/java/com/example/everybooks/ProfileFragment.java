@@ -62,7 +62,7 @@ public class ProfileFragment extends Fragment
                     case R.id.logout :
                         // 로그아웃을 클릭하면
                         // 로그인 여부를 false 로 초기화하고 sharedPreference (autoLogin) 에 저장되어있는
-                        // 모든 정보(로그인했던 아이디와 비밀번호)를 지우고 로그인 화면으로 전환한다.
+                        // 모든 정보(로그인했던 아이디와 비밀번호)를 지운 뒤 로그인 화면으로 전환한다.
                         MainActivity.isLogin = false;
                         SharedPreferences autoLogin = v.getContext().getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = autoLogin.edit();

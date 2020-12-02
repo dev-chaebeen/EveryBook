@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity
 {
     Intent intent;
@@ -72,19 +75,46 @@ public class LoginActivity extends AppCompatActivity
 
                     case R.id.login:
 
-                        if(textInputEditText_email.getText().toString().equals("chxxbeen@gmail.com")
-                        && textInputEditText_password.getText().toString().equals("123"))
+                        // todo
+                        // 기존에 등록된 아이디인지 확인한다
+                        // 등록된 아이디와 일치하면 비밀번호와 일치하는지 확인한다.
+
+                        // userInfo 파일을 불러와서 입력받은 아이디가 존재하는지 확인한다.
+                        SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
+
+                        String userInfoString = userInfo.getString(textInputEditText_email.getText().toString(), "false");
+
+                        if(userInfoString.equals("false"))
                         {
-                            MainActivity.isLogin = true;
-                            SharedPreferences.Editor editor = autoLogin.edit();
-                            editor.putString("inputEmail", textInputEditText_email.getText().toString());
-                            editor.putString("inputPassword", textInputEditText_password.getText().toString());
-                            editor.commit();
-                            Toast.makeText(LoginActivity.this, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            Toast.makeText(getApplicationContext(), "존재하지 않는 아이디입니다.", Toast.LENGTH_SHORT).show();
                         }
+                        else
+                        {
+                            try {
+
+                                JSONObject jsonObject = new JSONObject(userInfoString);
+                                String password = jsonObject.getString("password");
+
+                                if(textInputEditText_password.getText().toString().equals(password))
+                                {
+                                    MainActivity.isLogin = true;
+                                    SharedPreferences.Editor editor = autoLogin.edit();
+                                    editor.putString("inputEmail", textInputEditText_email.getText().toString());
+                                    editor.putString("inputPassword", textInputEditText_password.getText().toString());
+                                    editor.commit();
+                                    Toast.makeText(LoginActivity.this, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
 
                         break;
 
@@ -116,6 +146,11 @@ public class LoginActivity extends AppCompatActivity
         // SharedPreference 에 저장된 loginEmail 과 loginPassword 이 null 값이 아니라면
         // 기존에 등록된 회원정보(아이디, 패스워드)와 일치하는지 확인한다.
         // 기존에 등록된 회원정보와 일치하면 자동로그인한다.
+
+        // todo
+        // SharedPreference 에 저장된 loginEmail 과 loginPassword 이 null 값이 아니라면
+        // 기존에 등록된 아이디인지 확인한다
+        // 등록된 아이디와 일치하면 비밀번호와 일치하는지 확인한다.
         if(loginEmail != null && loginPassword != null)
         {
             if(loginEmail.equals("chxxbeen@gmail.com")&& loginPassword.equals("123"))

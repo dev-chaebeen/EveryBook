@@ -80,15 +80,19 @@ public class EditBookInfoActivity extends AppCompatActivity
 
                         if(state.equals("toRead"))
                         {
-                            ToReadBookAdapter adapter = new ToReadBookAdapter();
-                            Book book = ToReadBookAdapter.toReadBookList.get(position);
+                           // ToReadBookAdapter adapter = new ToReadBookAdapter(ToReadBookAdapter.toReadBookList);
 
+
+                            //Book book = ToReadBookAdapter.toReadBookList.get(position);
+
+/*
                             book.setTitle(title);
                             book.setWriter(writer);
                             book.setPublisher(publisher);
                             book.setPublishDate(publishDate);
+*/
 
-                            adapter.notifyDataSetChanged();
+                            //adapter.notifyDataSetChanged();
                         }
                         else if(state.equals("reading"))
                         {

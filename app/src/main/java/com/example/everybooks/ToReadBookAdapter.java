@@ -1,8 +1,11 @@
 package com.example.everybooks;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Book;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -21,6 +27,14 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
 {
     private int position;
     Book book;
+    Context context;
+
+
+    public ToReadBookAdapter(Context context)
+    {
+        this.context = context;
+    }
+
 
     // todo static 수정하기
     static ArrayList<Book> toReadBookList = new ArrayList<>();
@@ -104,7 +118,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     ToReadBookAdapter(){}
 
     ToReadBookAdapter(ArrayList<Book> toReadBookList) {
-        this.toReadBookList = toReadBookList;
+        //this.toReadBookList = toReadBookList;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴하는 메소드
@@ -170,6 +184,27 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     // 아이템 가져오는 메소드
     public Book getItem(int position) {
         return toReadBookList.get(position);
+    }
+
+    private ArrayList getStringArrayPref(Context context, String key) {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = prefs.getString(key, null);
+        ArrayList urls = new ArrayList();
+
+        if (json != null) {
+            try {
+                JSONArray a = new JSONArray(json);
+
+                for (int i = 0; i < a.length(); i++) {
+                    String url = a.optString(i);
+                    urls.add(url);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return urls;
     }
 
 }

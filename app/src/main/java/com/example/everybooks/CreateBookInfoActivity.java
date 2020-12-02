@@ -1,12 +1,16 @@
 package com.example.everybooks;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,10 +30,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +62,12 @@ public class CreateBookInfoActivity extends AppCompatActivity
     final int TAKE_PICTURE = 1000;
     final int OPEN_GALLERY = 1001;
 
+
+    // test
+    ArrayList<Book> array = new ArrayList<Book>();
+
+    int bookId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -69,9 +83,12 @@ public class CreateBookInfoActivity extends AppCompatActivity
         editText_publisher = findViewById(R.id.publisher);
         editText_publish_date = findViewById(R.id.publish_date);
 
+        array = getStringArrayPref(getApplicationContext(), "bookInfo");
+
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
         {
+
             @Override
             public void onClick(View view)
             {
@@ -81,14 +98,18 @@ public class CreateBookInfoActivity extends AppCompatActivity
                         // save 클릭했을 때 수행할 동작
                         // 입력받은 책 정보를 읽을 책 리스트에 저장한다.
 
-                        // 임시 저장
+                        // 기존
+
                         Book book = new Book();
+                        book.setBookId(bookId);
                         book.setImg(imageView_img_book.getDrawable());
                         book.setTitle(editText_title.getText().toString());
                         book.setWriter(editText_writer.getText().toString());
                         book.setPublisher(editText_publisher.getText().toString());
                         book.setPublishDate(editText_publish_date.getText().toString());
+                        book.setState("toRead");
 
+                        //어댑터에 추가
                         adapter = new ToReadBookAdapter();
                         adapter.addItem(book);
 
@@ -96,6 +117,8 @@ public class CreateBookInfoActivity extends AppCompatActivity
                         startActivity(intent);
 
                         finish();
+
+
                         break;
 
                     case R.id.add_photo:
@@ -137,6 +160,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
         textView_save.setOnClickListener(click);
         imageView_img_book.setOnClickListener(click);
     }
+
 
     // 카메라 실행 메소드
     private void openCamera()
@@ -370,4 +394,51 @@ public class CreateBookInfoActivity extends AppCompatActivity
         this.sendBroadcast(mediaScanIntent);
         Toast.makeText(this, "앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show();
     }
+
+    private void setStringArrayPref(Context context, String key, ArrayList<Book> values) {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        JSONArray a = new JSONArray();
+
+        for (int i = 0; i < values.size(); i++) {
+            a.put(values.get(i));
+        }
+
+        if (!values.isEmpty()) {
+            editor.putString(key, a.toString());
+        } else {
+            editor.putString(key, null);
+        }
+
+        editor.apply();
+    }
+
+    private ArrayList getStringArrayPref(Context context, String key) {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = prefs.getString(key, null);
+        ArrayList urls = new ArrayList();
+
+        if (json != null) {
+            try {
+                JSONArray a = new JSONArray(json);
+
+                for (int i = 0; i < a.length(); i++) {
+                    String url = a.optString(i);
+                    urls.add(url);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return urls;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setStringArrayPref(getApplicationContext(), "bookInfo", array);
+    }
+
 }
