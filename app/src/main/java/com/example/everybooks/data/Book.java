@@ -4,8 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+
+import com.example.everybooks.ToReadBookAdapter;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -155,35 +160,5 @@ public class Book
         this.starNum = starNum;
     }
 
-    public String getPlot() {
-        return plot;
-    }
 
-    public void setPlot(String plot) {
-        this.plot = plot;
-    }
-
-    public ArrayList<Book> getToReadBookList() {
-        return toReadBookList;
-    }
-
-    public void setToReadBookList(ArrayList<Book> toReadBookList) {
-        this.toReadBookList = toReadBookList;
-    }
-
-    public ArrayList<Book> getReadingBookList() {
-        return readingBookList;
-    }
-
-    public void setReadingBookList(ArrayList<Book> readingBookList) {
-        this.readingBookList = readingBookList;
-    }
-
-    public ArrayList<Book> getReadBookList() {
-        return readBookList;
-    }
-
-    public void setReadBookList(ArrayList<Book> readBookList) {
-        this.readBookList = readBookList;
-    }
 }

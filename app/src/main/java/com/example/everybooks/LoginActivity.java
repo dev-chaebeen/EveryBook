@@ -33,6 +33,9 @@ public class LoginActivity extends AppCompatActivity
 
     String loginEmail;
     String loginPassword;
+    String loginUser;
+
+    SharedPreferences autoLogin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -49,10 +52,6 @@ public class LoginActivity extends AppCompatActivity
         button_google_login = findViewById(R.id.google_login);
         textView_find_password = findViewById(R.id.find_password);
         textView_sign_up = findViewById(R.id.sign_up);
-
-        SharedPreferences autoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE);
-        loginEmail = autoLogin.getString("inputEmail", null);
-        loginPassword = autoLogin.getString("inputPassword", null);
 
 
         // 각 요소를 클릭하면 수행할 동작 지정
@@ -75,7 +74,6 @@ public class LoginActivity extends AppCompatActivity
                         break;
 
                     case R.id.login:
-
                         // userInfo 파일을 불러와서 입력받은 이메일이 존재하는지 확인한다.
                         SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
                         String userInfoString = userInfo.getString(textInputEditText_email.getText().toString(), "false");
@@ -98,9 +96,9 @@ public class LoginActivity extends AppCompatActivity
                                 if(textInputEditText_password.getText().toString().equals(password))
                                 {
                                     MainActivity.isLogin = true;
+                                    SharedPreferences autoLogin = getSharedPreferences("autoLogin", MODE_PRIVATE);
                                     SharedPreferences.Editor editor = autoLogin.edit();
-                                    editor.putString("inputEmail", textInputEditText_email.getText().toString());
-                                    editor.putString("inputPassword", textInputEditText_password.getText().toString());
+                                    editor.putString("loginUser", textInputEditText_email.getText().toString() +","+ textInputEditText_password.getText().toString());
                                     editor.commit();
                                     Toast.makeText(LoginActivity.this, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -117,7 +115,6 @@ public class LoginActivity extends AppCompatActivity
                                 e.printStackTrace();
                             }
                         }
-
                         break;
 
                     case R.id.google_login:
@@ -140,27 +137,32 @@ public class LoginActivity extends AppCompatActivity
     {
         super.onResume();
 
+
         // 인텐트에서 메일 데이터를 받아서 로그인 이메일 작성 창에 보여준다.
         String email = getIntent().getStringExtra("email");
         textInputEditText_email.setText(email);
 
-        // 자동로그인
-        // SharedPreference 에 저장된 loginEmail 과 loginPassword 이 null 값이 아니라면
-        // 기존에 등록된 회원정보(아이디, 패스워드)와 일치하는지 확인한다.
-        // 기존에 등록된 회원정보와 일치하면 자동로그인한다.
+        // 최초 로그인할 때 이후로는 자동로그인을 하기 위해서 autoLogin 파일에 저장해둔 loginUser 값을 받아온다.
 
-        // todo
-        // SharedPreference 에 저장된 loginEmail 과 loginPassword 이 null 값이 아니라면
-        // 기존에 등록된 아이디인지 확인한다
-        // 등록된 아이디와 일치하면 비밀번호와 일치하는지 확인한다.
-        if(loginEmail != null && loginPassword != null)
+        SharedPreferences autoLogin = getSharedPreferences("autoLogin",MODE_PRIVATE);
+        loginUser = autoLogin.getString("loginUser", null);
+
+        // SharedPreference autoLogin 에 저장된 loginUser 가 null 값이 아니라면
+        if(loginUser != null)
         {
-            SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
-            String userInfoString = userInfo.getString(loginEmail, "false");
 
+            // "email, password" 의 형태로 저장했기 때문에 "," 을 기준으로 문자열을 나눠서 String 배열에 값을 담는다.
+            // loginEmailPassword[0] 에 email , loginEmailPassword[1]에 password 가 담긴다.
+            String[] loginEmailPassword = loginUser.split(",");
+
+            // autoLogin 에 저장되어있는 이메일 값이 userInfo 에 존재하는지 확인한다.
+            SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
+            String userInfoString = userInfo.getString(loginEmailPassword[0], "false");
+
+            // 존재하지 않는다면
             if(userInfoString.equals("false"))
             {
-                // 로그인 화면으로 전환
+                // 로그인 화면으로 전환한다.
                 intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -169,13 +171,12 @@ public class LoginActivity extends AppCompatActivity
             {
                 try {
 
-                    // 입력받은 이메일이 존재한다면 해당하는 패스워드 정보를 가져온다.
+                    // autoLogin 에 저장되어있는 이메일 값이 userInfo 에 존재한다면 해당하는 패스워드 정보를 가져온다.
                     JSONObject jsonObject = new JSONObject(userInfoString);
                     String password = jsonObject.getString("password");
 
-                    // 입력받은 패스워드와 저장되어있는 패스워드가 일치하면 로그인 시킨 뒤
-                    // 자동로그인이 가능하도록 autoLogin 파일에 입력받은 이메일과 패스워드를 저장한다.
-                    if(loginPassword.equals(password))
+                    // autoLogin 에 저장되어있는 패스워드와 userInfo 에 저장되어있는 패스워드가 일치하면 로그인 시킨다.
+                    if(loginEmailPassword[1].equals(password))
                     {
                         MainActivity.isLogin = true;
                         Toast.makeText(LoginActivity.this, "자동 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -185,7 +186,7 @@ public class LoginActivity extends AppCompatActivity
                     }
                     else
                     {
-                        // 로그인 화면으로 전환
+                        // 일치하지 않는다면 로그인 화면으로 전환
                         intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);
                         finish();
@@ -197,13 +198,8 @@ public class LoginActivity extends AppCompatActivity
                 }
             }
         }
-
-
-
-        //  입력받은 이메일이 존재하지 않는다면 안내 메세지로 알려준다.
-
-
-
+        // SharedPreference autoLogin 에 저장된 loginUser 가 null 이라면
 
     }
+
 }

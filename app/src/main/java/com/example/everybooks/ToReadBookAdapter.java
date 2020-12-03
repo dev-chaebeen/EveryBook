@@ -28,7 +28,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     private int position;
     Book book;
 
-    static ArrayList<Book> toReadBookList;
+    static ArrayList<Book> toReadBookList = new ArrayList<>();
 
     public ToReadBookAdapter(){}
 
@@ -60,6 +60,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                         book = getItem(position);
                         Intent intent = new Intent(v.getContext(), EditBookInfoActivity.class);
                         //intent.putExtra("img", book.getImg());
+                        intent.putExtra("bookId", book.getBookId());
                         intent.putExtra("title", book.getTitle());
                         intent.putExtra("writer", book.getWriter());
                         intent.putExtra("publisher", book.getPublisher());

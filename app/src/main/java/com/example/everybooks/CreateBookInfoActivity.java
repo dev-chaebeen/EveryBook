@@ -101,24 +101,21 @@ public class CreateBookInfoActivity extends AppCompatActivity
                     case R.id.save:
                         // save 클릭했을 때 수행할 동작
 
-                        Log.d(TAG, "save 버튼 클릭");
+                        //Log.d(TAG, "save 버튼 클릭");
 
                         // bookInfo 라는 SharedPreferences 파일에서 bookId 를 가져온다.
                         // 저장된 값이 존재하지 않는다면 0을 가져온다.
                         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
                         bookId = bookInfo.getInt("bookId", 0);
 
-                        Log.d(TAG, "저장되어있던 bookId" + bookId);
+                        //Log.d(TAG, "저장되어있던 bookId" + bookId);
 
                         // 이미지뷰의 resource를 비트맵으로 가져오기
                         //BitmapDrawable drawable = (BitmapDrawable) imageView_img_book.getDrawable();
                         //Bitmap bitmap = drawable.getBitmap();
                         //img = bitmap.toString();
 
-                        // 기존
-
                         // 입력받은 정보를 book 객체에 저장한다.
-
                         Book book = new Book();
                         book.setBookId(bookId);
                         //book.setImg(imageView_img_book.getDrawable());
@@ -130,7 +127,6 @@ public class CreateBookInfoActivity extends AppCompatActivity
 
                         //현재 년도, 월, 일을 책 등록일에 저장한다.
                         Calendar cal = Calendar.getInstance();
-
                         int year = cal.get ( cal.YEAR );
                         int month = cal.get ( cal.MONTH ) + 1 ;
                         int date = cal.get ( cal.DATE ) ;
@@ -157,7 +153,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             editor.putInt("bookId", bookId + 1);
                             editor.commit();
 
-                            Log.d(TAG, "1증가시키고 저장해둔 bookId" + bookInfo.getInt("bookId",0));
+                            // Log.d(TAG, "1증가시키고 저장해둔 bookId" + bookInfo.getInt("bookId",0));
 
 
                             // 기존에 저장된 jsonArray에 저장하기 위해서
@@ -168,7 +164,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             if(toReadBookListString != null)
                             {
                                 jsonArray = new JSONArray(toReadBookListString);
-                                Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
+                                //Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
 
                                 jsonArray.put(bookJson);
 
@@ -177,7 +173,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                                 editor.putString("toReadBookList",toReadBookListString);
                                 editor.commit();
 
-                                Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
+                                //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
 
                             }
                             else
@@ -189,7 +185,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                                 toReadBookListString = jsonArray.toString();
                                 editor.putString("toReadBookList", toReadBookListString);
                                 editor.commit();
-                                Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
+                                //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
                             }
 
                             // jsonArray를 ArrayList<Book> 형태로 변환한다.
@@ -214,12 +210,6 @@ public class CreateBookInfoActivity extends AppCompatActivity
                                 String insertDate = jsonObject.getString("insertDate");
                                 String state = jsonObject.getString("state");
 
-                                // test ok
-                                //Log.d(TAG, "bookId :" + bookId);
-                                //Log.d(TAG, "title :" + title);
-                                //Log.d(TAG, "img :" + img);
-                                //Log.d(TAG, "insertDate :" + insertDate);
-                                //Log.d(TAG, "state :" + state);
 
                                 // ArrayList<Book> 에 저장
                                 toReadBookList.add(0, book);
@@ -235,10 +225,6 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             System.out.println(e.toString());
                         }
 
-
-                        //어댑터에 추가
-                        //adapter = new ToReadBookAdapter(toReadBookList);
-                        //adapter.addItem(book);
 
                         intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
