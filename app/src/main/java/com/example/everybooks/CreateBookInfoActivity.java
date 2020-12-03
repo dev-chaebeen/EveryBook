@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -69,8 +70,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
 
     int bookId;
     String img;
-    String bookListString;
-    Book book;
+    String toReadBookListString;
 
     ArrayList<Book> toReadBookList = new ArrayList<>();
     JSONArray jsonArray;
@@ -116,17 +116,13 @@ public class CreateBookInfoActivity extends AppCompatActivity
                         //img = bitmap.toString();
 
                         // 입력받은 정보를 book 객체에 저장한다.
-                        book = new Book();
+                        Book book = new Book();
                         book.setBookId(bookId);
                         //book.setImg(imageView_img_book.getDrawable());
                         book.setTitle(editText_title.getText().toString());
                         book.setWriter(editText_writer.getText().toString());
                         book.setPublisher(editText_publisher.getText().toString());
                         book.setPublishDate(editText_publish_date.getText().toString());
-                        book.setInsertDate("");
-                        book.setStartDate("");
-                        book.setEndDate("");
-                        book.setReadTime("");
                         book.setState("toRead");
 
                         //현재 년도, 월, 일을 책 등록일에 저장한다.
@@ -151,36 +147,33 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             bookJson.put("publishDate", book.getPublishDate());
                             bookJson.put("state", book.getState());
                             bookJson.put("insertDate", book.getInsertDate());
-                            bookJson.put("startDate", book.getStartDate());
-                            bookJson.put("endDate", book.getEndDate());
-                            bookJson.put("readTime", book.getReadTime());
-                            bookJson.put("starNum", book.getStarNum());
 
                             // 책을 구분하기 위해 저장된 책의 bookId 가 겹치지 않도록 bookInfo 에 저장된 bookId의 값을 1 증가시킨다.
                             SharedPreferences.Editor editor = bookInfo.edit();
                             editor.putInt("bookId", bookId + 1);
                             editor.commit();
 
+                            // Log.d(TAG, "1증가시키고 저장해둔 bookId" + bookInfo.getInt("bookId",0));
+
 
                             // 기존에 저장된 jsonArray에 저장하기 위해서
-                            // SharedPreference bookInfo 파일에서 "bookList" 키로 저장된 String 값을 불러온다.
-
-                            bookListString = bookInfo.getString("bookList", null);
+                            // SharedPreference bookInfo 파일에서 "toReadBookLIst" 키로 저장된 String 값을 불러온다.
+                            toReadBookListString = bookInfo.getString("toReadBookList", null);
 
                             // 저장된 값이 있을 때
-                            if(bookListString != null)
+                            if(toReadBookListString != null)
                             {
-                                jsonArray = new JSONArray(bookListString);
-                                Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
+                                jsonArray = new JSONArray(toReadBookListString);
+                                //Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
 
                                 jsonArray.put(bookJson);
 
-                                bookListString = jsonArray.toString();
+                                toReadBookListString = jsonArray.toString();
 
-                                editor.putString("bookList",bookListString);
+                                editor.putString("toReadBookList",toReadBookListString);
                                 editor.commit();
 
-                                Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
+                                //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
 
                             }
                             else
@@ -189,17 +182,19 @@ public class CreateBookInfoActivity extends AppCompatActivity
                                 jsonArray = new JSONArray();
                                 jsonArray.put(bookJson);
 
-                                bookListString = jsonArray.toString();
-                                editor.putString("bookList", bookListString);
+                                toReadBookListString = jsonArray.toString();
+                                editor.putString("toReadBookList", toReadBookListString);
                                 editor.commit();
-                                Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
+                                //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
                             }
 
                             // jsonArray를 ArrayList<Book> 형태로 변환한다.
-                            bookListString = bookInfo.getString("bookList", "");
-                            JSONArray jsonArray = new JSONArray(bookListString);
+                            toReadBookListString = bookInfo.getString("toReadBookList", "");
+                            JSONArray jsonArray = new JSONArray(toReadBookListString);
 
-                            Log.d(TAG, " 변환하려고 불러온 jsonArray length : " + jsonArray.length());
+                            //Log.d(TAG, " 변환하려고 불러온 jsonArray length : " + jsonArray.length());
+
+                            //Log.d(TAG, toReadBookListString);
 
                             // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
                             for (int i = 0; i < jsonArray.length(); i++)
@@ -213,33 +208,16 @@ public class CreateBookInfoActivity extends AppCompatActivity
                                 String publisher = jsonObject.getString("publisher");
                                 String publishDate = jsonObject.getString("publishDate");
                                 String insertDate = jsonObject.getString("insertDate");
-                                String startDate = jsonObject.getString("startDate");
-                                String endDate = jsonObject.getString("endDate");
-                                String readTime = jsonObject.getString("readTime");
                                 String state = jsonObject.getString("state");
-                                int starNum = jsonObject.getInt("starNum");
 
-                                book = new Book();
-                                book.setBookId(bookId);
-                                book.setTitle(title);
-                                book.setWriter(writer);
-                                book.setPublisher(publisher);
-                                book.setPublisher(publishDate);
-                                book.setInsertDate(insertDate);
-                                book.setStartDate(startDate);
-                                book.setEndDate(endDate);
-                                book.setReadTime(readTime);
-                                book.setState(state);
-                                book.setStarNum(starNum);
 
                                 // ArrayList<Book> 에 저장
-
                                 toReadBookList.add(0, book);
-                            }
+                                //Log.d(TAG, "toReadBookList.size : " + toReadBookList.size());
 
-                            Log.d(TAG, "toReadBookList.size : " + toReadBookList.size());
-                            //어댑터에 보내기
-                            adapter = new ToReadBookAdapter(toReadBookList);
+                                //어댑터에 보내기
+                                adapter = new ToReadBookAdapter(toReadBookList);
+                            }
 
                         }
                         catch (Exception e)
@@ -252,6 +230,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                         startActivity(intent);
 
                         finish();
+
 
                         break;
 
