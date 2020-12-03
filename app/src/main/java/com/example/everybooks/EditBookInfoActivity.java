@@ -182,14 +182,23 @@ public class EditBookInfoActivity extends AppCompatActivity
                                             for (int i = 0; i < jsonArray.length() ; i++)
                                             {
                                                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+
+                                                // 전달받은 bookId 와 jsonObject의 BookId 값이 같다면
                                                 if(bookId == jsonObject.getInt("bookId"))
                                                 {
+                                                    //Log.d(TAG,"삭제할 책의 bookId : " + bookId);
                                                     jsonObject.remove("bookId");
+                                                    jsonObject.remove("title");
+                                                    jsonObject.remove("writer");
+                                                    jsonObject.remove("publisher");
+                                                    jsonObject.remove("publishDate");
+                                                    jsonObject.remove("insertDate");
+                                                    jsonObject.remove("state");
                                                 }
                                             }
 
                                             // test ok
-                                            Log.d(TAG," jsonArray.toString: " + jsonArray.toString());
+                                            Log.d(TAG," 삭제하고 jsonArray.toString: " + jsonArray.toString());
 
                                             SharedPreferences.Editor editor = bookInfo.edit();
                                             editor.putString("toReadBookList", jsonArray.toString());
