@@ -86,7 +86,7 @@ public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.Bo
         Book book = selectBookList.get(position);
 
         // holder.imageView_img.set...
-        holder.imageView_img.setImageDrawable(book.getImg());
+        //holder.imageView_img.setImageDrawable(book.getImg());
         holder.textView_title.setText(book.getTitle());
         holder.textView_start_date.setText(book.getStartDate());
 

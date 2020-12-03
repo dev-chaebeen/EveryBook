@@ -66,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity
                 password = textInputEditText_password.getText().toString();
                 confirmPassword = textInputEditText_confirm_password.getText().toString();
 
-                // 비밀번호와 비밀번호 확인에 입력한 값이 같지 않으면 비밀번호가 일치하지 않는다는 안내를 한다.
+                // 비밀번호와 비밀번호 확인에 입력한 값이 일치하지 않으면 비밀번호를 확인하라는 안내를 한다.
                 if(!password.equals(confirmPassword))
                 {
                     Toast.makeText(getApplicationContext(), "비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
@@ -74,22 +74,20 @@ public class SignUpActivity extends AppCompatActivity
                 }
                 else
                 {
-
-
-                    // 정상적으로 입력하고 클릭한 경우 유저 객체를 생성해서 사용자가 입력한 값을 담은 다음
+                    // 정상적으로 입력한 경우 유저 객체를 생성해서 사용자가 입력한 값을 담는다.
                     user = new User();
                     user.setImg(img);
                     user.setNickname(nickname);
                     user.setEmail(email);
                     user.setPassword(password);
                     
-                   // json 형태로 바꾼 객체를 String 변수인 userString 에 저장한다..
+                    // json 형태로 바꾼 객체를 String 변수인 userString 에 저장하고
+                    // 입력받은 이메일로 저장된 값을 받아온다.
                     String userString = user.toJSON();
-
                     SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
                     String userInfoString = userInfo.getString(email, "false");
 
-                    // 이미 등록된 이메일인 경우
+                    // 이미 등록된 이메일인 경우 이미 등록된 이메일이라고 안내한다.
                     if(userInfoString!="false")
                     {
                         Toast.makeText(getApplicationContext(), "이미 등록된 이메일입니다.", Toast.LENGTH_SHORT).show();
@@ -101,7 +99,6 @@ public class SignUpActivity extends AppCompatActivity
                         // userInfo 라는 SharedPreferences 파일에
                         // 키 : 입력받은 email
                         // 값 : img, nickname, email, password 데이터를 저장한다.
-
                         SharedPreferences.Editor editor = userInfo.edit();
                         editor.putString(email, userString);
                         editor.commit();

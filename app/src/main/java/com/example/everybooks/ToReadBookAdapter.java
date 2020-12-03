@@ -27,17 +27,15 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
 {
     private int position;
     Book book;
-    Context context;
 
+    static ArrayList<Book> toReadBookList;
 
-    public ToReadBookAdapter(Context context)
+    public ToReadBookAdapter(){}
+
+    public ToReadBookAdapter(ArrayList<Book> toReadBookList)
     {
-        this.context = context;
+        this.toReadBookList = toReadBookList;
     }
-
-
-    // todo static 수정하기
-    static ArrayList<Book> toReadBookList = new ArrayList<>();
 
     public class BookViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView_img;
@@ -115,12 +113,6 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
         }
     }
 
-    ToReadBookAdapter(){}
-
-    ToReadBookAdapter(ArrayList<Book> toReadBookList) {
-        //this.toReadBookList = toReadBookList;
-    }
-
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴하는 메소드
     @Override
     public ToReadBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -135,7 +127,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     public void onBindViewHolder(ToReadBookAdapter.BookViewHolder holder, int position) {
         Book book = toReadBookList.get(position);
 
-        holder.imageView_img.setImageDrawable(book.getImg());
+        //holder.imageView_img.setImageBitmap(StringToBitmap(book.getImg()));
         holder.textView_title.setText(book.getTitle());
         holder.textView_insert_date.setText(book.getInsertDate());
 
@@ -186,25 +178,5 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
         return toReadBookList.get(position);
     }
 
-    private ArrayList getStringArrayPref(Context context, String key) {
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String json = prefs.getString(key, null);
-        ArrayList urls = new ArrayList();
-
-        if (json != null) {
-            try {
-                JSONArray a = new JSONArray(json);
-
-                for (int i = 0; i < a.length(); i++) {
-                    String url = a.optString(i);
-                    urls.add(url);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return urls;
-    }
 
 }

@@ -95,7 +95,7 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
     {
         Book book = searchBookList.get(position);
 
-        holder.imageView_img.setImageDrawable(book.getImg());
+        //holder.imageView_img.setImageDrawable(book.getImg());
         holder.textView_title.setText(book.getTitle());
         holder.textView_writer.setText(book.getWriter());
         //holder.textView_plot.setText(book.getPlot());

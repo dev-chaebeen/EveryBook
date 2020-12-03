@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,17 +32,22 @@ import androidx.core.content.FileProvider;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class CreateBookInfoActivity extends AppCompatActivity
 {
+
+    final String TAG = "테스트";
+
     Intent intent;
 
     // 뷰 요소 선언
@@ -63,10 +68,12 @@ public class CreateBookInfoActivity extends AppCompatActivity
     final int OPEN_GALLERY = 1001;
 
 
-    // test
-    ArrayList<Book> array = new ArrayList<Book>();
-
     int bookId;
+    String img;
+    String toReadBookListString;
+
+    ArrayList<Book> toReadBookList = new ArrayList<>();
+    JSONArray jsonArray;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -82,13 +89,10 @@ public class CreateBookInfoActivity extends AppCompatActivity
         editText_writer = findViewById(R.id.writer);
         editText_publisher = findViewById(R.id.publisher);
         editText_publish_date = findViewById(R.id.publish_date);
-
-        array = getStringArrayPref(getApplicationContext(), "bookInfo");
-
+        
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
         {
-
             @Override
             public void onClick(View view)
             {
@@ -96,22 +100,145 @@ public class CreateBookInfoActivity extends AppCompatActivity
                 {
                     case R.id.save:
                         // save 클릭했을 때 수행할 동작
-                        // 입력받은 책 정보를 읽을 책 리스트에 저장한다.
+
+                        Log.d(TAG, "save 버튼 클릭");
+
+                        // bookInfo 라는 SharedPreferences 파일에서 bookId 를 가져온다.
+                        // 저장된 값이 존재하지 않는다면 0을 가져온다.
+                        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                        bookId = bookInfo.getInt("bookId", 0);
+
+                        Log.d(TAG, "저장되어있던 bookId" + bookId);
+
+                        // 이미지뷰의 resource를 비트맵으로 가져오기
+                        //BitmapDrawable drawable = (BitmapDrawable) imageView_img_book.getDrawable();
+                        //Bitmap bitmap = drawable.getBitmap();
+                        //img = bitmap.toString();
 
                         // 기존
 
+                        // 입력받은 정보를 book 객체에 저장한다.
+
                         Book book = new Book();
                         book.setBookId(bookId);
-                        book.setImg(imageView_img_book.getDrawable());
+                        //book.setImg(imageView_img_book.getDrawable());
                         book.setTitle(editText_title.getText().toString());
                         book.setWriter(editText_writer.getText().toString());
                         book.setPublisher(editText_publisher.getText().toString());
                         book.setPublishDate(editText_publish_date.getText().toString());
                         book.setState("toRead");
 
+                        //현재 년도, 월, 일을 책 등록일에 저장한다.
+                        Calendar cal = Calendar.getInstance();
+
+                        int year = cal.get ( cal.YEAR );
+                        int month = cal.get ( cal.MONTH ) + 1 ;
+                        int date = cal.get ( cal.DATE ) ;
+
+                        String today = year + "." + month + "." + date;
+                        book.setInsertDate(today);
+
+                        try
+                        {
+                            // json 객체에 입력받은 값을 저장한다.
+                            JSONObject bookJson = new JSONObject();
+
+                            bookJson.put("bookId", book.getBookId());
+                            //bookJson.put("img", img);
+                            bookJson.put("title", book.getTitle());
+                            bookJson.put("writer", book.getWriter());
+                            bookJson.put("publisher", book.getPublisher());
+                            bookJson.put("publishDate", book.getPublishDate());
+                            bookJson.put("state", book.getState());
+                            bookJson.put("insertDate", book.getInsertDate());
+
+                            // 책을 구분하기 위해 저장된 책의 bookId 가 겹치지 않도록 bookInfo 에 저장된 bookId의 값을 1 증가시킨다.
+                            SharedPreferences.Editor editor = bookInfo.edit();
+                            editor.putInt("bookId", bookId + 1);
+                            editor.commit();
+
+                            Log.d(TAG, "1증가시키고 저장해둔 bookId" + bookInfo.getInt("bookId",0));
+
+
+                            // 기존에 저장된 jsonArray에 저장하기 위해서
+                            // SharedPreference bookInfo 파일에서 "toReadBookLIst" 키로 저장된 String 값을 불러온다.
+                            toReadBookListString = bookInfo.getString("toReadBookList", null);
+
+                            // 저장된 값이 있을 때
+                            if(toReadBookListString != null)
+                            {
+                                jsonArray = new JSONArray(toReadBookListString);
+                                Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
+
+                                jsonArray.put(bookJson);
+
+                                toReadBookListString = jsonArray.toString();
+
+                                editor.putString("toReadBookList",toReadBookListString);
+                                editor.commit();
+
+                                Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
+
+                            }
+                            else
+                            {
+                                // 처음 저장할 때
+                                jsonArray = new JSONArray();
+                                jsonArray.put(bookJson);
+
+                                toReadBookListString = jsonArray.toString();
+                                editor.putString("toReadBookList", toReadBookListString);
+                                editor.commit();
+                                Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
+                            }
+
+                            // jsonArray를 ArrayList<Book> 형태로 변환한다.
+                            toReadBookListString = bookInfo.getString("toReadBookList", "");
+                            JSONArray jsonArray = new JSONArray(toReadBookListString);
+
+                            Log.d(TAG, " 변환하려고 불러온 jsonArray length : " + jsonArray.length());
+
+                            Log.d(TAG, toReadBookListString);
+
+                            // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                            for (int i = 0; i < jsonArray.length(); i++)
+                            {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                int bookId = jsonObject.getInt("bookId");
+                                //String img = jsonObject.getString("img");
+                                String title = jsonObject.getString("title");
+                                String writer = jsonObject.getString("writer");
+                                String publisher = jsonObject.getString("publisher");
+                                String publishDate = jsonObject.getString("publishDate");
+                                String insertDate = jsonObject.getString("insertDate");
+                                String state = jsonObject.getString("state");
+
+                                // test ok
+                                //Log.d(TAG, "bookId :" + bookId);
+                                //Log.d(TAG, "title :" + title);
+                                //Log.d(TAG, "img :" + img);
+                                //Log.d(TAG, "insertDate :" + insertDate);
+                                //Log.d(TAG, "state :" + state);
+
+                                // ArrayList<Book> 에 저장
+                                toReadBookList.add(0, book);
+                                Log.d(TAG, "toReadBookList.size : " + toReadBookList.size());
+
+                                //어댑터에 보내기
+                                adapter = new ToReadBookAdapter(toReadBookList);
+                            }
+
+                        }
+                        catch (Exception e)
+                        {
+                            System.out.println(e.toString());
+                        }
+
+
                         //어댑터에 추가
-                        adapter = new ToReadBookAdapter();
-                        adapter.addItem(book);
+                        //adapter = new ToReadBookAdapter(toReadBookList);
+                        //adapter.addItem(book);
 
                         intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
@@ -395,9 +522,9 @@ public class CreateBookInfoActivity extends AppCompatActivity
         Toast.makeText(this, "앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
-    private void setStringArrayPref(Context context, String key, ArrayList<Book> values) {
+    private void setStringArrayPref(Context context, String key, ArrayList values) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = getSharedPreferences("bookInfo", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         JSONArray a = new JSONArray();
 
@@ -416,7 +543,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
 
     private ArrayList getStringArrayPref(Context context, String key) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = getSharedPreferences("bookInfo", MODE_PRIVATE);
         String json = prefs.getString(key, null);
         ArrayList urls = new ArrayList();
 
@@ -435,10 +562,6 @@ public class CreateBookInfoActivity extends AppCompatActivity
         return urls;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        setStringArrayPref(getApplicationContext(), "bookInfo", array);
-    }
+
 
 }

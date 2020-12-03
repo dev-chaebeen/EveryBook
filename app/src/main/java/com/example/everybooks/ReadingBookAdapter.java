@@ -106,7 +106,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     {
         Book book = readingBookList.get(position);
 
-        holder.imageView_img.setImageDrawable(book.getImg());
+        //holder.imageView_img.setImageDrawable(book.getImg());
         holder.textView_title.setText(book.getTitle());
         holder.textView_start_date.setText(book.getStartDate());
     }

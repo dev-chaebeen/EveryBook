@@ -4,10 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.example.everybooks.data.Book;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -18,6 +28,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentTransaction fragmentTransaction;
 
     ToReadBookAdapter adapter;
+    ArrayList<Book> toReadBookList = new ArrayList<>();
 
     // fragment 뷰들
     private HomeFragment homeFragment;
@@ -35,6 +46,8 @@ public class MainActivity extends AppCompatActivity
     final int RECORD = 1;
     final int ETC = 2;
     final int PROFILE = 3;
+
+    final String TAG = "테스트";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -61,6 +74,57 @@ public class MainActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
+
+        // 저장되어있는 값 어댑터에 보내주기
+        try
+        {
+            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+            String toReadBookListString = bookInfo.getString("toReadBookList", null);
+            if(toReadBookListString != null)
+            {
+                JSONArray jsonArray = new JSONArray(toReadBookListString);
+                Log.d(TAG, " 변환하려고 불러온 jsonArray length : " + jsonArray.length());
+
+                Log.d(TAG, toReadBookListString);
+
+                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    int bookId = jsonObject.getInt("bookId");
+                    //String img = jsonObject.getString("img");
+                    String title = jsonObject.getString("title");
+                    String writer = jsonObject.getString("writer");
+                    String publisher = jsonObject.getString("publisher");
+                    String publishDate = jsonObject.getString("publishDate");
+                    String insertDate = jsonObject.getString("insertDate");
+                    String state = jsonObject.getString("state");
+
+                    Book book = new Book();
+                    book.setBookId(bookId);
+                    //book.setImg(img);
+                    book.setTitle(title);
+                    book.setWriter(writer);
+                    book.setPublisher(publisher);
+                    book.setPublishDate(publishDate);
+                    book.setInsertDate(insertDate);
+                    book.setState(state);
+
+                    toReadBookList.add(0, book);
+                    //어댑터에 보내기
+                    adapter = new ToReadBookAdapter(toReadBookList);
+                }
+
+            }
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+
 
         // 메인 액티비티가 전면에 나올때마다 새로고침한다.
         refresh();
