@@ -18,7 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -28,8 +27,15 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    ToReadBookAdapter adapter;
+    ToReadBookAdapter toReadBookAdapter;
+    ReadingBookAdapter readingBookAdapter;
+    ReadBookAdapter readBookAdapter;
+
     ArrayList<Book> toReadBookList = new ArrayList<>();
+    ArrayList<Book> readingBookList = new ArrayList<>();
+    ArrayList<Book> readBookList = new ArrayList<>();
+
+
 
     // fragment 뷰들
     private HomeFragment homeFragment;
@@ -66,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         etcFragment = new EtcFragment();
         profileLogoutFragment = new ProfileLogoutFragment();
         profileFragment = new ProfileFragment();
-        adapter = new ToReadBookAdapter();
+        toReadBookAdapter = new ToReadBookAdapter();
 
         setFragment(HOME);// 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
     }
@@ -77,12 +83,11 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 
         // 저장되어있는 값 어댑터에 보내주기
-        //getToReadBookList();
 
         try
         {
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-            String toReadBookListString = bookInfo.getString("toReadBookList", null);
+            String toReadBookListString = bookInfo.getString("bookList", null);
             Log.d(TAG, toReadBookListString);
 
             if(toReadBookListString != null)
@@ -116,7 +121,7 @@ public class MainActivity extends AppCompatActivity
                     toReadBookList.add(0, book);
 
                     //어댑터에 보내기
-                    adapter = new ToReadBookAdapter(toReadBookList);
+                    toReadBookAdapter = new ToReadBookAdapter(toReadBookList);
                 }
 
             }
@@ -232,6 +237,17 @@ public class MainActivity extends AppCompatActivity
     }// end onBackPressed()
 
     @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        // 여기에서 어댑터에 있던 리스트들 저장
+
+
+
+    }
+
+    @Override
     protected void onDestroy()
     {
         super.onDestroy();
@@ -242,7 +258,7 @@ public class MainActivity extends AppCompatActivity
     // 새로고침
     public void refresh()
     {
-        adapter.notifyDataSetChanged();
+        toReadBookAdapter.notifyDataSetChanged();
     }
 
     // 저장된 JsonArray 로부터 읽을 책 리스트를 얻는 메소드
@@ -251,14 +267,13 @@ public class MainActivity extends AppCompatActivity
         ArrayList<Book> arrayList= new ArrayList<>();
 
         try {
+
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-            String toReadBookListString = bookInfo.getString("toReadBookList", null);
+            String bookListString = bookInfo.getString("bookList", null);
 
-            //ArrayList<Book> toReadBookList = new ArrayList<>();
-
-            if (toReadBookListString != null)
+            if (bookListString != null)
             {
-                JSONArray jsonArray = new JSONArray(toReadBookListString);
+                JSONArray jsonArray = new JSONArray(bookListString);
 
                 // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -289,7 +304,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 //어댑터에 보내기
-                adapter = new ToReadBookAdapter(arrayList);
+                toReadBookAdapter = new ToReadBookAdapter(arrayList);
 
             }
 
@@ -301,94 +316,4 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    // ArrayList<Book>을  sharedPreference 에 저장하는 메소드
-    public void setToReadBookList(ArrayList<Book> arrayList)
-    {
-            JSONArray jsonArray = new JSONArray();
-
-            for (int i = 0; i < arrayList.size(); i++)
-            {
-                Book book = arrayList.get(i);
-
-                // json 객체에 입력받은 값을 저장한다.
-                try
-                {
-                    JSONObject bookJson = new JSONObject();
-                    bookJson.put("bookId", book.getBookId());
-                    //bookJson.put("img", img);
-                    bookJson.put("title", book.getTitle());
-                    bookJson.put("writer", book.getWriter());
-                    bookJson.put("publisher", book.getPublisher());
-                    bookJson.put("publishDate", book.getPublishDate());
-                    bookJson.put("state", book.getState());
-                    bookJson.put("insertDate", book.getInsertDate());
-                    jsonArray.put(bookJson);
-                }
-                catch (Exception e)
-                {
-                    System.out.println(e.toString());
-                }
-            }
-
-            String toReadBookListString = jsonArray.toString();
-
-            Log.d(TAG, "set메소드 : " + toReadBookListString);
-
-            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-            SharedPreferences.Editor editor = bookInfo.edit();
-            editor.putString("toReadBookList", toReadBookListString);
-            editor.commit();
-    }
-
-
-    public void setStringArrayPref(String key, ArrayList values) {
-        SharedPreferences prefs = getSharedPreferences("bookInfo", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < values.size(); i++)
-        {
-            Book book = (Book) values.get(i);
-            try
-            {
-                JSONObject bookJson = new JSONObject();
-                bookJson.put("bookId", book.getBookId());
-                //bookJson.put("img", img);
-                bookJson.put("title", book.getTitle());
-                bookJson.put("writer", book.getWriter());
-                bookJson.put("publisher", book.getPublisher());
-                bookJson.put("publishDate", book.getPublishDate());
-                bookJson.put("state", book.getState());
-                bookJson.put("insertDate", book.getInsertDate());
-                jsonArray.put(bookJson);
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.toString());
-            }
-        }
-        if (!values.isEmpty()) {
-            editor.putString(key, jsonArray.toString());
-        } else {
-            editor.putString(key, null);
-        }
-        editor.commit();
-    }
-/*
-    private ArrayList getStringArrayPref( String key) {
-        SharedPreferences prefs = getSharedPreferences("bookInfo",MODE_PRIVATE);
-        String json = prefs.getString(key, null);
-        ArrayList urls = new ArrayList();
-        if (json != null) {
-            try {
-                JSONArray a = new JSONArray(json);
-                for (int i = 0; i < a.length(); i++) {
-                    String url = a.optString(i);
-                    urls.add(url);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return urls;
-    }*/
 }

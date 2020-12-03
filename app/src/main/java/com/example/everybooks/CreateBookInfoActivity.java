@@ -9,9 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,7 +68,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
 
     int bookId;
     String img;
-    String toReadBookListString;
+    String bookListString;
 
     ArrayList<Book> toReadBookList = new ArrayList<>();
     JSONArray jsonArray;
@@ -158,19 +156,19 @@ public class CreateBookInfoActivity extends AppCompatActivity
 
                             // 기존에 저장된 jsonArray에 저장하기 위해서
                             // SharedPreference bookInfo 파일에서 "toReadBookLIst" 키로 저장된 String 값을 불러온다.
-                            toReadBookListString = bookInfo.getString("toReadBookList", null);
+                            bookListString = bookInfo.getString("bookList", null);
 
                             // 저장된 값이 있을 때
-                            if(toReadBookListString != null)
+                            if(bookListString != null)
                             {
-                                jsonArray = new JSONArray(toReadBookListString);
+                                jsonArray = new JSONArray(bookListString);
                                 //Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
 
                                 jsonArray.put(bookJson);
 
-                                toReadBookListString = jsonArray.toString();
+                                bookListString = jsonArray.toString();
 
-                                editor.putString("toReadBookList",toReadBookListString);
+                                editor.putString("bookList", bookListString);
                                 editor.commit();
 
                                 //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
@@ -182,15 +180,15 @@ public class CreateBookInfoActivity extends AppCompatActivity
                                 jsonArray = new JSONArray();
                                 jsonArray.put(bookJson);
 
-                                toReadBookListString = jsonArray.toString();
-                                editor.putString("toReadBookList", toReadBookListString);
+                                bookListString = jsonArray.toString();
+                                editor.putString("bookList", bookListString);
                                 editor.commit();
                                 //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
                             }
 
                             // jsonArray를 ArrayList<Book> 형태로 변환한다.
-                            toReadBookListString = bookInfo.getString("toReadBookList", "");
-                            JSONArray jsonArray = new JSONArray(toReadBookListString);
+                            bookListString = bookInfo.getString("bookList", "");
+                            JSONArray jsonArray = new JSONArray(bookListString);
 
                             //Log.d(TAG, " 변환하려고 불러온 jsonArray length : " + jsonArray.length());
 
