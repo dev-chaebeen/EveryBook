@@ -69,7 +69,6 @@ public class EditBookInfoActivity extends AppCompatActivity
         editText_publish_date.setText(getIntent().getStringExtra("publishDate"));
 
         // 전달받은 데이터 저장
-
         position = getIntent().getIntExtra("position",-1);
         bookId = getIntent().getIntExtra("bookId", -1);
         state = getIntent().getStringExtra("state");
@@ -109,7 +108,6 @@ public class EditBookInfoActivity extends AppCompatActivity
                                     jsonObject.put("writer", writer);
                                     jsonObject.put("publisher", publisher);
                                     jsonObject.put("publishDate", publishDate);
-
                                 }
 
                                 // test ok
@@ -124,44 +122,13 @@ public class EditBookInfoActivity extends AppCompatActivity
                                 System.out.println(e.toString());
                             }
 
-
-                            /*for (int i = 0; i < ToReadBookAdapter.toReadBookList.size(); i++)
-                            {
-                                Book book = ToReadBookAdapter.toReadBookList.get(i);
-                                if(bookId == book.getBookId())
-                                {
-                                    book.setTitle(title);
-                                    Log.d(TAG, "book.setTitle(title) : " + book.getTitle());
-                                    book.setWriter(writer);
-                                    book.setPublisher(publisher);
-                                    book.setPublishDate(publishDate);
-                                }
-                            }*/
                             MainActivity mainActivity = new MainActivity();
                             ArrayList<Book> arrayList = mainActivity.getToReadBookList();
                             // 그리고 그 arrayList 를 어댑터에 보내준다.
                             //어댑터에 보내고
                             ToReadBookAdapter adapter = new ToReadBookAdapter(arrayList);
 
-                            // sharedPreferece 에 저장한다.
-                            //MainActivity mainActivity = new MainActivity();
-                            //mainActivity.setToReadBookList();
 
-
-
-
-                            // 기존
-                            /*
-                           ToReadBookAdapter adapter = new ToReadBookAdapter(ToReadBookAdapter.toReadBookList);
-
-                            Book book = ToReadBookAdapter.toReadBookList.get(position);
-
-                            book.setTitle(title);
-                            book.setWriter(writer);
-                            book.setPublisher(publisher);
-                            book.setPublishDate(publishDate);
-
-                            adapter.notifyDataSetChanged();*/
                         }
                         else if(state.equals("reading"))
                         {
@@ -206,8 +173,41 @@ public class EditBookInfoActivity extends AppCompatActivity
                                 {
                                     if(state.equals("toRead"))
                                     {
-                                        ToReadBookAdapter adapter = new ToReadBookAdapter();
-                                        adapter.removeItem(position);
+                                        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                                        String toReadBookListString= bookInfo.getString("toReadBookList", null);
+
+                                        try
+                                        {
+                                            JSONArray jsonArray = new JSONArray(toReadBookListString);
+                                            for (int i = 0; i < jsonArray.length() ; i++)
+                                            {
+                                                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                                                if(bookId == jsonObject.getInt("bookId"))
+                                                {
+                                                    jsonObject.remove("bookId");
+                                                }
+                                            }
+
+                                            // test ok
+                                            Log.d(TAG," jsonArray.toString: " + jsonArray.toString());
+
+                                            SharedPreferences.Editor editor = bookInfo.edit();
+                                            editor.putString("toReadBookList", jsonArray.toString());
+                                            editor.commit();
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            System.out.println(e.toString());
+                                        }
+
+                                        MainActivity mainActivity = new MainActivity();
+                                        ArrayList<Book> arrayList = mainActivity.getToReadBookList();
+                                        // 그리고 그 arrayList 를 어댑터에 보내준다.
+                                        //어댑터에 보내고
+                                        ToReadBookAdapter adapter = new ToReadBookAdapter(arrayList);
+                                        // 기존
+                                        //ToReadBookAdapter adapter = new ToReadBookAdapter();
+                                        //adapter.removeItem(position);
                                     }
                                     else if(state.equals("reading"))
                                     {
