@@ -22,6 +22,14 @@ public class Book
     ArrayList<Book> readingBookList;
     ArrayList<Book> readBookList;
 
+
+
+
+
+
+
+    // 임시 아이디
+
     private int bookId;
     private String img;
     private String title;
@@ -32,8 +40,12 @@ public class Book
     private String startDate;
     private String endDate;
     private String state;
-    private String readTime;
+
+    private int pages;
+    private int readTime;
     private int starNum;
+    private String plot;
+
 
     // getter / setter
     public String getImg() {
@@ -100,11 +112,19 @@ public class Book
         this.endDate = endDate;
     }
 
-    public String getReadTime() {
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    public int getReadTime() {
         return readTime;
     }
 
-    public void setReadTime(String readTime) {
+    public void setReadTime(int readTime) {
         this.readTime = readTime;
     }
 

@@ -3,9 +3,7 @@ package com.example.everybooks;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -16,13 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.everybooks.data.Book;
 import com.example.everybooks.data.Memo;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class ReadingBookInfoActivity extends AppCompatActivity
 {
@@ -56,8 +48,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
     int position;
     int bookId;
 
-    final String TAG = "테스트";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -88,89 +78,13 @@ public class ReadingBookInfoActivity extends AppCompatActivity
 
         // 데이터 받아오기
         // img
-       /* title = getIntent().getStringExtra("title");
+        title = getIntent().getStringExtra("title");
         writer = getIntent().getStringExtra("writer");
         publisher = getIntent().getStringExtra("publisher");
         publishDate = getIntent().getStringExtra("publishDate");
         startDate = getIntent().getStringExtra("startDate");
-        position = getIntent().getIntExtra("position",-1);*/
-
+        position = getIntent().getIntExtra("position",-1);
         bookId = getIntent().getIntExtra("bookId",-1);
-
-        // 해당하는 책 정보 가져오기
-        SharedPreferences bookList = getSharedPreferences("bookInfo", MODE_PRIVATE);
-        String bookListString = bookList.getString("bookList", null);
-
-        try{
-
-            JSONArray jsonArray = new JSONArray(bookListString);
-            for (int i = 0; i < jsonArray.length(); i++)
-            {
-                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                if(jsonObject.getInt("bookId") == bookId)
-                {
-                    //img
-                    title = jsonObject.getString("title");
-                    writer = jsonObject.getString("writer");
-                    publisher = jsonObject.getString("publisher");
-                    publishDate = jsonObject.getString("publishDate");
-                    startDate = jsonObject.getString("startDate");
-                }
-            }
-
-        }catch (Exception e){
-            System.out.println(e.toString());
-        }
-
-        // 클릭한 책에 해당하는 메모리스트 가져오기 -- ing
-        SharedPreferences memoList = getSharedPreferences("memoInfo", MODE_PRIVATE);
-        String memoListString = memoList.getString("memoList", null);
-        ArrayList<Memo> thisBookMemoList = new ArrayList<>();
-
-        //Log.d(TAG, "memoListString : " + memoListString);
-
-        if(memoListString!=null)
-        {
-            try
-            {
-                JSONArray jsonArray = new JSONArray(memoListString);
-
-                Log.d(TAG, "jsonArray.length() : " + jsonArray.length() );
-                for (int i = 0; i < jsonArray.length(); i++)
-                {
-                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-
-                    if(jsonObject.getInt("bookId") == bookId)
-                    {
-                        Log.d(TAG, "bookId : " + bookId);
-
-                        Memo memo = new Memo();
-                        memo.setBookId(jsonObject.getInt("bookId"));
-                        memo.setMemoId(jsonObject.getInt("MemoId"));
-                        memo.setMemoDate(jsonObject.getString("memoDate"));
-                        memo.setMemoText(jsonObject.getString("memoText"));
-                        thisBookMemoList.add(0, memo);
-                        Log.d(TAG, "i : " + i);
-                    }
-                }
-
-                Log.d(TAG, "thisBookMemoList.size : " + thisBookMemoList.size());
-
-                // 메모 리스트뷰 어댑터 객체 생성
-                memoAdapter = new MemoAdapter(thisBookMemoList);
-                memoAdapter.notifyDataSetChanged();
-
-                //리스트뷰에 어댑터를 붙여서 사용자에게 메모가 보이도록 한다.
-                listView.setAdapter(memoAdapter);
-
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.toString());
-            }
-
-        }
-
 
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
@@ -182,14 +96,13 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                 {
                     case R.id.btn_memo:
                         // 메모 버튼 클릭하면 어떤 책에 해당하는 메모인지 식별하기 위해서 bookId 데이터를 인텐트에 담아서 메모 생성 화면으로 전환한다.
+                        int bookId = getIntent().getIntExtra("bookId",-1);
                         intent = new Intent( getApplicationContext(), CreateMemoActivity.class);
                         intent.putExtra("bookId", bookId);
                         startActivity(intent);
                         break;
 
                     case R.id.btn_delete:
-                        /*
-                        // 기존
                         // Delete 를 클릭하면 책을 삭제하고 이전 화면으로 돌아가기
                         // 책 삭제할 때 관련된 메모도 삭제해야한다.
                         AlertDialog.Builder builder = new AlertDialog.Builder(ReadingBookInfoActivity.this);
@@ -221,137 +134,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                             });
 
                         builder.show();
-                        */
-
-
-                        // delete 를 클릭하면 책을 삭제한다.
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ReadingBookInfoActivity.this);
-                        builder.setMessage("책을 삭제하시겠습니까?");
-                        builder.setPositiveButton("확인",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    // 헤당하는 bookId 의 책을 삭제하기 위해서
-                                    // 저장되어있는 모든 책 리스트를 불러온다.
-                                    SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-                                    String bookListString = bookInfo.getString("bookList", null);
-                                    ArrayList<Book> bookArrayList = new ArrayList<>();
-
-                                    if (bookListString != null)
-                                    {
-                                        try
-                                        {
-                                            // 책 리스트를 jsonArray 형식으로 변환한다.
-                                            JSONArray jsonArray = new JSONArray(bookListString);
-
-                                            // 가져온 jsonArray 의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
-                                            for (int i = 0; i < jsonArray.length(); i++)
-                                            {
-                                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                                                int bookId = jsonObject.getInt("bookId");
-                                                //String img = jsonObject.getString("img");
-                                                String title = jsonObject.getString("title");
-                                                String writer = jsonObject.getString("writer");
-                                                String publisher = jsonObject.getString("publisher");
-                                                String publishDate = jsonObject.getString("publishDate");
-                                                String insertDate = jsonObject.getString("insertDate");
-                                                //String startDate = jsonObject.getString("startDate");
-                                                String state = jsonObject.getString("state");
-
-
-                                                Book book = new Book();
-                                                book.setBookId(bookId);
-                                                //book.setImg(img);
-                                                book.setTitle(title);
-                                                book.setWriter(writer);
-                                                book.setPublisher(publisher);
-                                                book.setPublishDate(publishDate);
-                                                book.setInsertDate(insertDate);
-                                                book.setStartDate(startDate);
-                                                book.setState(state);
-
-                                                bookArrayList.add(0, book);
-                                            }
-
-                                            Log.d(TAG, "변환환 bookArrayList.size() : " + bookArrayList.size());
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            System.out.println(e.toString());
-                                        }
-
-                                        for (int j = 0; j < bookArrayList.size() ; j++)
-                                        {
-                                            Book book = bookArrayList.get(j);
-                                            if(bookId == book.getBookId())
-                                            {
-                                                Log.d(TAG, "삭제할 북아이디, 인덱스 :" + book.getBookId() + "," + j);
-                                                //bookArrayList.remove(j);
-
-                                            }
-                                        }
-
-                                        Log.d(TAG, "삭제한 뒤 bookArrayList.size : " + bookArrayList.size());
-
-                                        /// JSONArray 로 변환해서 다시 저장하기
-                                        JSONArray jsonArray = new JSONArray();
-
-                                        for (int i = 0; i < bookArrayList.size(); i++) {
-                                            Book book = bookArrayList.get(i);
-
-                                            // json 객체에 입력받은 값을 저장한다.
-                                            try {
-                                                JSONObject bookJson = new JSONObject();
-                                                bookJson.put("bookId", book.getBookId());
-                                                //bookJson.put("img", img);
-                                                bookJson.put("title", book.getTitle());
-                                                bookJson.put("writer", book.getWriter());
-                                                bookJson.put("publisher", book.getPublisher());
-                                                bookJson.put("publishDate", book.getPublishDate());
-                                                bookJson.put("state", book.getState());
-                                                bookJson.put("insertDate", book.getInsertDate());
-                                                bookJson.put("startDate", book.getStartDate());
-                                                jsonArray.put(bookJson);
-
-                                            } catch (Exception e) {
-                                                System.out.println(e.toString());
-                                            }
-                                        }
-
-                                        bookListString = jsonArray.toString();
-
-                                        bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = bookInfo.edit();
-                                        editor.putString("bookList", bookListString);
-                                        editor.commit();
-
-                                        Log.d(TAG, "삭제한 뒤 저장되어있는 bookListString : " + bookListString);
-
-                                    }
-
-                                    dialog.dismiss();
-
-                                    intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-
-                                    finish();
-
-                                }
-                            });
-
-                        builder.setNegativeButton("취소",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            });
-
-                        builder.show();
-
                         break;
 
                     case R.id.edit :
@@ -362,7 +144,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                         intent.putExtra("writer", writer);
                         intent.putExtra("publisher", publisher);
                         intent.putExtra("publishDate", publishDate);
-                        intent.putExtra("bookId", bookId);
 
                         // 책 상태 구분하기 위해서 데이터를 담아간다
                         intent.putExtra("position", position);
@@ -378,9 +159,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
         button_memo.setOnClickListener(click);
         button_delete.setOnClickListener(click);
         textView_edit.setOnClickListener(click);
-
-
-
     }
 
     @Override
@@ -395,7 +173,8 @@ public class ReadingBookInfoActivity extends AppCompatActivity
         textView_publish_date.setText(publishDate);
         textView_start_date.setText(startDate);
 
-
+        //리스트뷰에 어댑터를 붙여서 사용자에게 메모가 보이도록 한다.
+        listView.setAdapter(memoAdapter);
 
         // 각 메모를 클릭하면 책 제목(추후 bookId 로 대체), 메모아이디, 메모 내용  데이터를 담아서
         // 메모 편집 화면으로 이동한다.
@@ -429,7 +208,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                         public void onClick(DialogInterface dialog, int which)
                         {
                             // 확인 클릭했을 때 해당 메모 삭제한다.
-                            //MemoAdapter.memoList.remove(position);
+                            MemoAdapter.memoList.remove(position);
 
                             // 아래 method를 호출하지 않을 경우, 삭제된 item이 화면에 계속 보여진다.
                             memoAdapter.notifyDataSetChanged();
