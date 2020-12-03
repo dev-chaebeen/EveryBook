@@ -104,10 +104,13 @@ public class EditBookInfoActivity extends AppCompatActivity
                                 for (int i = 0; i < jsonArray.length() ; i++)
                                 {
                                     JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                    jsonObject.put("title", title);
-                                    jsonObject.put("writer", writer);
-                                    jsonObject.put("publisher", publisher);
-                                    jsonObject.put("publishDate", publishDate);
+                                    if(jsonObject.getInt("bookId") == bookId)
+                                    {
+                                        jsonObject.put("title", title);
+                                        jsonObject.put("writer", writer);
+                                        jsonObject.put("publisher", publisher);
+                                        jsonObject.put("publishDate", publishDate);
+                                    }
                                 }
 
                                 // test ok
@@ -194,6 +197,7 @@ public class EditBookInfoActivity extends AppCompatActivity
                                                     jsonObject.remove("publishDate");
                                                     jsonObject.remove("insertDate");
                                                     jsonObject.remove("state");
+
                                                 }
                                             }
 

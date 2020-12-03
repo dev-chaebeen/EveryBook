@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 
         // 저장되어있는 값 어댑터에 보내주기
+        //getToReadBookList();
+
         try
         {
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
@@ -251,6 +253,7 @@ public class MainActivity extends AppCompatActivity
             String toReadBookListString = bookInfo.getString("toReadBookList", null);
 
             ArrayList<Book> toReadBookList = new ArrayList<>();
+            //ArrayList<Book> toReadBookList = ToReadBookAdapter.toReadBookList;
 
             if (toReadBookListString != null)
             {
