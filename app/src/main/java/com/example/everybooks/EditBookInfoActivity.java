@@ -82,80 +82,45 @@ public class EditBookInfoActivity extends AppCompatActivity
                 {
                     case R.id.edit :
 
-                        // edit 을 클릭하면 사용자에게 입력받은 값을 저장해서 그 값으로 책의 정보를 수정한다.
-                        // 전달받은 책의 상태에 적합한 리스트에 책이 저장되도록 한다.
-                        String title = editText_title.getText().toString();
-                        String writer = editText_writer.getText().toString();
-                        String publisher = editText_publisher.getText().toString();
-                        String publishDate = editText_publish_date.getText().toString();
+                    // edit 을 클릭하면 사용자에게 입력받은 값을 저장해서 그 값으로 책의 정보를 수정한다.
+                    // 전달받은 책의 상태에 적합한 리스트에 책이 저장되도록 한다.
+                    String title = editText_title.getText().toString();
+                    String writer = editText_writer.getText().toString();
+                    String publisher = editText_publisher.getText().toString();
+                    String publishDate = editText_publish_date.getText().toString();
 
-                        Log.d(TAG, "바꾸려는 제목 : " + title );
+                    Log.d(TAG, "바꾸려는 제목 : " + title );
 
-                        if(state.equals("toRead"))
+                        // 읽을 책 리스트를 얻어와서 전달받은 bookId 와 일치하는 book 객체의 데이터를 입력받은 값으로 바꿔준다.
+
+                        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                        String bookListString= bookInfo.getString("bookList", null);
+
+                        try
                         {
-                            // 읽을 책 리스트를 얻어와서 전달받은 bookId 와 일치하는 book 객체의 데이터를 입력받은 값으로 바꿔준다.
-
-                            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-                            String bookListString= bookInfo.getString("bookList", null);
-
-                            try
+                            JSONArray jsonArray = new JSONArray(bookListString);
+                            for (int i = 0; i < jsonArray.length() ; i++)
                             {
-                                JSONArray jsonArray = new JSONArray(bookListString);
-                                for (int i = 0; i < jsonArray.length() ; i++)
+                                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                                if(jsonObject.getInt("bookId") == bookId)
                                 {
-                                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                    if(jsonObject.getInt("bookId") == bookId)
-                                    {
-                                        jsonObject.put("title", title);
-                                        jsonObject.put("writer", writer);
-                                        jsonObject.put("publisher", publisher);
-                                        jsonObject.put("publishDate", publishDate);
-                                    }
+                                    jsonObject.put("title", title);
+                                    jsonObject.put("writer", writer);
+                                    jsonObject.put("publisher", publisher);
+                                    jsonObject.put("publishDate", publishDate);
                                 }
-
-                                // test ok
-                                Log.d(TAG," jsonArray.toString: " + jsonArray.toString());
-
-                                SharedPreferences.Editor editor = bookInfo.edit();
-                                editor.putString("bookList", jsonArray.toString());
-                                editor.commit();
-                            }
-                            catch (Exception e)
-                            {
-                                System.out.println(e.toString());
                             }
 
-                            MainActivity mainActivity = new MainActivity();
-                            ArrayList<Book> arrayList = mainActivity.getToReadBookList();
-                            // 그리고 그 arrayList 를 어댑터에 보내준다.
-                            //어댑터에 보내고
-                            ToReadBookAdapter adapter = new ToReadBookAdapter(arrayList);
+                            // test ok
+                            Log.d(TAG," jsonArray.toString: " + jsonArray.toString());
 
-
+                            SharedPreferences.Editor editor = bookInfo.edit();
+                            editor.putString("bookList", jsonArray.toString());
+                            editor.commit();
                         }
-                        else if(state.equals("reading"))
+                        catch (Exception e)
                         {
-                            ReadingBookAdapter adapter = new ReadingBookAdapter();
-                            Book book = ReadingBookAdapter.readingBookList.get(position);
-
-                            book.setTitle(title);
-                            book.setWriter(writer);
-                            book.setPublisher(publisher);
-                            book.setPublishDate(publishDate);
-
-                            adapter.notifyDataSetChanged();
-                        }
-                        else if(state.equals("read"))
-                        {
-                            ReadBookAdapter adapter = new ReadBookAdapter();
-                            Book book = ReadBookAdapter.readBookList.get(position);
-
-                            book.setTitle(title);
-                            book.setWriter(writer);
-                            book.setPublisher(publisher);
-                            book.setPublishDate(publishDate);
-
-                            adapter.notifyDataSetChanged();
+                            System.out.println(e.toString());
                         }
 
                         intent = new Intent(getApplicationContext(), MainActivity.class);

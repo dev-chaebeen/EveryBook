@@ -131,6 +131,10 @@ public class CreateBookInfoActivity extends AppCompatActivity
 
                         String today = year + "." + month + "." + date;
                         book.setInsertDate(today);
+                        book.setStartDate("");
+                        book.setEndDate("");
+                        book.setStarNum(0);
+                        book.setReadTime("");
 
                         try
                         {
@@ -145,6 +149,10 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             bookJson.put("publishDate", book.getPublishDate());
                             bookJson.put("state", book.getState());
                             bookJson.put("insertDate", book.getInsertDate());
+                            bookJson.put("startDate", book.getStartDate());
+                            bookJson.put("endDate", book.getEndDate());
+                            bookJson.put("starNum", book.getStarNum());
+                            bookJson.put("readTime", book.getReadTime());
 
                             // 책을 구분하기 위해 저장된 책의 bookId 가 겹치지 않도록 bookInfo 에 저장된 bookId의 값을 1 증가시킨다.
                             SharedPreferences.Editor editor = bookInfo.edit();
@@ -187,14 +195,14 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             }
 
                             // jsonArray를 ArrayList<Book> 형태로 변환한다.
-                            bookListString = bookInfo.getString("bookList", "");
-                            JSONArray jsonArray = new JSONArray(bookListString);
+                           // bookListString = bookInfo.getString("bookList", "");
+                           // JSONArray jsonArray = new JSONArray(bookListString);
 
                             //Log.d(TAG, " 변환하려고 불러온 jsonArray length : " + jsonArray.length());
 
                             //Log.d(TAG, toReadBookListString);
 
-                            // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                            /*// 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
                             for (int i = 0; i < jsonArray.length(); i++)
                             {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -215,7 +223,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
 
                                 //어댑터에 보내기
                                 adapter = new ToReadBookAdapter(toReadBookList);
-                            }
+                            }*/
 
                         }
                         catch (Exception e)
