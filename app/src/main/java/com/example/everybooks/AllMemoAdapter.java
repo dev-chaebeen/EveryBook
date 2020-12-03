@@ -3,6 +3,7 @@ package com.example.everybooks;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,18 @@ import java.util.ArrayList;
 public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHolder>
 {
     // todo static 수정하기
-    static ArrayList<Memo> allMemoList =  MemoAdapter.memoList;
+    static ArrayList<Memo> allMemoList = new ArrayList<>();
 
     int position;
     Memo memo;
+
+    public AllMemoAdapter(){}
+
+    public AllMemoAdapter(ArrayList<Memo> memoArrayList)
+    {
+        this.allMemoList = memoArrayList;
+    }
+
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -77,7 +86,7 @@ public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHold
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which)
                         {
-                           MemoAdapter.memoList.remove(position);
+                           //MemoAdapter.memoList.remove(position);
                            notifyDataSetChanged();
                            dialog.dismiss();
                         }
@@ -96,14 +105,6 @@ public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHold
                 }
             });
         }
-    }
-
-    // 기본 생성자
-    AllMemoAdapter(){}
-
-    // 생성자에서 데이터 리스트 객체를 전달받음.
-    AllMemoAdapter(ArrayList<Memo> allMemoList) {
-        this.allMemoList = allMemoList;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴하는 메소드

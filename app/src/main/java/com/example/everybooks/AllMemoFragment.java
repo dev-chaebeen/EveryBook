@@ -48,7 +48,7 @@ public class AllMemoFragment extends Fragment
         recyclerView = view.findViewById(R.id.all_memo_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new AllMemoAdapter(MemoAdapter.memoList);
+        adapter = new AllMemoAdapter();
         recyclerView.setAdapter(adapter);
     }
 

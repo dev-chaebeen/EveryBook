@@ -212,7 +212,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        MemoAdapter.memoList.remove(position);
+                        //MemoAdapter.memoList.remove(position);
                         memoAdapter.notifyDataSetChanged();
                         dialog.dismiss();
 
