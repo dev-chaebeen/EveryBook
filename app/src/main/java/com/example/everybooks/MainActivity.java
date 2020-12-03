@@ -248,12 +248,13 @@ public class MainActivity extends AppCompatActivity
     // 저장된 JsonArray 로부터 읽을 책 리스트를 얻는 메소드
     public ArrayList<Book> getToReadBookList() {
 
+        ArrayList<Book> arrayList= new ArrayList<>();
+
         try {
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
             String toReadBookListString = bookInfo.getString("toReadBookList", null);
 
-            ArrayList<Book> toReadBookList = new ArrayList<>();
-            //ArrayList<Book> toReadBookList = ToReadBookAdapter.toReadBookList;
+            //ArrayList<Book> toReadBookList = new ArrayList<>();
 
             if (toReadBookListString != null)
             {
@@ -282,11 +283,13 @@ public class MainActivity extends AppCompatActivity
                     book.setInsertDate(insertDate);
                     book.setState(state);
 
-                    toReadBookList.add(0, book);
+                    arrayList = new ArrayList<>();
+                    arrayList.add(0, book);
 
-                    //어댑터에 보내기
-                    adapter = new ToReadBookAdapter(toReadBookList);
                 }
+
+                //어댑터에 보내기
+                adapter = new ToReadBookAdapter(arrayList);
 
             }
 
@@ -299,13 +302,13 @@ public class MainActivity extends AppCompatActivity
 
 
     // ArrayList<Book>을  sharedPreference 에 저장하는 메소드
-    public void setToReadBookList()
+    public void setToReadBookList(ArrayList<Book> arrayList)
     {
             JSONArray jsonArray = new JSONArray();
 
-            for (int i = 0; i < ToReadBookAdapter.toReadBookList.size(); i++)
+            for (int i = 0; i < arrayList.size(); i++)
             {
-                Book book = ToReadBookAdapter.toReadBookList.get(i);
+                Book book = arrayList.get(i);
 
                 // json 객체에 입력받은 값을 저장한다.
                 try
@@ -329,9 +332,63 @@ public class MainActivity extends AppCompatActivity
 
             String toReadBookListString = jsonArray.toString();
 
+            Log.d(TAG, "set메소드 : " + toReadBookListString);
+
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
             SharedPreferences.Editor editor = bookInfo.edit();
-            editor.putString("toReadBookList",toReadBookListString);
+            editor.putString("toReadBookList", toReadBookListString);
             editor.commit();
     }
+
+
+    public void setStringArrayPref(String key, ArrayList values) {
+        SharedPreferences prefs = getSharedPreferences("bookInfo", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < values.size(); i++)
+        {
+            Book book = (Book) values.get(i);
+            try
+            {
+                JSONObject bookJson = new JSONObject();
+                bookJson.put("bookId", book.getBookId());
+                //bookJson.put("img", img);
+                bookJson.put("title", book.getTitle());
+                bookJson.put("writer", book.getWriter());
+                bookJson.put("publisher", book.getPublisher());
+                bookJson.put("publishDate", book.getPublishDate());
+                bookJson.put("state", book.getState());
+                bookJson.put("insertDate", book.getInsertDate());
+                jsonArray.put(bookJson);
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.toString());
+            }
+        }
+        if (!values.isEmpty()) {
+            editor.putString(key, jsonArray.toString());
+        } else {
+            editor.putString(key, null);
+        }
+        editor.commit();
+    }
+/*
+    private ArrayList getStringArrayPref( String key) {
+        SharedPreferences prefs = getSharedPreferences("bookInfo",MODE_PRIVATE);
+        String json = prefs.getString(key, null);
+        ArrayList urls = new ArrayList();
+        if (json != null) {
+            try {
+                JSONArray a = new JSONArray(json);
+                for (int i = 0; i < a.length(); i++) {
+                    String url = a.optString(i);
+                    urls.add(url);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return urls;
+    }*/
 }

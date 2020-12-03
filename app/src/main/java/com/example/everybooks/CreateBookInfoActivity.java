@@ -192,9 +192,9 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             toReadBookListString = bookInfo.getString("toReadBookList", "");
                             JSONArray jsonArray = new JSONArray(toReadBookListString);
 
-                            Log.d(TAG, " 변환하려고 불러온 jsonArray length : " + jsonArray.length());
+                            //Log.d(TAG, " 변환하려고 불러온 jsonArray length : " + jsonArray.length());
 
-                            Log.d(TAG, toReadBookListString);
+                            //Log.d(TAG, toReadBookListString);
 
                             // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
                             for (int i = 0; i < jsonArray.length(); i++)
@@ -213,7 +213,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
 
                                 // ArrayList<Book> 에 저장
                                 toReadBookList.add(0, book);
-                                Log.d(TAG, "toReadBookList.size : " + toReadBookList.size());
+                                //Log.d(TAG, "toReadBookList.size : " + toReadBookList.size());
 
                                 //어댑터에 보내기
                                 adapter = new ToReadBookAdapter(toReadBookList);
