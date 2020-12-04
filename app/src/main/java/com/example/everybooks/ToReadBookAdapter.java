@@ -82,7 +82,12 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                 @Override
                 public boolean onLongClick(View v) {
 
-                    //현재 년도, 월, 일을 책 등록일에 저장한다.
+                    position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION)
+                    {
+                        book = getItem(position);
+                    }
+                        //현재 년도, 월, 일을 책 등록일에 저장한다.
                     Calendar cal = Calendar.getInstance();
                     int year = cal.get ( cal.YEAR );
                     int month = cal.get ( cal.MONTH ) + 1 ;
@@ -101,6 +106,10 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                                 SharedPreferences bookInfo = context.getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
                                 String bookListString= bookInfo.getString("bookList", null);
 
+
+                                Log.d(TAG,"읽을 책 → 읽는 책 ToReadBookAdapter 에서 책 리스트 : " + bookListString);
+                                Log.d(TAG, "클릭한 책의 bookId : " + book.getBookId() );
+
                                 try
                                 {
                                     JSONArray jsonArray = new JSONArray(bookListString);
@@ -118,7 +127,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                                     editor.putString("bookList", jsonArray.toString());
                                     editor.commit();
 
-                                    // test ok
+                                    // test
                                     Log.d(TAG,"읽을 책 → 읽는 책: " + jsonArray.toString());
 
                                 }
