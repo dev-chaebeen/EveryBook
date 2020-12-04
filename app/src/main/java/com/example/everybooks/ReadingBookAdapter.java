@@ -55,17 +55,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                     {
                         book = getItem(position);
                         Intent intent = new Intent(v.getContext(), ReadingBookInfoActivity.class);
-
-                        // intent.putExtra("img", book.getImg());
-                        // readTime
                         intent.putExtra("bookId", book.getBookId());
-                        intent.putExtra("title", book.getTitle());
-                        intent.putExtra("writer", book.getWriter());
-                        intent.putExtra("publisher", book.getPublisher());
-                        intent.putExtra("publishDate", book.getPublishDate());
-                        intent.putExtra("startDate", book.getStartDate());
-                        intent.putExtra("position", position);
-                        intent.putExtra("state", book.getState());
                         v.getContext().startActivity(intent);
                     }
                 }

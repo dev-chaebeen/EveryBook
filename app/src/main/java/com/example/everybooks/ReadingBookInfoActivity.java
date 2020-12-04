@@ -3,6 +3,7 @@ package com.example.everybooks;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.everybooks.data.Memo;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class ReadingBookInfoActivity extends AppCompatActivity
 {
@@ -39,7 +43,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
     TextView textView_memo_text;
     TextView textView_memo_date;
 
-    // 인텐트로 수신하는 데이터
     String title;
     String writer;
     String publisher;
@@ -77,13 +80,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
         textView_memo_date = findViewById(R.id.memo_date);
 
         // 데이터 받아오기
-        // img
-        title = getIntent().getStringExtra("title");
-        writer = getIntent().getStringExtra("writer");
-        publisher = getIntent().getStringExtra("publisher");
-        publishDate = getIntent().getStringExtra("publishDate");
-        startDate = getIntent().getStringExtra("startDate");
-        position = getIntent().getIntExtra("position",-1);
         bookId = getIntent().getIntExtra("bookId",-1);
 
         // 각 요소를 클릭하면 수행할 동작 지정해두기
@@ -166,7 +162,36 @@ public class ReadingBookInfoActivity extends AppCompatActivity
     {
         super.onResume();
 
-        // 요소에 배치하기
+        // 인텐트로 전달받은 bookId 에 해당하는 데이터를 가져와서 사용자에게 보여주기 위해서
+        // 저장되어있는 bookList 문자열을 받아와서 JsonArray 형태로 변환한다.
+        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+        String bookLsitString =bookInfo.getString("bookList", null);
+
+        if(bookLsitString != null)
+        {
+            try
+            {
+                JSONArray jsonArray = new JSONArray(bookLsitString);
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
+                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+
+                    if(bookId == jsonObject.getInt("bookId"))
+                    {
+                        title = jsonObject.getString("title");
+                        writer = jsonObject.getString("writer");
+                        publisher = jsonObject.getString("publisher");
+                        publishDate = jsonObject.getString("publishDate");
+                        startDate = jsonObject.getString("startDate");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
         textView_title.setText(title);
         textView_writer.setText(writer);
         textView_publisher.setText(publisher);
