@@ -129,7 +129,7 @@ public class EditBookInfoActivity extends AppCompatActivity
                             ArrayList<Book> arrayList = mainActivity.getToReadBookList();
                             // 그리고 그 arrayList 를 어댑터에 보내준다.
                             //어댑터에 보내고
-                            ToReadBookAdapter adapter = new ToReadBookAdapter(arrayList);
+                           // ToReadBookAdapter adapter = new ToReadBookAdapter(arrayList);
 
 
                         }
@@ -235,7 +235,7 @@ public class EditBookInfoActivity extends AppCompatActivity
                                             Log.d(TAG, "삭제한 뒤 bookArrayList.size : " + bookArrayList.size());
 
                                             // test
-                                            ToReadBookAdapter adapter = new ToReadBookAdapter(bookArrayList);
+                                            //ToReadBookAdapter adapter = new ToReadBookAdapter(bookArrayList);
 
 
                                             /// JSONArray 로 변환해서 다시 저장하기

@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity
     ArrayList<Book> readingBookList = new ArrayList<>();
     ArrayList<Book> readBookList = new ArrayList<>();
 
-
-
     // fragment 뷰들
     private HomeFragment homeFragment;
     private RecordFragment recordFragment;

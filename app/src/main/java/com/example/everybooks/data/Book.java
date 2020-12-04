@@ -32,11 +32,8 @@ public class Book
     private String startDate;
     private String endDate;
     private String state;
-
-    private int pages;
-    private int readTime;
+    private String readTime;
     private int starNum;
-    private String plot;
 
 
     // getter / setter
@@ -104,19 +101,11 @@ public class Book
         this.endDate = endDate;
     }
 
-    public int getPages() {
-        return pages;
-    }
-
-    public void setPages(int pages) {
-        this.pages = pages;
-    }
-
-    public int getReadTime() {
+    public String getReadTime() {
         return readTime;
     }
 
-    public void setReadTime(int readTime) {
+    public void setReadTime(String readTime) {
         this.readTime = readTime;
     }
 

@@ -106,13 +106,6 @@ public class CreateBookInfoActivity extends AppCompatActivity
                         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
                         bookId = bookInfo.getInt("bookId", 0);
 
-                        //Log.d(TAG, "저장되어있던 bookId" + bookId);
-
-                        // 이미지뷰의 resource를 비트맵으로 가져오기
-                        //BitmapDrawable drawable = (BitmapDrawable) imageView_img_book.getDrawable();
-                        //Bitmap bitmap = drawable.getBitmap();
-                        //img = bitmap.toString();
-
                         // 입력받은 정보를 book 객체에 저장한다.
                         Book book = new Book();
                         book.setBookId(bookId);
@@ -214,7 +207,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                                 //Log.d(TAG, "toReadBookList.size : " + toReadBookList.size());
 
                                 //어댑터에 보내기
-                                adapter = new ToReadBookAdapter(toReadBookList);
+                                //adapter = new ToReadBookAdapter(toReadBookList);
                             }
 
                         }
