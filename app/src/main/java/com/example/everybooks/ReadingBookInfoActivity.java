@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -15,13 +16,18 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.everybooks.data.Book;
 import com.example.everybooks.data.Memo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class ReadingBookInfoActivity extends AppCompatActivity
 {
+
+    final String TAG = "테스트";
     Intent intent;
     View.OnClickListener click;
     MemoAdapter memoAdapter;
@@ -98,37 +104,150 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                         break;
 
                     case R.id.btn_delete:
-                        // Delete 를 클릭하면 책을 삭제하고 이전 화면으로 돌아가기
-                        // 책 삭제할 때 관련된 메모도 삭제해야한다.
+                        // delete 를 클릭하면 책을 삭제한다.
+                        // 책의 상태에 따라 알맞은 리스트에서 삭제되도록 한다.
                         AlertDialog.Builder builder = new AlertDialog.Builder(ReadingBookInfoActivity.this);
-                        builder.setMessage("책을 삭제하시겠습니까?\n 메모도 함께 삭제됩니다. ");
+                        builder.setMessage("책을 삭제하시겠습니까?");
                         builder.setPositiveButton("확인",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    // 확인 클릭했을 때 해당 책을 삭제한다.
-                                    ReadingBookAdapter adapter = new ReadingBookAdapter();
-                                    adapter.removeItem(position);
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
 
-                                    dialog.dismiss();
+                                        Log.d(TAG, "읽을 책 편집 화면에서 삭제 버튼 클릭 ");
+                                        // 저장되어있는 읽을 책 리스트를 불러온다.
+                                        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                                        String bookListString = bookInfo.getString("bookList", null);
+                                        ArrayList<Book> bookArrayList = new ArrayList<>();
 
-                                    intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
+                                        if (bookListString != null)
+                                        {
+                                            try
+                                            {
+                                                JSONArray jsonArray = new JSONArray(bookListString);
 
-                                    finish();
-                                }
-                            });
+                                                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                                                for (int i = 0; i < jsonArray.length(); i++)
+                                                {
+                                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                                    int bookId = jsonObject.getInt("bookId");
+                                                    //String img = jsonObject.getString("img");
+                                                    String title = jsonObject.getString("title");
+                                                    String writer = jsonObject.getString("writer");
+                                                    String publisher = jsonObject.getString("publisher");
+                                                    String publishDate = jsonObject.getString("publishDate");
+                                                    String insertDate = jsonObject.getString("insertDate");
+                                                    String startDate = jsonObject.getString("startDate");
+                                                    String endDate = jsonObject.getString("endDate");
+                                                    String readTime = jsonObject.getString("readTime");
+                                                    String state = jsonObject.getString("state");
+                                                    int starNum = jsonObject.getInt("starNum");
+
+                                                    Book book = new Book();
+                                                    book.setBookId(bookId);
+                                                    //book.setImg(img);
+                                                    book.setTitle(title);
+                                                    book.setWriter(writer);
+                                                    book.setPublisher(publisher);
+                                                    book.setPublishDate(publishDate);
+                                                    book.setInsertDate(insertDate);
+                                                    book.setStartDate(startDate);
+                                                    book.setEndDate(endDate);
+                                                    book.setReadTime(readTime);
+                                                    book.setState(state);
+                                                    book.setStarNum(starNum);
+                                                    bookArrayList.add(0, book);
+
+                                                }
+
+                                                Log.d(TAG, "저장되어있는 bookList : " + bookArrayList.size());
+
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                System.out.println(e.toString());
+                                            }
+
+                                            for (int j = 0; j < bookArrayList.size() ; j++)
+                                            {
+                                                Book book = bookArrayList.get(j);
+                                                if(bookId == book.getBookId())
+                                                {
+                                                    bookArrayList.remove(j);
+                                                    Log.d(TAG, "삭제할 북아이디, 인덱스 :" + book.getBookId() + "," + j);
+                                                }
+                                            }
+
+                                            Log.d(TAG, "삭제한 뒤 bookArrayList.size : " + bookArrayList.size());
+
+                                            // test
+                                            //ToReadBookAdapter adapter = new ToReadBookAdapter(getApplicationContext(), bookArrayList);
+
+
+                                            /// JSONArray 로 변환해서 다시 저장하기
+                                            JSONArray jsonArray = new JSONArray();
+
+                                            for (int i = 0; i < bookArrayList.size(); i++)
+                                            {
+                                                Book book = bookArrayList.get(i);
+
+                                                // json 객체에 입력받은 값을 저장한다.
+                                                try
+                                                {
+                                                    JSONObject bookJson = new JSONObject();
+                                                    bookJson.put("bookId", book.getBookId());
+                                                    //bookJson.put("img", img);
+                                                    bookJson.put("title", book.getTitle());
+                                                    bookJson.put("writer", book.getWriter());
+                                                    bookJson.put("publisher", book.getPublisher());
+                                                    bookJson.put("publishDate", book.getPublishDate());
+                                                    bookJson.put("state", book.getState());
+                                                    bookJson.put("insertDate", book.getInsertDate());
+                                                    bookJson.put("startDate", book.getStartDate());
+                                                    bookJson.put("endDate", book.getEndDate());
+                                                    bookJson.put("readTime", book.getReadTime());
+                                                    bookJson.put("starNum", book.getStarNum());
+
+                                                    jsonArray.put(bookJson);
+                                                }
+                                                catch (Exception e)
+                                                {
+                                                    System.out.println(e.toString());
+                                                }
+                                            }
+
+                                            bookListString = jsonArray.toString();
+
+                                            bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = bookInfo.edit();
+                                            editor.putString("bookList", bookListString);
+                                            editor.commit();
+
+                                            Log.d(TAG, "삭제한 뒤 저장되어있는 bookListString : " + bookListString);
+
+                                        }
+
+                                        dialog.dismiss();
+
+                                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+
+                                        finish();
+
+                                    }
+                                });
 
                         builder.setNegativeButton("취소",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    // 취소 클릭했을 때
-                                    Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
 
                         builder.show();
+
                         break;
 
                     case R.id.edit :
