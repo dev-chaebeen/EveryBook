@@ -92,7 +92,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                 {
                     case R.id.btn_memo:
                         // 메모 버튼 클릭하면 어떤 책에 해당하는 메모인지 식별하기 위해서 bookId 데이터를 인텐트에 담아서 메모 생성 화면으로 전환한다.
-                        int bookId = getIntent().getIntExtra("bookId",-1);
                         intent = new Intent( getApplicationContext(), CreateMemoActivity.class);
                         intent.putExtra("bookId", bookId);
                         startActivity(intent);
@@ -133,18 +132,9 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                         break;
 
                     case R.id.edit :
-                        // Edit 을 클릭하면 책 정보를 담고 책 편집 화면으로 전환한다.
+                        // Edit 을 클릭하면 책 id 를 담고 책 편집 화면으로 전환한다.
                         intent = new Intent(getApplicationContext(), EditBookInfoActivity.class);
-                        // img
-                        intent.putExtra("title", title);
-                        intent.putExtra("writer", writer);
-                        intent.putExtra("publisher", publisher);
-                        intent.putExtra("publishDate", publishDate);
-
-                        // 책 상태 구분하기 위해서 데이터를 담아간다
-                        intent.putExtra("position", position);
-                        intent.putExtra("state", "reading");
-
+                        intent.putExtra("bookId", bookId);
                         startActivity(intent);
                         break;
                 }
