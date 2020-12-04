@@ -38,9 +38,7 @@ public class EditBookInfoActivity extends AppCompatActivity
     EditText editText_publish_date;
 
     // 전달받는 데이터 선언
-    int position;
     int bookId;
-    String state;
 
     final String TAG = "테스트";
 
@@ -132,123 +130,119 @@ public class EditBookInfoActivity extends AppCompatActivity
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which)
                                     {
-                                        if(state.equals("toRead"))
-                                        {
-                                            // 저장되어있는 읽을 책 리스트를 불러온다.
-                                            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-                                            String bookListString = bookInfo.getString("bookList", null);
-                                            ArrayList<Book> bookArrayList = new ArrayList<>();
 
-                                            if (bookListString != null)
+                                        Log.d(TAG, "읽을 책 편집 화면에서 삭제 버튼 클릭 ");
+                                        // 저장되어있는 읽을 책 리스트를 불러온다.
+                                        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                                        String bookListString = bookInfo.getString("bookList", null);
+                                        ArrayList<Book> bookArrayList = new ArrayList<>();
+
+                                        if (bookListString != null)
+                                        {
+                                            try
                                             {
+                                                JSONArray jsonArray = new JSONArray(bookListString);
+
+                                                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                                                for (int i = 0; i < jsonArray.length(); i++)
+                                                {
+                                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                                    int bookId = jsonObject.getInt("bookId");
+                                                    //String img = jsonObject.getString("img");
+                                                    String title = jsonObject.getString("title");
+                                                    String writer = jsonObject.getString("writer");
+                                                    String publisher = jsonObject.getString("publisher");
+                                                    String publishDate = jsonObject.getString("publishDate");
+                                                    String insertDate = jsonObject.getString("insertDate");
+                                                    String startDate = jsonObject.getString("startDate");
+                                                    String endDate = jsonObject.getString("endDate");
+                                                    String readTime = jsonObject.getString("readTime");
+                                                    String state = jsonObject.getString("state");
+                                                    int starNum = jsonObject.getInt("starNum");
+
+                                                    Book book = new Book();
+                                                    book.setBookId(bookId);
+                                                    //book.setImg(img);
+                                                    book.setTitle(title);
+                                                    book.setWriter(writer);
+                                                    book.setPublisher(publisher);
+                                                    book.setPublishDate(publishDate);
+                                                    book.setInsertDate(insertDate);
+                                                    book.setStartDate(startDate);
+                                                    book.setEndDate(endDate);
+                                                    book.setReadTime(readTime);
+                                                    book.setState(state);
+                                                    book.setStarNum(starNum);
+                                                    bookArrayList.add(0, book);
+
+                                                }
+
+                                                Log.d(TAG, "저장되어있는 bookList : " + bookArrayList.size());
+
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                System.out.println(e.toString());
+                                            }
+
+                                            for (int j = 0; j < bookArrayList.size() ; j++)
+                                            {
+                                                Book book = bookArrayList.get(j);
+                                                if(bookId == book.getBookId())
+                                                {
+                                                    bookArrayList.remove(j);
+                                                    Log.d(TAG, "삭제할 북아이디, 인덱스 :" + book.getBookId() + "," + j);
+                                                }
+                                            }
+
+                                            Log.d(TAG, "삭제한 뒤 bookArrayList.size : " + bookArrayList.size());
+
+                                            // test
+                                            //ToReadBookAdapter adapter = new ToReadBookAdapter(getApplicationContext(), bookArrayList);
+
+
+                                            /// JSONArray 로 변환해서 다시 저장하기
+                                            JSONArray jsonArray = new JSONArray();
+
+                                            for (int i = 0; i < bookArrayList.size(); i++)
+                                            {
+                                                Book book = bookArrayList.get(i);
+
+                                                // json 객체에 입력받은 값을 저장한다.
                                                 try
                                                 {
-                                                    JSONArray jsonArray = new JSONArray(bookListString);
+                                                    JSONObject bookJson = new JSONObject();
+                                                    bookJson.put("bookId", book.getBookId());
+                                                    //bookJson.put("img", img);
+                                                    bookJson.put("title", book.getTitle());
+                                                    bookJson.put("writer", book.getWriter());
+                                                    bookJson.put("publisher", book.getPublisher());
+                                                    bookJson.put("publishDate", book.getPublishDate());
+                                                    bookJson.put("state", book.getState());
+                                                    bookJson.put("insertDate", book.getInsertDate());
+                                                    bookJson.put("startDate", book.getStartDate());
+                                                    bookJson.put("endDate", book.getEndDate());
+                                                    bookJson.put("readTime", book.getReadTime());
+                                                    bookJson.put("starNum", book.getStarNum());
 
-                                                    // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
-                                                    for (int i = 0; i < jsonArray.length(); i++)
-                                                    {
-                                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                                                        int bookId = jsonObject.getInt("bookId");
-                                                        //String img = jsonObject.getString("img");
-                                                        String title = jsonObject.getString("title");
-                                                        String writer = jsonObject.getString("writer");
-                                                        String publisher = jsonObject.getString("publisher");
-                                                        String publishDate = jsonObject.getString("publishDate");
-                                                        String insertDate = jsonObject.getString("insertDate");
-                                                        String state = jsonObject.getString("state");
-
-                                                        Book book = new Book();
-                                                        book.setBookId(bookId);
-                                                        //book.setImg(img);
-                                                        book.setTitle(title);
-                                                        book.setWriter(writer);
-                                                        book.setPublisher(publisher);
-                                                        book.setPublishDate(publishDate);
-                                                        book.setInsertDate(insertDate);
-                                                        book.setState(state);
-                                                        bookArrayList.add(0, book);
-
-                                                    }
-
-                                                    Log.d(TAG, "저장되어있는 bookList : " + bookArrayList.size());
-
+                                                    jsonArray.put(bookJson);
                                                 }
                                                 catch (Exception e)
                                                 {
                                                     System.out.println(e.toString());
                                                 }
-
-                                                for (int j = 0; j < bookArrayList.size() ; j++)
-                                                {
-                                                    Book book = bookArrayList.get(j);
-                                                    if(bookId == book.getBookId())
-                                                    {
-                                                        bookArrayList.remove(j);
-                                                        Log.d(TAG, "삭제할 북아이디, 인덱스 :" + book.getBookId() + "," + j);
-                                                    }
-                                                }
-
-                                                Log.d(TAG, "삭제한 뒤 bookArrayList.size : " + bookArrayList.size());
-
-                                                // test
-                                                //ToReadBookAdapter adapter = new ToReadBookAdapter(bookArrayList);
-
-
-                                                /// JSONArray 로 변환해서 다시 저장하기
-                                                JSONArray jsonArray = new JSONArray();
-
-                                                for (int i = 0; i < bookArrayList.size(); i++)
-                                                {
-                                                    Book book = bookArrayList.get(i);
-
-                                                    // json 객체에 입력받은 값을 저장한다.
-                                                    try
-                                                    {
-                                                        JSONObject bookJson = new JSONObject();
-                                                        bookJson.put("bookId", book.getBookId());
-                                                        //bookJson.put("img", img);
-                                                        bookJson.put("title", book.getTitle());
-                                                        bookJson.put("writer", book.getWriter());
-                                                        bookJson.put("publisher", book.getPublisher());
-                                                        bookJson.put("publishDate", book.getPublishDate());
-                                                        bookJson.put("state", book.getState());
-                                                        bookJson.put("insertDate", book.getInsertDate());
-                                                        jsonArray.put(bookJson);
-                                                    }
-                                                    catch (Exception e)
-                                                    {
-                                                        System.out.println(e.toString());
-                                                    }
-                                                }
-
-                                                bookListString = jsonArray.toString();
-
-                                                Log.d(TAG, "set메소드 : " + bookListString);
-
-                                                bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-                                                SharedPreferences.Editor editor = bookInfo.edit();
-                                                editor.putString("bookList", bookListString);
-                                                editor.commit();
-
-                                                Log.d(TAG, "삭제한 뒤 저장되어있는 bookListString : " + bookListString);
-
-
                                             }
 
+                                            bookListString = jsonArray.toString();
 
+                                            bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = bookInfo.edit();
+                                            editor.putString("bookList", bookListString);
+                                            editor.commit();
 
-                                        }
-                                        else if(state.equals("reading"))
-                                        {
-                                            ReadingBookAdapter adapter = new ReadingBookAdapter();
-                                            adapter.removeItem(position);
-                                        }
-                                        else if(state.equals("read"))
-                                        {
-                                            ReadBookAdapter adapter = new ReadBookAdapter();
-                                            adapter.removeItem(position);
+                                            Log.d(TAG, "삭제한 뒤 저장되어있는 bookListString : " + bookListString);
+
                                         }
 
                                         dialog.dismiss();

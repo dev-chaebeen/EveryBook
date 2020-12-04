@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity
     ReadingBookAdapter readingBookAdapter;
     ReadBookAdapter readBookAdapter;
 
-
-
     // fragment 뷰들
     private HomeFragment homeFragment;
     private RecordFragment recordFragment;
@@ -169,13 +167,16 @@ public class MainActivity extends AppCompatActivity
                         readBookList.add(0, book);
                     }
 
-                    //어댑터에 보내기
-                    //Log.d(TAG, "MainActivity, 어댑터에 보내는 toReadBookList.size : " + toReadBookList.size());
-                    toReadBookAdapter = new ToReadBookAdapter(getApplicationContext(), toReadBookList);
-                    readingBookAdapter = new ReadingBookAdapter(getApplicationContext(), readingBookList);
-                    readBookAdapter = new ReadBookAdapter(getApplicationContext(), readBookList);
                 }
 
+                //어댑터에 보내기
+                Log.d(TAG, "MainActivity, 어댑터에 보내는 toReadBookList.size : " + toReadBookList.size());
+                toReadBookAdapter = new ToReadBookAdapter(getApplicationContext(), toReadBookList);
+                toReadBookAdapter.notifyDataSetChanged();
+                readingBookAdapter = new ReadingBookAdapter(getApplicationContext(), readingBookList);
+                readingBookAdapter.notifyDataSetChanged();
+                readBookAdapter = new ReadBookAdapter(getApplicationContext(), readBookList);
+                readBookAdapter.notifyDataSetChanged();
             }
 
         }
@@ -183,10 +184,6 @@ public class MainActivity extends AppCompatActivity
         {
             System.out.println(e.toString());
         }
-
-
-
-
 
     }
 
