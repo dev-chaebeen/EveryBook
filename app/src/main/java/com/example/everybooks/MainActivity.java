@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     ToReadBookAdapter toReadBookAdapter;
     ReadingBookAdapter readingBookAdapter;
     ReadBookAdapter readBookAdapter;
+    AllMemoAdapter allMemoAdapter;
 
     // fragment 뷰들
     private HomeFragment homeFragment;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity
         ArrayList<Book> toReadBookList = new ArrayList<>();
         ArrayList<Book> readingBookList = new ArrayList<>();
         ArrayList<Book> readBookList = new ArrayList<>();
+        ArrayList<Memo> allMemoList = new ArrayList<>();
 
         // 메인 액티비티가 전면에 나올때마다 새로고침한다.
         //refresh();
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        // 저장되어있는 값 어댑터에 보내주기
+        // 저장되어있는 책 리스트 어댑터에 보내주기
         try
         {
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
@@ -187,6 +189,47 @@ public class MainActivity extends AppCompatActivity
         {
             System.out.println(e.toString());
         }
+
+        // 저장되어있는 메모리스트 어댑터에 보내주기
+        try
+        {
+            SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
+            String memoListString = memoInfo.getString("memoList", null);
+            Log.d(TAG, "MainActivity, 저장되어있는 메모 목록 : " + memoListString);
+
+            if(memoListString != null)
+            {
+                JSONArray jsonArray = new JSONArray(memoListString);
+
+                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    Memo memo = new Memo();
+                    memo.setMemoId(jsonObject.getInt("memoId"));
+                    memo.setBookId(jsonObject.getInt("bookId"));
+                    memo.setMemoText(jsonObject.getString("memoText"));
+                    memo.setMemoDate(jsonObject.getString("memoDate"));
+
+                    allMemoList.add(0, memo);
+
+                }
+
+                //어댑터에 보내기
+                Log.d(TAG, "MainActivity, 어댑터에 보내는 메모.size : " + allMemoList.size());
+
+                allMemoAdapter = new AllMemoAdapter(getApplicationContext(), allMemoList);
+                allMemoAdapter.notifyDataSetChanged();
+            }
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+
 
     }
 

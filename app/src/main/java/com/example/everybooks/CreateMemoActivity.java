@@ -77,8 +77,8 @@ public class CreateMemoActivity extends AppCompatActivity {
 
                         // 입력받은 정보를 Memo 객체에 저장한다.
                         Memo memo = new Memo();
-                        memo.setBookId(bookId);
                         memo.setMemoId(memoId);
+                        memo.setBookId(bookId);
                         memo.setMemoText(editText_memo_text.getText().toString());
                         memo.setMemoDate(today);
 
@@ -86,8 +86,8 @@ public class CreateMemoActivity extends AppCompatActivity {
                         {
                             // json 객체에 입력받은 정보를 저장한다.
                             JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("bookId", memo.getBookId());
                             jsonObject.put("memoId", memo.getMemoId());
+                            jsonObject.put("bookId", memo.getBookId());
                             jsonObject.put("memoText", memo.getMemoText());
                             jsonObject.put("memoDate", memo.getMemoDate());
 
@@ -136,15 +136,10 @@ public class CreateMemoActivity extends AppCompatActivity {
                             System.out.println(e.toString());
                         }
 
-                        Log.d(TAG, "CreatMemo , 메모리스트  : " + memoListString);
+                        Log.d(TAG, "CreateMemoActivity , 모든 메모리스트  : " + memoListString);
+
 
                         finish();
-
-                        /*
-                        MemoAdapter memoAdapter = new MemoAdapter();
-                        memoAdapter.addItem(bookId, editText_memo_text.getText().toString());
-                        memoAdapter.notifyDataSetChanged();
-                       */
 
                         break;
 

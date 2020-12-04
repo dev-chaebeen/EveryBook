@@ -44,18 +44,20 @@ public class AllMemoFragment extends Fragment
         memo_text = view.findViewById(R.id.memo_text);
         memo_date = view.findViewById(R.id.memo_date);
 
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
         // 리사이클러뷰 생성 및 어댑터 연결
         recyclerView = view.findViewById(R.id.all_memo_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new AllMemoAdapter(MemoAdapter.memoList);
+        adapter = new AllMemoAdapter(getContext());
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        recyclerView.setAdapter(adapter);
-    }
 }

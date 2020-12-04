@@ -103,6 +103,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                     case R.id.btn_delete:
                         // delete 를 클릭하면 책을 삭제한다.
                         // 책의 상태에 따라 알맞은 리스트에서 삭제되도록 한다.
+                        // 관련된 메모도 삭제되도록 한다.
                         AlertDialog.Builder builder = new AlertDialog.Builder(ReadingBookInfoActivity.this);
                         builder.setMessage("책을 삭제하시겠습니까?");
                         builder.setPositiveButton("확인",
@@ -177,10 +178,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
 
                                             Log.d(TAG, "삭제한 뒤 bookArrayList.size : " + bookArrayList.size());
 
-                                            // test
-                                            //ToReadBookAdapter adapter = new ToReadBookAdapter(getApplicationContext(), bookArrayList);
-
-
                                             /// JSONArray 로 변환해서 다시 저장하기
                                             JSONArray jsonArray = new JSONArray();
 
@@ -221,6 +218,88 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                             editor.commit();
 
                                             Log.d(TAG, "삭제한 뒤 저장되어있는 bookListString : " + bookListString);
+
+                                        }
+
+                                        // 관련된 메모 삭제
+                                        // 저장되어있는 메모 리스트를 불러온다.
+                                        SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
+                                        String memoListString = memoInfo.getString("memoList", null);
+                                        ArrayList<Memo> allMemoList = new ArrayList<>();
+
+                                        if (bookListString != null)
+                                        {
+                                            try
+                                            {
+                                                JSONArray jsonArray = new JSONArray(memoListString);
+
+                                                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                                                for (int i = 0; i < jsonArray.length(); i++)
+                                                {
+                                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                                    Memo memo = new Memo();
+                                                    memo.setMemoId(jsonObject.getInt("memoId"));
+                                                    memo.setBookId(jsonObject.getInt("bookId"));
+                                                    memo.setMemoText(jsonObject.getString("memoText"));
+                                                    memo.setMemoDate(jsonObject.getString("memoDate"));
+                                                    allMemoList.add(0, memo);
+
+                                                }
+
+                                                Log.d(TAG, "저장되어있는 allMemoList : " + allMemoList.size());
+
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                System.out.println(e.toString());
+                                            }
+
+                                            for (int j = 0; j < allMemoList.size() ; j++)
+                                            {
+                                                Memo memo = allMemoList.get(j);
+                                                if(bookId == memo.getBookId())
+                                                {
+                                                    allMemoList.remove(j);
+                                                    Log.d(TAG, "삭제할 북아이디 :" + memo.getBookId());
+                                                }
+                                            }
+
+                                            Log.d(TAG, "삭제한 뒤 allMemoList.size : " + allMemoList.size());
+
+                                            /// JSONArray 로 변환해서 다시 저장하기
+                                            JSONArray jsonArray = new JSONArray();
+
+                                            for (int i = 0; i < allMemoList.size(); i++)
+                                            {
+                                                Memo memo = allMemoList.get(i);
+
+                                                // json 객체에 입력받은 값을 저장한다.
+                                                try
+                                                {
+                                                    JSONObject jsonObject = new JSONObject();
+
+                                                    jsonObject.put("memoId", memo.getMemoId());
+                                                    jsonObject.put("bookId", memo.getBookId());
+                                                    jsonObject.put("memoText", memo.getMemoText());
+                                                    jsonObject.put("memoDate", memo.getMemoDate());
+
+                                                    jsonArray.put(jsonObject);
+                                                }
+                                                catch (Exception e)
+                                                {
+                                                    System.out.println(e.toString());
+                                                }
+                                            }
+
+                                            memoListString = jsonArray.toString();
+
+                                            memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = memoInfo.edit();
+                                            editor.putString("memoList", memoListString);
+                                            editor.commit();
+
+                                            Log.d(TAG, "삭제한 뒤 저장되어있는 memoListString : " + memoListString);
 
                                         }
 
@@ -309,12 +388,14 @@ public class ReadingBookInfoActivity extends AppCompatActivity
         SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
         String memoListString = memoInfo.getString("memoList", null);
         ArrayList<Memo> thisBookMemoList = new ArrayList<>();
+        ArrayList<Memo> allMemoList = new ArrayList<>();
         try
         {
             JSONArray jsonArray = new JSONArray(memoListString);
             for (int i = 0; i < jsonArray.length(); i++)
             {
                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+
                 if(bookId == jsonObject.getInt("bookId"))
                 {
                     Memo memo = new Memo();
