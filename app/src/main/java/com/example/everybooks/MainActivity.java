@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
         {
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
             String bookListString = bookInfo.getString("bookList", null);
-            Log.d(TAG, bookListString);
+            Log.d(TAG, "MainActivity, 저장되어있는 책 목록 : " + bookListString);
 
             if(bookListString != null)
             {
@@ -131,7 +131,12 @@ public class MainActivity extends AppCompatActivity
                     String publisher = jsonObject.getString("publisher");
                     String publishDate = jsonObject.getString("publishDate");
                     String insertDate = jsonObject.getString("insertDate");
+                    String startDate = jsonObject.getString("startDate");
+                    String endDate = jsonObject.getString("endDate");
                     String state = jsonObject.getString("state");
+                    String readTime = jsonObject.getString("readTime");
+                    int starNum = jsonObject.getInt("starNum");
+
 
                     Book book = new Book();
                     book.setBookId(bookId);
@@ -141,7 +146,11 @@ public class MainActivity extends AppCompatActivity
                     book.setPublisher(publisher);
                     book.setPublishDate(publishDate);
                     book.setInsertDate(insertDate);
+                    book.setStartDate(startDate);
+                    book.setEndDate(endDate);
                     book.setState(state);
+                    book.setReadTime(readTime);
+                    book.setStarNum(starNum);
 
                     if(book.getState().equals("toRead"))
                     {
