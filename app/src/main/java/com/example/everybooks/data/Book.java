@@ -22,14 +22,6 @@ public class Book
     ArrayList<Book> readingBookList;
     ArrayList<Book> readBookList;
 
-
-
-
-
-
-
-    // 임시 아이디
-
     private int bookId;
     private String img;
     private String title;

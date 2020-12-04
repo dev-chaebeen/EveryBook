@@ -16,6 +16,15 @@ public class CalendarAdapter extends BaseAdapter
 {
     // todo static 수정하기
     static ArrayList<Book> readBookList = ReadBookAdapter.readBookList;
+    Context context;
+
+    public CalendarAdapter(){}
+
+    public  CalendarAdapter(Context context, ArrayList<Book> arrayList)
+    {
+        this.context = context;
+        this.readBookList = arrayList;
+    }
 
     @Override
     public int getCount() {

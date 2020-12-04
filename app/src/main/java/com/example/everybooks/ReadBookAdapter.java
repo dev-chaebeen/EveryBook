@@ -1,5 +1,6 @@
 package com.example.everybooks;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +18,12 @@ import java.util.Calendar;
 
 public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookViewHolder> {
 
-    // todo static 수정하기
     static ArrayList<Book> readBookList = new ArrayList<>() ;
 
     int position;
     Book book;
+
+    Context context;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -76,7 +78,9 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
     ReadBookAdapter(){}
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    ReadBookAdapter(ArrayList<Book> ReadBookList) {
+    ReadBookAdapter(Context context, ArrayList<Book> ReadBookList)
+    {
+        this.context = context;
         this.readBookList = ReadBookList;
     }
 

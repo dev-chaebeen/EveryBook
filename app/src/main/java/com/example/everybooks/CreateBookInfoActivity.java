@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,20 +99,12 @@ public class CreateBookInfoActivity extends AppCompatActivity
                 {
                     case R.id.save:
                         // save 클릭했을 때 수행할 동작
-
                         //Log.d(TAG, "save 버튼 클릭");
-
                         // bookInfo 라는 SharedPreferences 파일에서 bookId 를 가져온다.
                         // 저장된 값이 존재하지 않는다면 0을 가져온다.
                         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
                         bookId = bookInfo.getInt("bookId", 0);
-
-                        //Log.d(TAG, "저장되어있던 bookId" + bookId);
-
-                        // 이미지뷰의 resource를 비트맵으로 가져오기
-                        //BitmapDrawable drawable = (BitmapDrawable) imageView_img_book.getDrawable();
-                        //Bitmap bitmap = drawable.getBitmap();
-                        //img = bitmap.toString();
+                        //Log.d(TAG, "저장될 bookId : " + bookId);
 
                         // 입력받은 정보를 book 객체에 저장한다.
                         Book book = new Book();
@@ -136,6 +129,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                         book.setStarNum(0);
                         book.setReadTime("");
 
+                        //Log.d(TAG, "book 객체에 정보 저장");
                         try
                         {
                             // json 객체에 입력받은 값을 저장한다.
@@ -154,17 +148,16 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             bookJson.put("starNum", book.getStarNum());
                             bookJson.put("readTime", book.getReadTime());
 
+                            //Log.d(TAG, "json 객체에 정보 저장 : " + bookJson.toString());
+                            // SharedPreference bookInfo 파일에서 "toReadBookLIst" 키로 저장된 문자열을 불러온다.
+                            // 불러온 문자열을 JsonArray 형식으로 바꾼다음 jsonObject를 JsonArray 에 추가한다.
+
+                            bookListString = bookInfo.getString("bookList", null);
+
                             // 책을 구분하기 위해 저장된 책의 bookId 가 겹치지 않도록 bookInfo 에 저장된 bookId의 값을 1 증가시킨다.
                             SharedPreferences.Editor editor = bookInfo.edit();
                             editor.putInt("bookId", bookId + 1);
                             editor.commit();
-
-                            // Log.d(TAG, "1증가시키고 저장해둔 bookId" + bookInfo.getInt("bookId",0));
-
-
-                            // 기존에 저장된 jsonArray에 저장하기 위해서
-                            // SharedPreference bookInfo 파일에서 "toReadBookLIst" 키로 저장된 String 값을 불러온다.
-                            bookListString = bookInfo.getString("bookList", null);
 
                             // 저장된 값이 있을 때
                             if(bookListString != null)
@@ -194,37 +187,8 @@ public class CreateBookInfoActivity extends AppCompatActivity
                                 //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
                             }
 
-                            // jsonArray를 ArrayList<Book> 형태로 변환한다.
-                           // bookListString = bookInfo.getString("bookList", "");
-                           // JSONArray jsonArray = new JSONArray(bookListString);
-
-                            //Log.d(TAG, " 변환하려고 불러온 jsonArray length : " + jsonArray.length());
-
-                            //Log.d(TAG, toReadBookListString);
-
-                            /*// 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
-                            for (int i = 0; i < jsonArray.length(); i++)
-                            {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                                int bookId = jsonObject.getInt("bookId");
-                                //String img = jsonObject.getString("img");
-                                String title = jsonObject.getString("title");
-                                String writer = jsonObject.getString("writer");
-                                String publisher = jsonObject.getString("publisher");
-                                String publishDate = jsonObject.getString("publishDate");
-                                String insertDate = jsonObject.getString("insertDate");
-                                String state = jsonObject.getString("state");
-
-
-                                // ArrayList<Book> 에 저장
-                                toReadBookList.add(0, book);
-                                //Log.d(TAG, "toReadBookList.size : " + toReadBookList.size());
-
-                                //어댑터에 보내기
-                                adapter = new ToReadBookAdapter(toReadBookList);
-                            }*/
-
+                            //Log.d(TAG, "1 증가시키고 저장해둔 bookId : " + bookInfo.getInt("bookId",0));
+                            //Log.d(TAG, "추가한 뒤 bookListString" + jsonArray.toString());
                         }
                         catch (Exception e)
                         {

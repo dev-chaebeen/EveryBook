@@ -1,7 +1,10 @@
 package com.example.everybooks;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +18,21 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.everybooks.data.Book;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 // 읽을 책 목록
 public class ToReadFragment extends Fragment
 {
     private View view;
     Intent intent;
-    
+    final String TAG = "테스트";
+
     // 뷰 요소 선언
     FloatingActionButton floatingActionButton_add_book;
     LinearLayout linearLayout_to_read_book;
@@ -84,9 +94,8 @@ public class ToReadFragment extends Fragment
     {
         // 리사이클러뷰 생성
         recyclerView = (RecyclerView) view.findViewById(R.id.to_read_book_list);
-
         recyclerView.setHasFixedSize(true);
-        adapter = new ToReadBookAdapter(ToReadBookAdapter.toReadBookList);
+        adapter = new ToReadBookAdapter();
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setAdapter(adapter);
     }

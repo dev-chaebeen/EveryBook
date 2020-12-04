@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.example.everybooks.data.Book;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,13 +29,21 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
 {
     private int position;
     Book book;
+    Context context;
+    final String TAG = "테스트";
 
-    static ArrayList<Book> toReadBookList = new ArrayList<>();
+    ArrayList<Book> toReadBookList = new ArrayList<>();
 
     public ToReadBookAdapter(){}
 
-    public ToReadBookAdapter(ArrayList<Book> toReadBookList)
+    public ToReadBookAdapter(Context context)
     {
+        this.context = context;
+    }
+
+    public ToReadBookAdapter(Context context, ArrayList<Book> toReadBookList)
+    {
+        this.context = context;
         this.toReadBookList = toReadBookList;
     }
 
@@ -42,7 +52,8 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
         TextView textView_title;
         TextView textView_insert_date;
 
-        BookViewHolder(View itemView) {
+        BookViewHolder(View itemView)
+        {
             super(itemView) ;
 
            // 뷰 요소 초기화
@@ -50,7 +61,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
             textView_title = itemView.findViewById(R.id.title);
             textView_insert_date = itemView.findViewById(R.id.insert_date);
 
-            // 각각의 아이템을 클릭하면 책 데이터를 가지고 책 정보수정 화면으로 전환한다.
+            // 각각의 아이템을 클릭하면 책 아이디를 가지고 책 정보수정 화면으로 전환한다.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -59,14 +70,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
 
                         book = getItem(position);
                         Intent intent = new Intent(v.getContext(), EditBookInfoActivity.class);
-                        //intent.putExtra("img", book.getImg());
                         intent.putExtra("bookId", book.getBookId());
-                        intent.putExtra("title", book.getTitle());
-                        intent.putExtra("writer", book.getWriter());
-                        intent.putExtra("publisher", book.getPublisher());
-                        intent.putExtra("publishDate", book.getPublishDate());
-                        intent.putExtra("position", position);
-                        intent.putExtra("state", book.getState());
                         v.getContext().startActivity(intent);
 
                     }
@@ -77,6 +81,14 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                 @Override
                 public boolean onLongClick(View v) {
 
+                    //현재 년도, 월, 일을 책 등록일에 저장한다.
+                    Calendar cal = Calendar.getInstance();
+                    int year = cal.get ( cal.YEAR );
+                    int month = cal.get ( cal.MONTH ) + 1 ;
+                    int date = cal.get ( cal.DATE ) ;
+
+                    String today = year + "." + month + "." + date;
+
                     //AlertDialog.Builder builder = new AlertDialog.Builder(ToReadBookAdapter.this);
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     builder.setMessage("독서를 시작할까요?");
@@ -85,7 +97,37 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                             public void onClick(DialogInterface dialog, int which)
                             {
                                 // 읽을 책 → 읽는 책 리스트로 이동시킨다.
-                                // 해당하는 책을 찾아서 readingBookList에 추가하고 toReadbookList에서 삭제한다.
+                                // 해당하는 책을 찾아서 state 를 reading으로 바꾸고 startDate 에 값을 입력한다.
+                                SharedPreferences bookInfo = context.getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
+                                String bookListString= bookInfo.getString("bookList", null);
+
+                                try
+                                {
+                                    JSONArray jsonArray = new JSONArray(bookListString);
+                                    for (int i = 0; i < jsonArray.length() ; i++)
+                                    {
+                                        JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                                        if(jsonObject.getInt("bookId") == book.getBookId())
+                                        {
+                                            jsonObject.put("state", "reading");
+                                            jsonObject.put("startDate", today);
+
+                                        }
+                                    }
+
+                                    // test ok
+                                    Log.d(TAG,"읽을 책 → 읽는 책: " + jsonArray.toString());
+
+                                    SharedPreferences.Editor editor = bookInfo.edit();
+                                    editor.putString("bookList", jsonArray.toString());
+                                    editor.commit();
+                                }
+                                catch (Exception e)
+                                {
+                                    System.out.println(e.toString());
+                                }
+
+
                                 position = getAdapterPosition();
                                 Book book = getItem(position);
 
@@ -126,6 +168,8 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시하는 메소드
     @Override
     public void onBindViewHolder(ToReadBookAdapter.BookViewHolder holder, int position) {
+
+        Log.d(TAG,"ToRead 어댑터에서 toReadBookList.size : " + toReadBookList.size() );
         Book book = toReadBookList.get(position);
 
         //holder.imageView_img.setImageBitmap(StringToBitmap(book.getImg()));

@@ -73,21 +73,53 @@ public class MainActivity extends AppCompatActivity
         etcFragment = new EtcFragment();
         profileLogoutFragment = new ProfileLogoutFragment();
         profileFragment = new ProfileFragment();
-        toReadBookAdapter = new ToReadBookAdapter();
 
         setFragment(HOME);// 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        // 메인 액티비티가 전면에 나올때마다 새로고침한다.
+        //refresh();
+
+        // 하단 네비 바 아이템 클릭하면 해당하는 프래그먼트로 변경
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
+        {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
+            {
+                switch (menuItem.getItemId())
+                {
+                    case R.id.action_home :
+                        setFragment(HOME);
+                        break;
+                    case R.id.action_record :
+                        setFragment(RECORD);
+                        break;
+                    case R.id.action_etc :
+                        setFragment(ETC);
+                        break;
+                    case R.id.action_profile :
+                        setFragment(PROFILE);
+                        break;
+                }
+                return true;
+            }
+        });
 
         // 저장되어있는 값 어댑터에 보내주기
-
         try
         {
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-            String toReadBookListString = bookInfo.getString("bookList", null);
-            Log.d(TAG, toReadBookListString);
+            String bookListString = bookInfo.getString("bookList", null);
+            Log.d(TAG, bookListString);
 
-            if(toReadBookListString != null)
+            if(bookListString != null)
             {
-                JSONArray jsonArray = new JSONArray(toReadBookListString);
+                JSONArray jsonArray = new JSONArray(bookListString);
 
                 // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
                 for (int i = 0; i < jsonArray.length(); i++)
@@ -127,9 +159,9 @@ public class MainActivity extends AppCompatActivity
                     }
 
                     //어댑터에 보내기
-                    toReadBookAdapter = new ToReadBookAdapter(toReadBookList);
-                    readingBookAdapter = new ReadingBookAdapter(readingBookList);
-                    readBookAdapter = new ReadBookAdapter(readBookList);
+                    toReadBookAdapter = new ToReadBookAdapter(getApplicationContext(), toReadBookList);
+                    readingBookAdapter = new ReadingBookAdapter(getApplicationContext(), readingBookList);
+                    readBookAdapter = new ReadBookAdapter(getApplicationContext(), readBookList);
                 }
 
             }
@@ -141,46 +173,9 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        //어댑터에 보내기
-        toReadBookAdapter = new ToReadBookAdapter(toReadBookList);
-        readingBookAdapter = new ReadingBookAdapter(readingBookList);
-        readBookAdapter = new ReadBookAdapter(readBookList);
 
 
-        // 메인 액티비티가 전면에 나올때마다 새로고침한다.
-        refresh();
 
-        // 하단 네비 바 아이템 클릭하면 해당하는 프래그먼트로 변경
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
-        {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
-            {
-                switch (menuItem.getItemId())
-                {
-                    case R.id.action_home :
-                        setFragment(HOME);
-                        break;
-                    case R.id.action_record :
-                        setFragment(RECORD);
-                        break;
-                    case R.id.action_etc :
-                        setFragment(ETC);
-                        break;
-                    case R.id.action_profile :
-                        setFragment(PROFILE);
-                        break;
-                }
-                return true;
-            }
-        });
     }
 
     // 프레그먼트 교체가 일어나는 메소드
@@ -261,20 +256,17 @@ public class MainActivity extends AppCompatActivity
     {
         super.onPause();
 
-        // 여기에서 어댑터에 있던 리스트들 저장
         // 책 리스트
-        // 여기에서 어댑터에 있던 리스트들 저장
-        // 여기에서 어댑터에 있던 책 리스트들 저장
-        ArrayList<Book> toReadBookList = new ArrayList<>();
-        ArrayList<Book> readingBookList = new ArrayList<>();
-        ArrayList<Book> readBookList = new ArrayList<>();
+       // ArrayList<Book> toReadBookList = new ArrayList<>();
+        //ArrayList<Book> readingBookList = new ArrayList<>();
+       // ArrayList<Book> readBookList = new ArrayList<>();
 
-        toReadBookList = ToReadBookAdapter.toReadBookList;
-        readingBookList = ReadingBookAdapter.readingBookList;
-        readBookList = ReadBookAdapter.readBookList;
+        //toReadBookList = ToReadBookAdapter.toReadBookList;
+       // readingBookList = ReadingBookAdapter.readingBookList;
+       // readBookList = ReadBookAdapter.readBookList;
 
         /// JSONArray 로 변환해서 다시 저장하기
-        JSONArray jsonArray = new JSONArray();
+        /*JSONArray jsonArray = new JSONArray();
 
 
         // 읽을 책 저장
@@ -294,6 +286,9 @@ public class MainActivity extends AppCompatActivity
                 bookJson.put("publishDate", book.getPublishDate());
                 bookJson.put("state", book.getState());
                 bookJson.put("insertDate", book.getInsertDate());
+                bookJson.put("startDate", book.getStartDate());
+                bookJson.put("endDate", book.getEndDate());
+                bookJson.put("readTime", book.getReadTime());
                 jsonArray.put(bookJson);
             }
             catch (Exception e)
@@ -320,6 +315,7 @@ public class MainActivity extends AppCompatActivity
                 bookJson.put("state", book.getState());
                 bookJson.put("insertDate", book.getInsertDate());
                 bookJson.put("startDate", book.getStartDate());
+                bookJson.put("endDate", book.getEndDate());
                 bookJson.put("readTime", book.getReadTime());
                 jsonArray.put(bookJson);
             }
@@ -349,7 +345,6 @@ public class MainActivity extends AppCompatActivity
                 bookJson.put("startDate", book.getStartDate());
                 bookJson.put("endDate", book.getEndDate());
                 bookJson.put("readTime", book.getReadTime());
-                bookJson.put("starNum", book.getStarNum());
                 jsonArray.put(bookJson);
             }
             catch (Exception e)
@@ -363,10 +358,12 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences.Editor editor = bookInfo.edit();
         editor.putString("bookList", bookListString);
         editor.commit();
-
+*/
 
         // 어댑터에 있는 메모리스트 저장 - ing
         ArrayList<Memo> memoList = new ArrayList<>();
+
+
 
 
     }
@@ -385,6 +382,59 @@ public class MainActivity extends AppCompatActivity
         toReadBookAdapter.notifyDataSetChanged();
     }
 
+    // 저장된 JsonArray 로부터 읽을 책 리스트를 얻는 메소드
+    public ArrayList<Book> getToReadBookList() {
+
+        ArrayList<Book> arrayList= new ArrayList<>();
+
+        try {
+
+            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+            String bookListString = bookInfo.getString("bookList", null);
+
+            if (bookListString != null)
+            {
+                JSONArray jsonArray = new JSONArray(bookListString);
+
+                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    int bookId = jsonObject.getInt("bookId");
+                    //String img = jsonObject.getString("img");
+                    String title = jsonObject.getString("title");
+                    String writer = jsonObject.getString("writer");
+                    String publisher = jsonObject.getString("publisher");
+                    String publishDate = jsonObject.getString("publishDate");
+                    String insertDate = jsonObject.getString("insertDate");
+                    String state = jsonObject.getString("state");
+
+                    Book book = new Book();
+                    book.setBookId(bookId);
+                    //book.setImg(img);
+                    book.setTitle(title);
+                    book.setWriter(writer);
+                    book.setPublisher(publisher);
+                    book.setPublishDate(publishDate);
+                    book.setInsertDate(insertDate);
+                    book.setState(state);
+
+                    arrayList = new ArrayList<>();
+                    arrayList.add(0, book);
+
+                }
+
+                //어댑터에 보내기
+                toReadBookAdapter = new ToReadBookAdapter(getApplicationContext(), arrayList);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+
+        return toReadBookList;
+    }
 
 
 }

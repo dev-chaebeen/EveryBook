@@ -181,7 +181,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
 
                     case R.id.btn_delete:
 
-                        // todo 삭제하면 시작일 없어지는거
+                        // todo 삭제하면 시작일 없어지는거 -- 주석 때문?
 
                         /*
                         // 기존
@@ -252,7 +252,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                                     String publisher = jsonObject.getString("publisher");
                                                     String publishDate = jsonObject.getString("publishDate");
                                                     String insertDate = jsonObject.getString("insertDate");
-                                                    //String startDate = jsonObject.getString("startDate");
+                                                    String startDate = jsonObject.getString("startDate");
                                                     String state = jsonObject.getString("state");
 
 

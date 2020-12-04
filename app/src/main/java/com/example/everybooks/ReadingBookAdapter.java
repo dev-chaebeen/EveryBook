@@ -1,6 +1,7 @@
 package com.example.everybooks;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     RatingBar ratingBar;
     int position;
     Book book;
+    Context context;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder
@@ -86,9 +88,11 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     // 기본 생성자
     ReadingBookAdapter(){}
 
+    // 리스트를 사용자에게 보여주기 위해서
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    // todo 이유 작성
-    ReadingBookAdapter(ArrayList<Book> readingBookList) {
+    ReadingBookAdapter(Context context,ArrayList<Book> readingBookList)
+    {
+        this.context = context;
         this.readingBookList = readingBookList;
     }
 

@@ -46,7 +46,7 @@ public class ReadingFragment extends Fragment
         // 리사이클러뷰 생성
         recyclerView = view.findViewById(R.id.reading_book_list);
         recyclerView.setHasFixedSize(true);
-        adapter = new ReadingBookAdapter(ReadingBookAdapter.readingBookList);
+        adapter = new ReadingBookAdapter(getContext(), ReadingBookAdapter.readingBookList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setAdapter(adapter);
     }
