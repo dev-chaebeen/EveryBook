@@ -32,7 +32,8 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     Context context;
     final String TAG = "테스트";
 
-    ArrayList<Book> toReadBookList = new ArrayList<>();
+    // static 지우면 안된다.
+    static ArrayList<Book> toReadBookList = new ArrayList<>();
 
     public ToReadBookAdapter(){}
 
@@ -169,7 +170,8 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     @Override
     public void onBindViewHolder(ToReadBookAdapter.BookViewHolder holder, int position) {
 
-        Log.d(TAG,"ToRead 어댑터에서 toReadBookList.size : " + toReadBookList.size() );
+        Log.d(TAG,"ToReadAdapter, toReadBookList.size : " + toReadBookList.size() );
+
         Book book = toReadBookList.get(position);
 
         //holder.imageView_img.setImageBitmap(StringToBitmap(book.getImg()));

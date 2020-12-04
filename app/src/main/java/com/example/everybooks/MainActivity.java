@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity
                     }
 
                     //어댑터에 보내기
+                    Log.d(TAG, "MainActivity, 어댑터에 보내는 toReadBookList.size : " + toReadBookList.size());
                     toReadBookAdapter = new ToReadBookAdapter(getApplicationContext(), toReadBookList);
                     readingBookAdapter = new ReadingBookAdapter(getApplicationContext(), readingBookList);
                     readBookAdapter = new ReadBookAdapter(getApplicationContext(), readBookList);
