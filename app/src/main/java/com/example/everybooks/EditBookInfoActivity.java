@@ -82,36 +82,71 @@ public class EditBookInfoActivity extends AppCompatActivity
 
                         Log.d(TAG, "바꾸려는 제목 : " + title );
 
-                        // 읽을 책 리스트를 얻어와서 전달받은 bookId 와 일치하는 book 객체의 데이터를 입력받은 값으로 바꿔준다.
-
-                        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-                        String bookListString= bookInfo.getString("bookList", null);
-
-                        try
+                        if(state.equals("toRead"))
                         {
-                            JSONArray jsonArray = new JSONArray(bookListString);
-                            for (int i = 0; i < jsonArray.length() ; i++)
+                            // 읽을 책 리스트를 얻어와서 전달받은 bookId 와 일치하는 book 객체의 데이터를 입력받은 값으로 바꿔준다.
+
+                            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                            String bookListString= bookInfo.getString("bookList", null);
+
+                            try
                             {
-                                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                if(jsonObject.getInt("bookId") == bookId)
+                                JSONArray jsonArray = new JSONArray(bookListString);
+                                for (int i = 0; i < jsonArray.length() ; i++)
                                 {
-                                    jsonObject.put("title", title);
-                                    jsonObject.put("writer", writer);
-                                    jsonObject.put("publisher", publisher);
-                                    jsonObject.put("publishDate", publishDate);
+                                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                                    if(jsonObject.getInt("bookId") == bookId)
+                                    {
+                                        jsonObject.put("title", title);
+                                        jsonObject.put("writer", writer);
+                                        jsonObject.put("publisher", publisher);
+                                        jsonObject.put("publishDate", publishDate);
+                                    }
                                 }
+
+                                // test ok
+                                Log.d(TAG," jsonArray.toString: " + jsonArray.toString());
+
+                                SharedPreferences.Editor editor = bookInfo.edit();
+                                editor.putString("bookList", jsonArray.toString());
+                                editor.commit();
+                            }
+                            catch (Exception e)
+                            {
+                                System.out.println(e.toString());
                             }
 
-                            // test ok
-                            // Log.d(TAG," jsonArray.toString: " + jsonArray.toString());
+                            MainActivity mainActivity = new MainActivity();
+                            ArrayList<Book> arrayList = mainActivity.getToReadBookList();
+                            // 그리고 그 arrayList 를 어댑터에 보내준다.
+                            //어댑터에 보내고
+                            // ToReadBookAdapter adapter = new ToReadBookAdapter(arrayList);
 
-                            SharedPreferences.Editor editor = bookInfo.edit();
-                            editor.putString("bookList", jsonArray.toString());
-                            editor.commit();
+
                         }
-                        catch (Exception e)
+                        else if(state.equals("reading"))
                         {
-                            System.out.println(e.toString());
+                            ReadingBookAdapter adapter = new ReadingBookAdapter();
+                            Book book = ReadingBookAdapter.readingBookList.get(position);
+
+                            book.setTitle(title);
+                            book.setWriter(writer);
+                            book.setPublisher(publisher);
+                            book.setPublishDate(publishDate);
+
+                            adapter.notifyDataSetChanged();
+                        }
+                        else if(state.equals("read"))
+                        {
+                            ReadBookAdapter adapter = new ReadBookAdapter();
+                            Book book = ReadBookAdapter.readBookList.get(position);
+
+                            book.setTitle(title);
+                            book.setWriter(writer);
+                            book.setPublisher(publisher);
+                            book.setPublishDate(publishDate);
+
+                            adapter.notifyDataSetChanged();
                         }
 
                         intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -127,113 +162,113 @@ public class EditBookInfoActivity extends AppCompatActivity
                         AlertDialog.Builder builder = new AlertDialog.Builder(EditBookInfoActivity.this);
                         builder.setMessage("책을 삭제하시겠습니까?");
                         builder.setPositiveButton("확인",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    if(state.equals("toRead"))
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which)
                                     {
-                                        // 저장되어있는 읽을 책 리스트를 불러온다.
-                                        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-                                        String bookListString = bookInfo.getString("bookList", null);
-                                        ArrayList<Book> bookArrayList = new ArrayList<>();
-
-                                        if (bookListString != null)
+                                        if(state.equals("toRead"))
                                         {
-                                            try
+                                            // 저장되어있는 읽을 책 리스트를 불러온다.
+                                            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                                            String bookListString = bookInfo.getString("bookList", null);
+                                            ArrayList<Book> bookArrayList = new ArrayList<>();
+
+                                            if (bookListString != null)
                                             {
-                                                JSONArray jsonArray = new JSONArray(bookListString);
-
-                                                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
-                                                for (int i = 0; i < jsonArray.length(); i++)
-                                                {
-                                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                                                    int bookId = jsonObject.getInt("bookId");
-                                                    //String img = jsonObject.getString("img");
-                                                    String title = jsonObject.getString("title");
-                                                    String writer = jsonObject.getString("writer");
-                                                    String publisher = jsonObject.getString("publisher");
-                                                    String publishDate = jsonObject.getString("publishDate");
-                                                    String insertDate = jsonObject.getString("insertDate");
-                                                    String state = jsonObject.getString("state");
-
-                                                    Book book = new Book();
-                                                    book.setBookId(bookId);
-                                                    //book.setImg(img);
-                                                    book.setTitle(title);
-                                                    book.setWriter(writer);
-                                                    book.setPublisher(publisher);
-                                                    book.setPublishDate(publishDate);
-                                                    book.setInsertDate(insertDate);
-                                                    book.setState(state);
-                                                    bookArrayList.add(0, book);
-
-                                                }
-
-                                                Log.d(TAG, "저장되어있는 bookList : " + bookArrayList.size());
-
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                System.out.println(e.toString());
-                                            }
-
-                                            for (int j = 0; j < bookArrayList.size() ; j++)
-                                            {
-                                                Book book = bookArrayList.get(j);
-                                                if(bookId == book.getBookId())
-                                                {
-                                                    bookArrayList.remove(j);
-                                                    Log.d(TAG, "삭제할 북아이디, 인덱스 :" + book.getBookId() + "," + j);
-                                                }
-                                            }
-
-                                            Log.d(TAG, "삭제한 뒤 bookArrayList.size : " + bookArrayList.size());
-
-                                            // test
-                                            //ToReadBookAdapter adapter = new ToReadBookAdapter(bookArrayList);
-
-
-                                            /// JSONArray 로 변환해서 다시 저장하기
-                                            JSONArray jsonArray = new JSONArray();
-
-                                            for (int i = 0; i < bookArrayList.size(); i++)
-                                            {
-                                                Book book = bookArrayList.get(i);
-
-                                                // json 객체에 입력받은 값을 저장한다.
                                                 try
                                                 {
-                                                    JSONObject bookJson = new JSONObject();
-                                                    bookJson.put("bookId", book.getBookId());
-                                                    //bookJson.put("img", img);
-                                                    bookJson.put("title", book.getTitle());
-                                                    bookJson.put("writer", book.getWriter());
-                                                    bookJson.put("publisher", book.getPublisher());
-                                                    bookJson.put("publishDate", book.getPublishDate());
-                                                    bookJson.put("state", book.getState());
-                                                    bookJson.put("insertDate", book.getInsertDate());
-                                                    jsonArray.put(bookJson);
+                                                    JSONArray jsonArray = new JSONArray(bookListString);
+
+                                                    // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                                                    for (int i = 0; i < jsonArray.length(); i++)
+                                                    {
+                                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                                        int bookId = jsonObject.getInt("bookId");
+                                                        //String img = jsonObject.getString("img");
+                                                        String title = jsonObject.getString("title");
+                                                        String writer = jsonObject.getString("writer");
+                                                        String publisher = jsonObject.getString("publisher");
+                                                        String publishDate = jsonObject.getString("publishDate");
+                                                        String insertDate = jsonObject.getString("insertDate");
+                                                        String state = jsonObject.getString("state");
+
+                                                        Book book = new Book();
+                                                        book.setBookId(bookId);
+                                                        //book.setImg(img);
+                                                        book.setTitle(title);
+                                                        book.setWriter(writer);
+                                                        book.setPublisher(publisher);
+                                                        book.setPublishDate(publishDate);
+                                                        book.setInsertDate(insertDate);
+                                                        book.setState(state);
+                                                        bookArrayList.add(0, book);
+
+                                                    }
+
+                                                    Log.d(TAG, "저장되어있는 bookList : " + bookArrayList.size());
+
                                                 }
                                                 catch (Exception e)
                                                 {
                                                     System.out.println(e.toString());
                                                 }
+
+                                                for (int j = 0; j < bookArrayList.size() ; j++)
+                                                {
+                                                    Book book = bookArrayList.get(j);
+                                                    if(bookId == book.getBookId())
+                                                    {
+                                                        bookArrayList.remove(j);
+                                                        Log.d(TAG, "삭제할 북아이디, 인덱스 :" + book.getBookId() + "," + j);
+                                                    }
+                                                }
+
+                                                Log.d(TAG, "삭제한 뒤 bookArrayList.size : " + bookArrayList.size());
+
+                                                // test
+                                                //ToReadBookAdapter adapter = new ToReadBookAdapter(bookArrayList);
+
+
+                                                /// JSONArray 로 변환해서 다시 저장하기
+                                                JSONArray jsonArray = new JSONArray();
+
+                                                for (int i = 0; i < bookArrayList.size(); i++)
+                                                {
+                                                    Book book = bookArrayList.get(i);
+
+                                                    // json 객체에 입력받은 값을 저장한다.
+                                                    try
+                                                    {
+                                                        JSONObject bookJson = new JSONObject();
+                                                        bookJson.put("bookId", book.getBookId());
+                                                        //bookJson.put("img", img);
+                                                        bookJson.put("title", book.getTitle());
+                                                        bookJson.put("writer", book.getWriter());
+                                                        bookJson.put("publisher", book.getPublisher());
+                                                        bookJson.put("publishDate", book.getPublishDate());
+                                                        bookJson.put("state", book.getState());
+                                                        bookJson.put("insertDate", book.getInsertDate());
+                                                        jsonArray.put(bookJson);
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        System.out.println(e.toString());
+                                                    }
+                                                }
+
+                                                bookListString = jsonArray.toString();
+
+                                                Log.d(TAG, "set메소드 : " + bookListString);
+
+                                                bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = bookInfo.edit();
+                                                editor.putString("bookList", bookListString);
+                                                editor.commit();
+
+                                                Log.d(TAG, "삭제한 뒤 저장되어있는 bookListString : " + bookListString);
+
+
                                             }
-
-                                            bookListString = jsonArray.toString();
-
-                                            Log.d(TAG, "set메소드 : " + bookListString);
-
-                                            bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-                                            SharedPreferences.Editor editor = bookInfo.edit();
-                                            editor.putString("bookList", bookListString);
-                                            editor.commit();
-
-                                            Log.d(TAG, "삭제한 뒤 저장되어있는 bookListString : " + bookListString);
-
-
-                                        }
 
 
 
@@ -284,39 +319,39 @@ public class EditBookInfoActivity extends AppCompatActivity
                                         ToReadBookAdapter adapter = new ToReadBookAdapter(arrayList);
                                         */
 
-                                        // 기존
-                                        //ToReadBookAdapter adapter = new ToReadBookAdapter();
-                                        //adapter.removeItem(position);
+                                            // 기존
+                                            //ToReadBookAdapter adapter = new ToReadBookAdapter();
+                                            //adapter.removeItem(position);
+                                        }
+                                        else if(state.equals("reading"))
+                                        {
+                                            ReadingBookAdapter adapter = new ReadingBookAdapter();
+                                            adapter.removeItem(position);
+                                        }
+                                        else if(state.equals("read"))
+                                        {
+                                            ReadBookAdapter adapter = new ReadBookAdapter();
+                                            adapter.removeItem(position);
+                                        }
+
+                                        dialog.dismiss();
+
+                                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+
+                                        finish();
+
                                     }
-                                    else if(state.equals("reading"))
-                                    {
-                                        ReadingBookAdapter adapter = new ReadingBookAdapter();
-                                        adapter.removeItem(position);
-                                    }
-                                    else if(state.equals("read"))
-                                    {
-                                        ReadBookAdapter adapter = new ReadBookAdapter();
-                                        adapter.removeItem(position);
-                                    }
-
-                                    dialog.dismiss();
-
-                                    intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-
-                                    finish();
-
-                                }
-                            });
+                                });
 
                         builder.setNegativeButton("취소",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                    Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            });
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
 
                         builder.show();
 
