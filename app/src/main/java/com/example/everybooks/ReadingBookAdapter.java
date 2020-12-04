@@ -21,7 +21,7 @@ import java.util.Calendar;
 
 public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.BookViewHolder>
 {
-    // todo static 수정하기
+    // static 수정하면 안된다.
     static ArrayList<Book> readingBookList = new ArrayList<>();
 
     RatingBar ratingBar;
