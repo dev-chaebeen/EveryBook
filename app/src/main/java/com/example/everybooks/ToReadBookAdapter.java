@@ -97,7 +97,6 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which)
                             {
-                                // 읽을 책 → 읽는 책 리스트로 이동시킨다.
                                 // 해당하는 책을 찾아서 state 를 reading으로 바꾸고 startDate 에 값을 입력한다.
                                 SharedPreferences bookInfo = context.getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
                                 String bookListString= bookInfo.getString("bookList", null);
@@ -108,20 +107,20 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                                     for (int i = 0; i < jsonArray.length() ; i++)
                                     {
                                         JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                        if(jsonObject.getInt("bookId") == book.getBookId())
+                                        if(book.getBookId() == jsonObject.getInt("bookId"))
                                         {
                                             jsonObject.put("state", "reading");
                                             jsonObject.put("startDate", today);
-
                                         }
                                     }
-
-                                    // test ok
-                                    Log.d(TAG,"읽을 책 → 읽는 책: " + jsonArray.toString());
 
                                     SharedPreferences.Editor editor = bookInfo.edit();
                                     editor.putString("bookList", jsonArray.toString());
                                     editor.commit();
+
+                                    // test ok
+                                    Log.d(TAG,"읽을 책 → 읽는 책: " + jsonArray.toString());
+
                                 }
                                 catch (Exception e)
                                 {
