@@ -17,6 +17,13 @@ public class MemoAdapter extends BaseAdapter
     // todo static 수정하기
     static ArrayList<Memo> memoList = new ArrayList<>();
 
+    public MemoAdapter(){}
+
+    public MemoAdapter(ArrayList<Memo> arrayList)
+    {
+        this.memoList = arrayList;
+    }
+
     // 데이터 추가 메소드
     public void addItem(int bookId, String memoText)
     {

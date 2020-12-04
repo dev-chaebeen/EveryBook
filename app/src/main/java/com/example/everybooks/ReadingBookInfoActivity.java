@@ -65,9 +65,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
         // 화면 생성
         setContentView(R.layout.activity_reading_book_info);
 
-        // 메모 리스트뷰 어댑터 객체 생성
-        memoAdapter = new MemoAdapter();
-
         // 뷰 요소 초기화
         textView_edit = findViewById(R.id.edit);
         button_memo = findViewById(R.id.btn_memo);
@@ -297,15 +294,46 @@ public class ReadingBookInfoActivity extends AppCompatActivity
             }
             catch (Exception e)
             {
-
+                System.out.println(e.toString());
             }
         }
 
+        // 책 정보를 뷰 요소에 담아준다.
         textView_title.setText(title);
         textView_writer.setText(writer);
         textView_publisher.setText(publisher);
         textView_publish_date.setText(publishDate);
         textView_start_date.setText(startDate);
+
+        // 책에 해당하는 메모를 보여주기 위해서 전체 메모리스트를 가져온 뒤 bookId 와 일치하는 메모만 arrayList에 담아서 어댑터로 보낸다.
+        SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
+        String memoListString = memoInfo.getString("memoList", null);
+        ArrayList<Memo> thisBookMemoList = new ArrayList<>();
+        try
+        {
+            JSONArray jsonArray = new JSONArray(memoListString);
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                if(bookId == jsonObject.getInt("bookId"))
+                {
+                    Memo memo = new Memo();
+                    memo.setMemoId(jsonObject.getInt("memoId"));
+                    memo.setBookId(jsonObject.getInt("bookId"));
+                    memo.setMemoText(jsonObject.getString("memoText"));
+                    memo.setMemoDate(jsonObject.getString("memoDate"));
+                    thisBookMemoList.add(0, memo);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+        // 메모 리스트뷰 어댑터 객체 생성
+        memoAdapter = new MemoAdapter(thisBookMemoList);
+
 
         //리스트뷰에 어댑터를 붙여서 사용자에게 메모가 보이도록 한다.
         listView.setAdapter(memoAdapter);
