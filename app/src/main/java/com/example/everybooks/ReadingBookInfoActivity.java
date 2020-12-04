@@ -233,7 +233,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                             {
                                                 JSONArray jsonArray = new JSONArray(memoListString);
 
-                                                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                                                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Memo> 에 담는다.
                                                 for (int i = 0; i < jsonArray.length(); i++)
                                                 {
                                                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -258,10 +258,13 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                             for (int j = 0; j < allMemoList.size() ; j++)
                                             {
                                                 Memo memo = allMemoList.get(j);
-                                                if(bookId == memo.getBookId())
+                                                int memoBookId = memo.getBookId();
+                                                if(bookId == memoBookId)
                                                 {
                                                     allMemoList.remove(j);
-                                                    Log.d(TAG, "삭제할 북아이디 :" + memo.getBookId());
+                                                    Log.d(TAG, "이 책의 북아이디 : " + bookId);
+                                                    Log.d(TAG, "삭제할 메모의 북아이디 :" + memo.getBookId());
+
                                                 }
                                             }
 

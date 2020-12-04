@@ -111,6 +111,7 @@ public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHold
     public AllMemoAdapter(Context context, ArrayList<Memo> arrayList)
     {
         this.context = context;
+        this.allMemoList = arrayList;
     }
 
 

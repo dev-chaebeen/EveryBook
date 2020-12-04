@@ -96,7 +96,7 @@ public class CreateMemoActivity extends AppCompatActivity {
                             editor.putInt("memoId", memoId + 1);
                             editor.commit();
 
-                            Log.d(TAG, "1증가시키고 저장해둔 memoId" + memoInfo.getInt("memoId",0));
+                            //Log.d(TAG, "1증가시키고 저장해둔 memoId" + memoInfo.getInt("memoId",0));
 
                             // 기존에 저장된 jsonArray에 저장하기 위해서
                             // SharedPreference bookInfo 파일에서 "toReadBookLIst" 키로 저장된 String 값을 불러온다.
@@ -106,7 +106,7 @@ public class CreateMemoActivity extends AppCompatActivity {
                             if(memoListString != null)
                             {
                                 jsonArray = new JSONArray(memoListString);
-                                Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
+                                //Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
 
                                 jsonArray.put(jsonObject);
 
