@@ -245,7 +245,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                                         memo.setMemoText(jsonObject.getString("memoText"));
                                                         memo.setMemoDate(jsonObject.getString("memoDate"));
 
-                                                        allMemoList.add(0, memo);
+                                                        allMemoList.add(memo);
                                                     }
                                                 }
 
