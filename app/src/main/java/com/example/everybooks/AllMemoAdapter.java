@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Memo;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHolder>
+public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHolder>
 {
     static ArrayList<Memo> allMemoList = new ArrayList<>();
 
@@ -43,7 +47,7 @@ public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHold
             textView_memo_text = itemView.findViewById(R.id.memo_text);
             textView_memo_date = itemView.findViewById(R.id.memo_date);
 
-            // 아이템을 클릭하면 인텐트에 메모 데이터를 담고 메모 편집화면으로 전환한다.
+            // 아이템을 클릭하면 해당 메모에 해당하는 상세정보 화면으로 전환한다.
             itemView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -52,16 +56,42 @@ public class AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHold
                     if (position != RecyclerView.NO_POSITION)
                     {
                         memo = getItem(position);
-                        Intent intent = new Intent(v.getContext(), EditMemoActivity.class);
+                        int bookId = memo.getBookId();
+                        String state = "";
 
-                        // readTime
-                        // intent.putExtra("memoId", memo.getMemoId());
-                        intent.putExtra("position", position);
-                        intent.putExtra("bookId", memo.getBookId());
-                        intent.putExtra("title", textView_title.getText().toString());
-                        intent.putExtra("memoText", textView_memo_text.getText().toString());
-                        intent.putExtra("memoDate", textView_memo_date.getText().toString());
-                        v.getContext().startActivity(intent);
+                        SharedPreferences bookInfo = v.getContext().getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
+                        String bookListString = bookInfo.getString("bookList", null);
+
+                        try
+                        {
+                            JSONArray jsonArray = new JSONArray(bookListString);
+                            for (int i = 0; i < jsonArray.length(); i++)
+                            {
+                                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                                if(bookId == jsonObject.getInt("bookId"))
+                                {
+                                    state = jsonObject.getString("state");
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            System.out.println(e.toString());
+                        }
+
+
+                        if(state.equals("reading"))
+                        {
+                            Intent intent = new Intent(v.getContext(), ReadingBookInfoActivity.class);
+                            intent.putExtra("bookId", memo.getBookId());
+                            v.getContext().startActivity(intent);
+                        }
+                        else if(state.equals("read"))
+                        {
+                            Intent intent = new Intent(v.getContext(), ReadBookInfoActivity.class);
+                            intent.putExtra("bookId", memo.getBookId());
+                            v.getContext().startActivity(intent);
+                        }
                     }
                 }
             });
