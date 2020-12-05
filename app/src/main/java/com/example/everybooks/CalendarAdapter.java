@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class CalendarAdapter extends BaseAdapter
 {
     // todo static 수정하기
-    static ArrayList<Book> readBookList = ReadBookAdapter.readBookList;
+    static ArrayList<Book> theDayBookList = new ArrayList<>();
     Context context;
 
     public CalendarAdapter(){}
@@ -23,18 +23,18 @@ public class CalendarAdapter extends BaseAdapter
     public  CalendarAdapter(Context context, ArrayList<Book> arrayList)
     {
         this.context = context;
-        this.readBookList = arrayList;
+        this.theDayBookList = arrayList;
     }
 
     @Override
     public int getCount() {
-        return readBookList.size();
+        return theDayBookList.size();
     }
 
     @Override
     public Object getItem(int position)
     {
-        return readBookList.get(position);
+        return theDayBookList.get(position);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class CalendarAdapter extends BaseAdapter
         TextView textView_publish_date = convertView.findViewById(R.id.publish_date);
 
         // 책 객체로부터 데이터를 얻어서 해당하는 뷰 요소에 나타낸다.
-        Book book = readBookList.get(position);
+        Book book = theDayBookList.get(position);
         //imageView_img
         textView_title.setText(book.getTitle());
         textView_writer.setText(book.getWriter());

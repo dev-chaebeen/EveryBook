@@ -329,16 +329,9 @@ public class ReadBookInfoActivity extends AppCompatActivity
                         break;
 
                     case R.id.edit :
-                        // Edit 을 클릭하면 책 정보를 담고 책 정보 수정화면으로 전환한다.
+                        // Edit 을 클릭하면 책 id 를 담고 책 편집 화면으로 전환한다.
                         intent = new Intent(getApplicationContext(), EditBookInfoActivity.class);
-
-                        // img
-                        intent.putExtra("title", title);
-                        intent.putExtra("writer", writer);
-                        intent.putExtra("publisher", publisher);
-                        intent.putExtra("publishDate", publishDate);
-                        intent.putExtra("position", position);
-                        intent.putExtra("state", state);
+                        intent.putExtra("bookId", bookId);
                         startActivity(intent);
                         break;
                 }

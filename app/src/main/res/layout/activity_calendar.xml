@@ -38,13 +38,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="60dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         >
 
         <!-- 캘린더 -->
         <CalendarView
+            android:id="@+id/calendar"
           android:layout_width="300dp"
           android:layout_height="300dp"
           android:layout_gravity="center"
