@@ -342,13 +342,13 @@ public class ReadingBookInfoActivity extends AppCompatActivity
         // 인텐트로 전달받은 bookId 에 해당하는 데이터를 가져와서 사용자에게 보여주기 위해서
         // 저장되어있는 bookList 문자열을 받아와서 JsonArray 형태로 변환한다.
         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-        String bookLsitString =bookInfo.getString("bookList", null);
+        String bookListString =bookInfo.getString("bookList", null);
 
-        if(bookLsitString != null)
+        if(bookListString != null)
         {
             try
             {
-                JSONArray jsonArray = new JSONArray(bookLsitString);
+                JSONArray jsonArray = new JSONArray(bookListString);
                 for (int i = 0; i < jsonArray.length(); i++)
                 {
                     JSONObject jsonObject = (JSONObject) jsonArray.get(i);
@@ -411,7 +411,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
         //리스트뷰에 어댑터를 붙여서 사용자에게 메모가 보이도록 한다.
         listView.setAdapter(memoAdapter);
 
-        // 각 메모를 클릭하면 책 제목(추후 bookId 로 대체), 메모아이디, 메모 내용  데이터를 담아서
+        // 각 메모를 클릭하면 책 제목, 메모아이디, 메모 내용  데이터를 담아서
         // 메모 편집 화면으로 이동한다.
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -421,9 +421,9 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                 intent = new Intent(getApplicationContext(), EditMemoActivity.class);
 
                 Memo memo = (Memo)memoAdapter.getItem(position);
-                intent.putExtra("title", textView_title.getText());
-                intent.putExtra("memoId", memo.getMemoId());  // 선택한 아이템의 아이디 얻어오기
-                intent.putExtra("position", position);
+                intent.putExtra("title", title);
+                intent.putExtra("memoId", memo.getMemoId());
+                //intent.putExtra("position", position);
                 intent.putExtra("memoText", memo.getMemoText());
 
                 startActivity(intent);

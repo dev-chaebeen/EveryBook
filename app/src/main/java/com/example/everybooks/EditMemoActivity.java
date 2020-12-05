@@ -1,6 +1,8 @@
 package com.example.everybooks;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -8,6 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.everybooks.data.Memo;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class EditMemoActivity extends AppCompatActivity
 {
@@ -22,8 +27,9 @@ public class EditMemoActivity extends AppCompatActivity
     // 인텐트로 전달받는 데이터
     String title;
     String memoText;
-    int position;
+    //int position;
     int memoId;
+    final String TAG = "테스트";
 
     Memo memo;
 
@@ -42,7 +48,7 @@ public class EditMemoActivity extends AppCompatActivity
         editText_memo_text = findViewById(R.id.memo_text);
 
         // 인텐트로 전달받은 데이터 수신
-        position = getIntent().getIntExtra("position", -1);
+        //position = getIntent().getIntExtra("position", -1);
         memoId = getIntent().getIntExtra("memoId", -1);
         title = getIntent().getStringExtra("title");
         memoText = getIntent().getStringExtra("memoText");
@@ -57,14 +63,45 @@ public class EditMemoActivity extends AppCompatActivity
                 {
                     case R.id.save:
 
+                        // save 를 클릭하면 전달받은 memoId 에 해당하는 메모 객체를 찾아서 메모 내용을 변경해준다.
+                        SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
+                        String memoListString = memoInfo.getString("memoList", null);
+
+                        try
+                        {
+                            JSONArray jsonArray = new JSONArray(memoListString);
+                            for (int i = 0; i < jsonArray.length() ; i++)
+                            {
+                                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                                if(jsonObject.getInt("memoId") == memoId)
+                                {
+                                    jsonObject.put("memoText", editText_memo_text.getText().toString());
+                                }
+                            }
+
+                            // test ok
+                            Log.d(TAG," 메모 수정 후 jsonArray.toString: " + jsonArray.toString());
+
+                            SharedPreferences.Editor editor = memoInfo.edit();
+                            editor.putString("memoList", jsonArray.toString());
+                            editor.commit();
+                        }
+                        catch (Exception e)
+                        {
+                            System.out.println(e.toString());
+                        }
+
+
+
+
                         // save를 클릭하면 인텐트로 전달받은 position 에 해당하는 아이디를 가진 메모 객체를 찾아서 메모 내용을 변경해준다
-                        MemoAdapter memoAdapter = new MemoAdapter();
+                       /* MemoAdapter memoAdapter = new MemoAdapter();
                         memo = (Memo)memoAdapter.getItem(position);
                         memo.setMemoText(editText_memo_text.getText().toString());
                         memoAdapter.notifyDataSetChanged();
 
                         AllMemoAdapter allmemoAdapter = new AllMemoAdapter();
-                        allmemoAdapter.notifyDataSetChanged();
+                        allmemoAdapter.notifyDataSetChanged();*/
 
                         finish();
                         break;
