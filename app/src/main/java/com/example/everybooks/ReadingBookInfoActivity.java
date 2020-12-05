@@ -434,7 +434,9 @@ public class ReadingBookInfoActivity extends AppCompatActivity
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                Memo memo = (Memo)memoAdapter.getItem(position);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ReadingBookInfoActivity.this);
                 builder.setMessage("메모를 삭제하시겠습니까?.");
@@ -442,12 +444,90 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which)
                         {
+                            // 메모를 삭제하기 위해서 저장되어있는 메모 리스트를 불러온다.
+                            SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
+                            String memoListString = memoInfo.getString("memoList", null);
+                            ArrayList<Memo> allMemoList = new ArrayList<>();
+
+                            if (memoListString != null)
+                            {
+                                try
+                                {
+                                    JSONArray jsonArray = new JSONArray(memoListString);
+
+                                    // JsonArray 형태로는 객체를 삭제할 수 없기 때문에
+                                    // jsonArray 의 길이만큼 반복해서 jsonObject 를 가져오고,
+                                    // 삭제할 memoId 와 일치하지 않는 jsonObject 만 Memo 객체에 담은 뒤 ArrayList<Memo> 에 담는다.
+                                    for (int i = 0; i < jsonArray.length(); i++)
+                                    {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                        if(jsonObject.getInt("memoId") != memo.getMemoId())
+                                        {
+                                            Memo memo = new Memo();
+                                            memo.setMemoId(jsonObject.getInt("memoId"));
+                                            memo.setBookId(jsonObject.getInt("bookId"));
+                                            memo.setMemoText(jsonObject.getString("memoText"));
+                                            memo.setMemoDate(jsonObject.getString("memoDate"));
+
+                                            allMemoList.add(memo);
+                                        }
+                                    }
+
+                                    Log.d(TAG, "저장되어있는 allMemoList.size : " + allMemoList.size());
+
+                                }
+                                catch (Exception e)
+                                {
+                                    System.out.println(e.toString());
+                                }
+
+
+                                /// JSONArray 로 변환해서 다시 저장하기
+                                JSONArray jsonArray = new JSONArray();
+
+                                for (int i = 0; i < allMemoList.size(); i++)
+                                {
+                                    Memo memo = allMemoList.get(i);
+
+                                    // json 객체에 입력받은 값을 저장한다.
+                                    try
+                                    {
+                                        JSONObject jsonObject = new JSONObject();
+
+                                        jsonObject.put("memoId", memo.getMemoId());
+                                        jsonObject.put("bookId", memo.getBookId());
+                                        jsonObject.put("memoText", memo.getMemoText());
+                                        jsonObject.put("memoDate", memo.getMemoDate());
+
+                                        jsonArray.put(jsonObject);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        System.out.println(e.toString());
+                                    }
+                                }
+
+                                memoListString = jsonArray.toString();
+
+                                memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = memoInfo.edit();
+                                editor.putString("memoList", memoListString);
+                                editor.commit();
+
+                                dialog.dismiss();
+
+                            }
+
+                            // 다시
+
+                            /*
                             // 확인 클릭했을 때 해당 메모 삭제한다.
                             MemoAdapter.memoList.remove(position);
 
                             // 아래 method를 호출하지 않을 경우, 삭제된 item이 화면에 계속 보여진다.
-                            memoAdapter.notifyDataSetChanged();
-                            dialog.dismiss();
+                            memoAdapter.notifyDataSetChanged();*/
+                            //dialog.dismiss();
 
                         }
                     });

@@ -91,19 +91,21 @@ public class EditMemoActivity extends AppCompatActivity
                             System.out.println(e.toString());
                         }
 
+                        finish();
 
 
-
+                        // 기존
                         // save를 클릭하면 인텐트로 전달받은 position 에 해당하는 아이디를 가진 메모 객체를 찾아서 메모 내용을 변경해준다
-                       /* MemoAdapter memoAdapter = new MemoAdapter();
+                        /*
+                        MemoAdapter memoAdapter = new MemoAdapter();
                         memo = (Memo)memoAdapter.getItem(position);
                         memo.setMemoText(editText_memo_text.getText().toString());
                         memoAdapter.notifyDataSetChanged();
 
                         AllMemoAdapter allmemoAdapter = new AllMemoAdapter();
-                        allmemoAdapter.notifyDataSetChanged();*/
+                        allmemoAdapter.notifyDataSetChanged();
+                        */
 
-                        finish();
                         break;
 
                     case R.id.cancel:
