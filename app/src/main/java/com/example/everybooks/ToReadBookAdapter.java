@@ -87,7 +87,8 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                     {
                         book = getItem(position);
                     }
-                        //현재 년도, 월, 일을 책 등록일에 저장한다.
+
+                    //현재 년도, 월, 일을 책 등록일에 저장한다.
                     Calendar cal = Calendar.getInstance();
                     int year = cal.get ( cal.YEAR );
                     int month = cal.get ( cal.MONTH ) + 1 ;

@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,9 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Book;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,6 +33,10 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     int position;
     Book book;
     Context context;
+
+    final String TAG ="테스트";
+
+    Intent intent;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder
@@ -135,37 +144,40 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         notifyItemRemoved(position);
     }
 
-    // 아이템 가져오는 메소드
     public Book getItem(int position) {
         return readingBookList.get(position);
     }
 
     public void ShowDialog(View v, int position)
     {
+
         final AlertDialog.Builder popDialog = new AlertDialog.Builder(v.getContext());
 
         LinearLayout linearLayout = new LinearLayout(v.getContext());
         ratingBar = new RatingBar(v.getContext());
 
+        // 레이아웃 속성 설정
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
         ratingBar.setLayoutParams(lp);
+
+        //사용자는 1점 단위로 별점을 부여할 수 있고 5개의 별이 주어진다.
         ratingBar.setNumStars(5);
         ratingBar.setStepSize(1);
-        // todo 세팅하는 이유 설명, 남을 위해서 주석을 작성하도록 하기
+
         linearLayout.addView(ratingBar);
         popDialog.setTitle("독서를 마칠까요?\n별점을 입력해주세요. ");
         popDialog.setView(linearLayout);
 
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener()
+       /* ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener()
         {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
 
             }
-        });
+        });*/
 
         // Button OK
         popDialog.setPositiveButton("확인",
@@ -173,14 +185,58 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
             {
                 public void onClick(DialogInterface dialog, int which)
                 {
-                    // 해당하는 책을 찾아서 입력받은 별점을 저장하고 읽는 책 → 읽은 책 리스트로 이동시킨다.
                     book = getItem(position);
-                    book.setStarNum((int)ratingBar.getRating());
+                    int bookId = book.getBookId();
+
+                    //현재 년도, 월, 일을 책 등록일에 저장한다.
+                    Calendar cal = Calendar.getInstance();
+                    int year = cal.get ( cal.YEAR );
+                    int month = cal.get ( cal.MONTH ) + 1 ;
+                    int date = cal.get ( cal.DATE ) ;
+
+                    String today = year + "." + month + "." + date;
+
+
+                    // 해당하는 책을 찾아서 입력받은 별점을 저장하고 읽는 책 → 읽은 책 리스트로 이동시킨다.
+                    SharedPreferences bookInfo = v.getContext().getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
+                    String bookListString = bookInfo.getString("bookList", null);
+
+                    try
+                    {
+                        JSONArray jsonArray = new JSONArray(bookListString);
+                        for (int i = 0; i < jsonArray.length(); i++)
+                        {
+                            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                            if(bookId == jsonObject.getInt("bookId"))
+                            {
+                                jsonObject.put("starNum", (int)ratingBar.getRating());
+                                jsonObject.put("state", "read");
+                                jsonObject.put("endDate", today);
+                            }
+                        }
+
+                        SharedPreferences.Editor editor = bookInfo.edit();
+                        editor.putString("bookList", jsonArray.toString());
+                        editor.commit();
+
+                        Log.d(TAG,"ReadingBookAdapter, 별점이랑 독서상태 변경 후 " + jsonArray.toString());
+
+                        intent = new Intent(v.getContext(), MainActivity.class);
+                        v.getContext().startActivity(intent);
+                    }
+                    catch (Exception e)
+                    {
+                        System.out.println(e.toString());
+                    }
+
+
+
+                    /*book.setStarNum((int)ratingBar.getRating());
                     ReadBookAdapter readBookAdapter = new ReadBookAdapter();
                     readBookAdapter.addItem(book);
 
                     removeItem(position);
-                    dialog.dismiss();
+                    dialog.dismiss();*/
                 }
             })
 

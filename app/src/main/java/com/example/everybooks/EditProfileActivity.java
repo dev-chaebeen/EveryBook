@@ -155,7 +155,7 @@ public class EditProfileActivity extends AppCompatActivity
                         editor.putString(loginEmail, jsonObject.toString());
                         editor.commit();
 
-                        Log.d(TAG, " 닉네임 바꾼 뒤 유저 정보 : " + jsonObject.toString());
+                        Log.d(TAG, "EditProfileActivity, 닉네임 변경 후 유저 정보 : " + jsonObject.toString());
                     }
                     catch (Exception e)
                     {
