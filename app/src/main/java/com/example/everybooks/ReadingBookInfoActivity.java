@@ -519,7 +519,12 @@ public class ReadingBookInfoActivity extends AppCompatActivity
 
                             }
 
-                            // 다시
+                            // 현재 화면 종료하고
+                            finish();
+                            // 다시 요청
+                            intent = new Intent(getApplicationContext(), ReadingBookInfoActivity.class);
+                            intent.putExtra("bookId", memo.getBookId());
+                            startActivity(intent);
 
                             /*
                             // 확인 클릭했을 때 해당 메모 삭제한다.
