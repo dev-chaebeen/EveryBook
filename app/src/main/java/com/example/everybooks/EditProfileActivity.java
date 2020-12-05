@@ -72,13 +72,12 @@ public class EditProfileActivity extends AppCompatActivity
                         break;
 
                     case R.id.edit_nickname :
-                        // edit_nickname 클릭했을 때 수행할 동작
                         editNickname();
-
                         break;
 
                     case R.id.withdraw :
                         // withdraw 클릭했을 때 수행할 동작
+                        withdraw();
                         break;
                 }
             }
@@ -182,8 +181,46 @@ public class EditProfileActivity extends AppCompatActivity
             });
 
         builder.show();
+
     }
 
+    private void withdraw()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("탈퇴하기");                      // 다이얼로그 제목
+        builder.setMessage(" 정말 탈퇴하시겠습니까? ");  // 다이얼로그 내용
+        builder.setPositiveButton("확인",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        // 로그인된 이메일을 키로 가진 회원 정보 삭제
+                        SharedPreferences.Editor editor = userInfo.edit();
+                        editor.remove(loginEmail);
+                        editor.commit();
+                        Toast.makeText(getApplicationContext(), "탈퇴가 완료되었습니다." ,Toast.LENGTH_SHORT).show();
 
+                        // 자동로그인 정보 삭제
+                        editor = autoLogin.edit();
+                        editor.clear();
+                        editor.commit();
+
+                        // 로그인 화면으로 전환
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+
+                        finish();
+                    }
+                });
+        builder.setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        // 취소 클릭했을 때
+                        Toast.makeText( getApplicationContext(), "변경 취소" ,Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        builder.show();
+    }
 
 }
