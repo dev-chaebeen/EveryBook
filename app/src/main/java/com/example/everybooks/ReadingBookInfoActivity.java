@@ -423,7 +423,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                 Memo memo = (Memo)memoAdapter.getItem(position);
                 intent.putExtra("title", title);
                 intent.putExtra("memoId", memo.getMemoId());
-                //intent.putExtra("position", position);
                 intent.putExtra("memoText", memo.getMemoText());
 
                 startActivity(intent);

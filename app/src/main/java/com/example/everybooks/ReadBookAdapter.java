@@ -53,20 +53,10 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
                     if (position != RecyclerView.NO_POSITION) {
 
                         book = getItem(position);
-                        Intent intent = new Intent(v.getContext(), ReadBookInfoActivity.class);
 
-                        // todo 데이터 담고 이동하도록
-                        // readTime
+                        // bookId 로 해당하는 책 정보를 얻어올 수 있도록 인텐트에 bookId 를 담아서 화면을 전환한다.
+                        Intent intent = new Intent(v.getContext(), ReadBookInfoActivity.class);
                         intent.putExtra("bookId", book.getBookId());
-                        intent.putExtra("title", book.getTitle());
-                        intent.putExtra("writer", book.getWriter());
-                        intent.putExtra("publisher", book.getPublisher());
-                        intent.putExtra("publishDate", book.getPublishDate());
-                        intent.putExtra("startDate", book.getStartDate());
-                        intent.putExtra("endDate", book.getEndDate());
-                        intent.putExtra("position", position);
-                        intent.putExtra("starNum", book.getStarNum());
-                        intent.putExtra("state", book.getState());
                         v.getContext().startActivity(intent);
                     }
                 }
