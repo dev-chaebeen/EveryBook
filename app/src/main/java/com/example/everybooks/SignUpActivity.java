@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,11 +32,13 @@ public class SignUpActivity extends AppCompatActivity
 
     // 회원가입
     User user;
-    Drawable img;
+    //Drawable img;
     String nickname;
     String email;
     String password;
     String confirmPassword;
+
+    final String TAG ="테스트";
 
 
     @Override
@@ -60,7 +63,7 @@ public class SignUpActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                img = imageView_add_photo.getDrawable();
+                //img = imageView_add_photo.getDrawable();
                 nickname = textInputEditText_nickname.getText().toString();
                 email = textInputEditText_email.getText().toString();
                 password = textInputEditText_password.getText().toString();
@@ -76,7 +79,7 @@ public class SignUpActivity extends AppCompatActivity
                 {
                     // 정상적으로 입력한 경우 유저 객체를 생성해서 사용자가 입력한 값을 담는다.
                     user = new User();
-                    user.setImg(img);
+                    //user.setImg(img);
                     user.setNickname(nickname);
                     user.setEmail(email);
                     user.setPassword(password);
@@ -84,6 +87,9 @@ public class SignUpActivity extends AppCompatActivity
                     // json 형태로 바꾼 객체를 String 변수인 userString 에 저장하고
                     // 입력받은 이메일로 저장된 값을 받아온다.
                     String userString = user.toJSON();
+
+                    Log.d(TAG, "회원가입 정보 : " + userString);
+
                     SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
                     String userInfoString = userInfo.getString(email, "false");
 
