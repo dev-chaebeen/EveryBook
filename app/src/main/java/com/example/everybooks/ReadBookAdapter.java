@@ -2,6 +2,7 @@ package com.example.everybooks;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Book;
+import com.example.everybooks.data.Util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,7 +90,10 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
     {
         Book book = readBookList.get(position);
 
-        //holder.imageView_img.setImageDrawable(book.getImg());
+        // 문자열 이미지 비트맵으로 변환
+        Util util = new Util();
+        Bitmap bitmap = util.stringToBitmap(book.getImg());
+        holder.imageView_img.setImageBitmap(bitmap);
         holder.textView_title.setText(book.getTitle());
         holder.textView_writer.setText(book.getWriter());
         holder.ratingBar_rate.setRating(book.getStarNum());

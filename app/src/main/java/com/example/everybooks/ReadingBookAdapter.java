@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Book;
+import com.example.everybooks.data.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -109,7 +111,10 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
     {
         Book book = readingBookList.get(position);
 
-        //holder.imageView_img.setImageDrawable(book.getImg());
+        // 문자열 이미지 비트맵으로 변환
+        Util util = new Util();
+        Bitmap bitmap = util.stringToBitmap(book.getImg());
+        holder.imageView_img.setImageBitmap(bitmap);
         holder.textView_title.setText(book.getTitle());
         holder.textView_start_date.setText(book.getStartDate());
     }

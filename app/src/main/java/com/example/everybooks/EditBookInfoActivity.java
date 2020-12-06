@@ -76,7 +76,7 @@ public class EditBookInfoActivity extends AppCompatActivity
         setContentView(R.layout.activity_edit_book_info);
 
         // 뷰 요소 초기화
-        textView_edit = (TextView) findViewById(R.id.edit);
+        textView_edit = findViewById(R.id.edit);
         textView_delete = findViewById(R.id.delete);
 
         imageView_img = findViewById(R.id.img);

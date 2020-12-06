@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.everybooks.data.Book;
 import com.example.everybooks.data.Memo;
+import com.example.everybooks.data.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,7 +54,6 @@ public class ReadBookInfoActivity extends AppCompatActivity
     TextView textView_memo_text;
     TextView textView_memo_date;
 
-    int position;
     int bookId;
     int starNum;
     String title;
@@ -63,6 +64,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
     String endDate;
     String state;
     String readTime;
+    String img;
 
     final String TAG = "테스트";
 
@@ -139,7 +141,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
                                                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                                                     int bookId = jsonObject.getInt("bookId");
-                                                    //String img = jsonObject.getString("img");
+                                                    String img = jsonObject.getString("img");
                                                     String title = jsonObject.getString("title");
                                                     String writer = jsonObject.getString("writer");
                                                     String publisher = jsonObject.getString("publisher");
@@ -153,7 +155,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
 
                                                     Book book = new Book();
                                                     book.setBookId(bookId);
-                                                    //book.setImg(img);
+                                                    book.setImg(img);
                                                     book.setTitle(title);
                                                     book.setWriter(writer);
                                                     book.setPublisher(publisher);
@@ -199,7 +201,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
                                                 {
                                                     JSONObject bookJson = new JSONObject();
                                                     bookJson.put("bookId", book.getBookId());
-                                                    //bookJson.put("img", img);
+                                                    bookJson.put("img", book.getImg());
                                                     bookJson.put("title", book.getTitle());
                                                     bookJson.put("writer", book.getWriter());
                                                     bookJson.put("publisher", book.getPublisher());
@@ -374,7 +376,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
                         endDate = jsonObject.getString("endDate");
                         starNum = jsonObject.getInt("starNum");
                         readTime = jsonObject.getString("readTime");
-                        // img
+                        img = jsonObject.getString("img");
                     }
                 }
             }
@@ -392,13 +394,15 @@ public class ReadBookInfoActivity extends AppCompatActivity
         textView_start_date.setText(startDate);
         textView_end_date.setText(endDate);
         textView_time.setText(readTime);
-        // img
+
+        Util util = new Util();
+        Bitmap bitmap = util.stringToBitmap(img);
+        imageView_img.setImageBitmap(bitmap);
 
         // 책에 해당하는 메모를 보여주기 위해서 전체 메모리스트를 가져온 뒤 bookId 와 일치하는 메모만 arrayList에 담아서 어댑터로 보낸다.
         SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
         String memoListString = memoInfo.getString("memoList", null);
         ArrayList<Memo> thisBookMemoList = new ArrayList<>();
-        ArrayList<Memo> allMemoList = new ArrayList<>();
         try
         {
             JSONArray jsonArray = new JSONArray(memoListString);

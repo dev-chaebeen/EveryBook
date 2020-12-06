@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.everybooks.data.Book;
 import com.example.everybooks.data.Memo;
+import com.example.everybooks.data.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -54,7 +56,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
     String publisher;
     String publishDate;
     String startDate;
-    int position;
+    String img;
     int bookId;
 
     @Override
@@ -128,7 +130,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                                                     int bookId = jsonObject.getInt("bookId");
-                                                    //String img = jsonObject.getString("img");
+                                                    String img = jsonObject.getString("img");
                                                     String title = jsonObject.getString("title");
                                                     String writer = jsonObject.getString("writer");
                                                     String publisher = jsonObject.getString("publisher");
@@ -188,7 +190,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                                 {
                                                     JSONObject bookJson = new JSONObject();
                                                     bookJson.put("bookId", book.getBookId());
-                                                    //bookJson.put("img", img);
+                                                    bookJson.put("img", book.getImg());
                                                     bookJson.put("title", book.getTitle());
                                                     bookJson.put("writer", book.getWriter());
                                                     bookJson.put("publisher", book.getPublisher());
@@ -360,6 +362,8 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                         publisher = jsonObject.getString("publisher");
                         publishDate = jsonObject.getString("publishDate");
                         startDate = jsonObject.getString("startDate");
+                        img = jsonObject.getString("img");
+                        //readTime
                     }
                 }
             }
@@ -375,6 +379,10 @@ public class ReadingBookInfoActivity extends AppCompatActivity
         textView_publisher.setText(publisher);
         textView_publish_date.setText(publishDate);
         textView_start_date.setText(startDate);
+
+        Util util = new Util();
+        Bitmap bitmap = util.stringToBitmap(img);
+        imageView_img.setImageBitmap(bitmap);
 
         // 책에 해당하는 메모를 보여주기 위해서 전체 메모리스트를 가져온 뒤 bookId 와 일치하는 메모만 arrayList에 담아서 어댑터로 보낸다.
         SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
