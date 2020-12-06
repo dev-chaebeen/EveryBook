@@ -1,6 +1,7 @@
 package com.example.everybooks;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.everybooks.data.Book;
+import com.example.everybooks.data.Util;
 
 import java.util.ArrayList;
 
@@ -64,7 +66,10 @@ public class CalendarAdapter extends BaseAdapter
 
         // 책 객체로부터 데이터를 얻어서 해당하는 뷰 요소에 나타낸다.
         Book book = theDayBookList.get(position);
-        //imageView_img
+
+        Util util = new Util();
+        Bitmap bitmap = util.stringToBitmap(book.getImg());
+        imageView_img.setImageBitmap(bitmap);
         textView_title.setText(book.getTitle());
         textView_writer.setText(book.getWriter());
         textView_publisher.setText(book.getPublisher());

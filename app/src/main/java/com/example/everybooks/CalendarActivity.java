@@ -65,7 +65,7 @@ public class CalendarActivity extends AppCompatActivity
                             if(jsonObject.getString("endDate").equals(year+"."+(month+1)+"."+dayOfMonth))
                             {
                                 int bookId = jsonObject.getInt("bookId");
-                                //String img = jsonObject.getString("img");
+                                String img = jsonObject.getString("img");
                                 String title = jsonObject.getString("title");
                                 String writer = jsonObject.getString("writer");
                                 String publisher = jsonObject.getString("publisher");
@@ -80,7 +80,7 @@ public class CalendarActivity extends AppCompatActivity
 
                                 Book book = new Book();
                                 book.setBookId(bookId);
-                                //book.setImg(img);
+                                book.setImg(img);
                                 book.setTitle(title);
                                 book.setWriter(writer);
                                 book.setPublisher(publisher);
@@ -153,7 +153,7 @@ public class CalendarActivity extends AppCompatActivity
                     if(jsonObject.getString("endDate").equals(today))
                     {
                         int bookId = jsonObject.getInt("bookId");
-                        //String img = jsonObject.getString("img");
+                        String img = jsonObject.getString("img");
                         String title = jsonObject.getString("title");
                         String writer = jsonObject.getString("writer");
                         String publisher = jsonObject.getString("publisher");
@@ -168,7 +168,7 @@ public class CalendarActivity extends AppCompatActivity
 
                         Book book = new Book();
                         book.setBookId(bookId);
-                        //book.setImg(img);
+                        book.setImg(img);
                         book.setTitle(title);
                         book.setWriter(writer);
                         book.setPublisher(publisher);
