@@ -42,7 +42,7 @@ public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.Bo
             textView_title = itemView.findViewById(R.id.title);
             textView_start_date = itemView.findViewById(R.id.start_date);
 
-            // 각각의 아이템을 클릭하면 인텐트에 책 정보를 담아서 시간 측정 화면으로 전환한다.
+            // 각각의 아이템을 클릭하면 bookId 를 담아서 시간 측정 화면으로 전환한다.
             itemView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -52,17 +52,7 @@ public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.Bo
 
                         book = getItem(position);
                         Intent intent = new Intent(v.getContext(), TimeRecordActivity.class);
-
-                        // intent.putExtra("img", book.getImg());
-                        // readTime
                         intent.putExtra("bookId", book.getBookId());
-                        intent.putExtra("title", book.getTitle());
-                        intent.putExtra("writer", book.getWriter());
-                        intent.putExtra("publisher", book.getPublisher());
-                        intent.putExtra("publishDate", book.getPublishDate());
-                        intent.putExtra("startDate", book.getStartDate());
-                        intent.putExtra("position", position);
-                        intent.putExtra("state", book.getState());
                         v.getContext().startActivity(intent);
 
                     }
