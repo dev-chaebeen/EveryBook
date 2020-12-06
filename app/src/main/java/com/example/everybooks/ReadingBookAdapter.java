@@ -218,8 +218,6 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
 
                         Log.d(TAG,"ReadingBookAdapter, 별점이랑 독서상태 변경 후 " + jsonArray.toString());
 
-                        /*intent = new Intent(v.getContext(), MainActivity.class);
-                        v.getContext().startActivity(intent);*/
                     }
                     catch (Exception e)
                     {

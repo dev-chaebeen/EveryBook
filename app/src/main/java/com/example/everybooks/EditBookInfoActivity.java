@@ -421,13 +421,8 @@ public class EditBookInfoActivity extends AppCompatActivity
         // 각 요소가 클릭되면 동작 수행
         textView_edit.setOnClickListener(click);
         textView_delete.setOnClickListener(click);
+        imageView_img.setOnClickListener(click);
 
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         String title="";
         String writer="";
@@ -471,8 +466,6 @@ public class EditBookInfoActivity extends AppCompatActivity
         editText_publish_date.setText(publishDate);
 
     }
-
-
 
     private void dispatchTakePictureIntent()
     {
