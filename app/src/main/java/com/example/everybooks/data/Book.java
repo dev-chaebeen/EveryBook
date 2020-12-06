@@ -2,8 +2,11 @@ package com.example.everybooks.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 
 import com.example.everybooks.ToReadBookAdapter;
 
@@ -11,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -140,6 +144,7 @@ public class Book
     public void setStarNum(int starNum) {
         this.starNum = starNum;
     }
+
 
 
 }

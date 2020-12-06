@@ -1,27 +1,48 @@
 package com.example.everybooks;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.example.everybooks.data.Book;
 import com.example.everybooks.data.Memo;
+import com.example.everybooks.data.Util;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class EditBookInfoActivity extends AppCompatActivity
 {
@@ -32,7 +53,7 @@ public class EditBookInfoActivity extends AppCompatActivity
     TextView textView_edit;
     TextView textView_delete;
 
-    ImageView ImageView_img;
+    ImageView imageView_img;
     EditText editText_title;
     EditText editText_writer;
     EditText editText_publisher;
@@ -42,6 +63,10 @@ public class EditBookInfoActivity extends AppCompatActivity
     int bookId;
 
     final String TAG = "테스트";
+
+    // 인텐트 requestCode 상수
+    final int TAKE_PICTURE = 1000;
+    final int OPEN_GALLERY = 1001;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -54,7 +79,7 @@ public class EditBookInfoActivity extends AppCompatActivity
         textView_edit = (TextView) findViewById(R.id.edit);
         textView_delete = findViewById(R.id.delete);
 
-        ImageView_img = findViewById(R.id.img);
+        imageView_img = findViewById(R.id.img);
         editText_title = findViewById(R.id.title);
         editText_writer = findViewById(R.id.writer);
         editText_publisher = findViewById(R.id.publisher);
@@ -79,6 +104,14 @@ public class EditBookInfoActivity extends AppCompatActivity
                     String publisher = editText_publisher.getText().toString();
                     String publishDate = editText_publish_date.getText().toString();
 
+                    // ImageView 의 resource를 bitmap 으로 가져오기
+                    BitmapDrawable drawable = (BitmapDrawable) imageView_img.getDrawable();
+                    Bitmap bitmap = drawable.getBitmap();
+
+                    // Bitmap을 문자열로 바꾸기
+                    Util util = new Util();
+                    String imgString = util.bitMapToString(bitmap);
+
                     Log.d(TAG, "바꾸려는 제목 : " + title );
 
 
@@ -99,6 +132,7 @@ public class EditBookInfoActivity extends AppCompatActivity
                                     jsonObject.put("writer", writer);
                                     jsonObject.put("publisher", publisher);
                                     jsonObject.put("publishDate", publishDate);
+                                    jsonObject.put("img", imgString);
                                 }
                             }
 
@@ -150,7 +184,7 @@ public class EditBookInfoActivity extends AppCompatActivity
                                                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                                                     int bookId = jsonObject.getInt("bookId");
-                                                    //String img = jsonObject.getString("img");
+                                                    String img = jsonObject.getString("img");
                                                     String title = jsonObject.getString("title");
                                                     String writer = jsonObject.getString("writer");
                                                     String publisher = jsonObject.getString("publisher");
@@ -164,7 +198,7 @@ public class EditBookInfoActivity extends AppCompatActivity
 
                                                     Book book = new Book();
                                                     book.setBookId(bookId);
-                                                    //book.setImg(img);
+                                                    book.setImg(img);
                                                     book.setTitle(title);
                                                     book.setWriter(writer);
                                                     book.setPublisher(publisher);
@@ -215,7 +249,7 @@ public class EditBookInfoActivity extends AppCompatActivity
                                                 {
                                                     JSONObject bookJson = new JSONObject();
                                                     bookJson.put("bookId", book.getBookId());
-                                                    //bookJson.put("img", img);
+                                                    bookJson.put("img", book.getImg());
                                                     bookJson.put("title", book.getTitle());
                                                     bookJson.put("writer", book.getWriter());
                                                     bookJson.put("publisher", book.getPublisher());
@@ -345,6 +379,41 @@ public class EditBookInfoActivity extends AppCompatActivity
                         builder.show();
 
                         break;
+
+                    case R.id.img :
+
+                        Log.d(TAG, "EditBookInfoActivity, img 클릭");
+                        // 책 추가 이미지 클릭하면 팝업 메뉴 띄우기
+                        PopupMenu popupMenu = new PopupMenu(getApplicationContext(), v);
+                        getMenuInflater().inflate(R.menu.img_menu, popupMenu.getMenu());
+
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+                        {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                                switch(menuItem.getItemId())
+                                {
+                                    case R.id.camera :
+                                        //openCamera();
+                                        dispatchTakePictureIntent();
+                                        break;
+
+                                    case R.id.gallery :
+                                        openGallery();
+                                        break;
+
+                                    case R.id.basic :
+                                        imageView_img.setImageResource(R.drawable.icon_book);
+                                        break;
+                                }
+                                return true;
+                            }
+                        });
+
+                        popupMenu.show();// 팝업 메뉴 보이기
+
+                        break;
                 }
             }
         };
@@ -364,6 +433,7 @@ public class EditBookInfoActivity extends AppCompatActivity
         String writer="";
         String publisher="";
         String publishDate="";
+        String imgString="";
 
         // 전달받은 bookId 에 해당하는 정보를 보여주기 위해서
         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
@@ -381,6 +451,7 @@ public class EditBookInfoActivity extends AppCompatActivity
                     writer = jsonObject.getString("writer");
                     publisher = jsonObject.getString("publisher");
                     publishDate = jsonObject.getString("publishDate");
+                    imgString = jsonObject.getString("img");
                 }
             }
 
@@ -391,10 +462,205 @@ public class EditBookInfoActivity extends AppCompatActivity
         }
 
 
-        //ImageView_img.setImageResource(getIntent().getIntExtra("img",0));
+        Util util = new Util();
+        Bitmap bitmap  = util.stringToBitmap(imgString);
+        imageView_img.setImageBitmap(bitmap);
         editText_title.setText(title);
         editText_writer.setText(writer);
         editText_publisher.setText(publisher);
         editText_publish_date.setText(publishDate);
+
     }
+
+
+
+    private void dispatchTakePictureIntent()
+    {
+        // 권한 체크
+        PermissionListener permissionListener = new PermissionListener()
+        {
+            @Override
+            public void onPermissionGranted()
+            {
+                // 권한 허가 상태일 때
+                Toast.makeText(getApplicationContext(), "권한 허가",Toast.LENGTH_SHORT).show();
+
+                // 카메라 열기
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePictureIntent, TAKE_PICTURE);
+
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+                    // 파일을 생성한다
+                    // Create the File where the photo should go
+                    File photoFile = null;
+                    try
+                    {
+                        photoFile = createImageFile();
+                    }
+                    catch (IOException ex)
+                    {
+                        System.out.println(ex.toString());
+                    }
+
+                    // 파일이 생성되면
+                    if (photoFile != null)
+                    {
+                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                                "com.example.everybooks",
+                                photoFile);
+
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        startActivityForResult(takePictureIntent, TAKE_PICTURE);
+                    }
+                }
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions)
+            {
+                // 권한 허가하지 않았을 때
+                Toast.makeText(getApplicationContext(), "권한을 허용하지 않으면 서비스를 이용할 수 없습니다.",Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        // 권한 체크
+        TedPermission.with(getApplicationContext())
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage(" 카메라 접근 권한이 필요합니다")
+                .setDeniedMessage(" [설정] > [권한] 에서 권한을 허용할 수 있습니다.")
+                .setPermissions(Manifest.permission.CAMERA)
+                .check();
+    }
+
+    // 갤러리 실행 메소드
+    public void openGallery()
+    {
+        // 권한 체크
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted()
+            {
+                // 권한 허가 상태일 때
+                Toast.makeText(getApplicationContext(), "권한 허가",Toast.LENGTH_SHORT).show();
+
+                // 갤러리 열기
+               /* Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Get Album"), OPEN_GALLERY);*/
+
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent, OPEN_GALLERY);
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions)
+            {
+                // 권한 허가하지 않았을 때
+                Toast.makeText(getApplicationContext(), "권한을 허용하지 않으면 서비스를 이용할 수 없습니다.",Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        // 권한 체크
+        TedPermission.with(getApplicationContext())
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage(" 갤러리 접근 권한이 필요합니다.")
+                .setDeniedMessage(" [설정] > [권한] 에서 권한을 허용할 수 있습니다.")
+                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        // 암묵적 인텐트 응답 결과에 따라 동작을 실행한다.
+        // 카메라로 찍은 사진, 갤러리에서 불러온 사진을 이미지뷰에 보여준다.
+        switch (requestCode)
+        {
+            case TAKE_PICTURE:
+                if(resultCode != RESULT_CANCELED)
+                {
+                    if (resultCode == RESULT_OK && intent.hasExtra("data") )
+                    {
+                        Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
+                        if (bitmap != null)
+                        {
+                            imageView_img.setImageBitmap(bitmap);
+                        }
+                    }
+                }
+
+                break;
+
+            case OPEN_GALLERY:
+                if(requestCode == OPEN_GALLERY && resultCode == RESULT_OK)
+                {
+                    try
+                    {
+                        InputStream is = getContentResolver().openInputStream(intent.getData());
+                        Bitmap bm = BitmapFactory.decodeStream(is);
+                        is.close();
+                        imageView_img.setImageBitmap(bm);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                }
+                else if(requestCode == OPEN_GALLERY && resultCode == RESULT_CANCELED)
+                {
+                    Toast.makeText(this,"선택 취소", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
+    }
+
+    // popup 메뉴 생성
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.img_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        int id = item.getItemId();
+        if(id==1)// 메뉴가 하나라면
+        {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // 사진 저장될 경로
+    String currentPhotoPath;
+
+    //사진을 파일로 만드는 메소드
+    private File createImageFile() throws IOException {
+
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // 그림 파일 저장 (/mnt/sdcard/Pictures)
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
 }

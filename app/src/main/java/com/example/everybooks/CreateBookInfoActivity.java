@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.everybooks.data.Book;
+import com.example.everybooks.data.Util;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -32,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,8 +103,17 @@ public class CreateBookInfoActivity extends AppCompatActivity
                 {
                     case R.id.save:
                         // save 클릭했을 때 수행할 동작
+                        Log.d(TAG, "save 버튼 클릭");
 
-                        //Log.d(TAG, "save 버튼 클릭");
+                        // ImageView 의 resource를 bitmap 으로 가져오기
+                        BitmapDrawable drawable = (BitmapDrawable) imageView_img_book.getDrawable();
+                        Bitmap bitmap = drawable.getBitmap();
+
+                        // Bitmap을 문자열로 바꾸기
+                        Util util = new Util();
+                        String imgString = util.bitMapToString(bitmap);
+
+                        //Log.d(TAG, "CreateBookInfoActivity, 문자열로 바꾼 bitmap : " + imgString);
 
                         // bookInfo 라는 SharedPreferences 파일에서 bookId 를 가져온다.
                         // 저장된 값이 존재하지 않는다면 0을 가져온다.
@@ -109,7 +123,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                         // 입력받은 정보를 book 객체에 저장한다.
                         Book book = new Book();
                         book.setBookId(bookId);
-                        //book.setImg(imageView_img_book.getDrawable());
+                        book.setImg(imgString);
                         book.setTitle(editText_title.getText().toString());
                         book.setWriter(editText_writer.getText().toString());
                         book.setPublisher(editText_publisher.getText().toString());
@@ -135,7 +149,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             JSONObject bookJson = new JSONObject();
 
                             bookJson.put("bookId", book.getBookId());
-                            //bookJson.put("img", img);
+                            bookJson.put("img", book.getImg());
                             bookJson.put("title", book.getTitle());
                             bookJson.put("writer", book.getWriter());
                             bookJson.put("publisher", book.getPublisher());
@@ -232,7 +246,9 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             }
                         });
 
-                     popupMenu.show();// 팝업 메뉴 보이기
+                        popupMenu.show();// 팝업 메뉴 보이기
+
+                        break;
                 }
             }
         };
@@ -475,47 +491,6 @@ public class CreateBookInfoActivity extends AppCompatActivity
         this.sendBroadcast(mediaScanIntent);
         Toast.makeText(this, "앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show();
     }
-
-    private void setStringArrayPref(Context context, String key, ArrayList values) {
-
-        SharedPreferences prefs = getSharedPreferences("bookInfo", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        JSONArray a = new JSONArray();
-
-        for (int i = 0; i < values.size(); i++) {
-            a.put(values.get(i));
-        }
-
-        if (!values.isEmpty()) {
-            editor.putString(key, a.toString());
-        } else {
-            editor.putString(key, null);
-        }
-
-        editor.apply();
-    }
-
-    private ArrayList getStringArrayPref(Context context, String key) {
-
-        SharedPreferences prefs = getSharedPreferences("bookInfo", MODE_PRIVATE);
-        String json = prefs.getString(key, null);
-        ArrayList urls = new ArrayList();
-
-        if (json != null) {
-            try {
-                JSONArray a = new JSONArray(json);
-
-                for (int i = 0; i < a.length(); i++) {
-                    String url = a.optString(i);
-                    urls.add(url);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return urls;
-    }
-
 
 
 }

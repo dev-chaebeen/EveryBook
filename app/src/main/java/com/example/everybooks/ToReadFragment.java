@@ -93,9 +93,8 @@ public class ToReadFragment extends Fragment
     public void showItemList()
     {
         // 리사이클러뷰 생성
-        recyclerView = (RecyclerView) view.findViewById(R.id.to_read_book_list);
+        recyclerView = view.findViewById(R.id.to_read_book_list);
         recyclerView.setHasFixedSize(true);
-        //getContext() 추가
         adapter = new ToReadBookAdapter(getContext());
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setAdapter(adapter);
