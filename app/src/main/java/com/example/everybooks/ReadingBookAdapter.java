@@ -176,14 +176,6 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         popDialog.setTitle("독서를 마칠까요?\n별점을 입력해주세요. ");
         popDialog.setView(linearLayout);
 
-       /* ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener()
-        {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-
-            }
-        });*/
-
         // Button OK
         popDialog.setPositiveButton("확인",
             new DialogInterface.OnClickListener()
@@ -226,8 +218,8 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
 
                         Log.d(TAG,"ReadingBookAdapter, 별점이랑 독서상태 변경 후 " + jsonArray.toString());
 
-                        intent = new Intent(v.getContext(), MainActivity.class);
-                        v.getContext().startActivity(intent);
+                        /*intent = new Intent(v.getContext(), MainActivity.class);
+                        v.getContext().startActivity(intent);*/
                     }
                     catch (Exception e)
                     {
@@ -235,12 +227,12 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                     }
 
 
-                    /*book.setStarNum((int)ratingBar.getRating());
+                    book.setStarNum((int)ratingBar.getRating());
                     ReadBookAdapter readBookAdapter = new ReadBookAdapter();
                     readBookAdapter.addItem(book);
 
                     removeItem(position);
-                    dialog.dismiss();*/
+                    dialog.dismiss();
                 }
             })
 
