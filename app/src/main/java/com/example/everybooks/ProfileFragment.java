@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.everybooks.data.Util;
+
 import org.json.JSONObject;
+
+import java.util.function.BiConsumer;
 
 public class ProfileFragment extends Fragment
 {
@@ -26,6 +32,7 @@ public class ProfileFragment extends Fragment
     LinearLayout linearLayout_logout;
     LinearLayout linearLayout_feedback;
     TextView textView_nickname;
+    ImageView imageView_img;
 
     Intent intent;
     View.OnClickListener click;
@@ -50,6 +57,7 @@ public class ProfileFragment extends Fragment
         linearLayout_logout = view.findViewById(R.id.logout);
         linearLayout_feedback = view.findViewById(R.id.feedback);
         textView_nickname = view.findViewById(R.id.nickname);
+        imageView_img = view.findViewById(R.id.img);
 
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
@@ -122,10 +130,14 @@ public class ProfileFragment extends Fragment
 
         try
         {
-            // 기존의 닉네임을 가져와서 뷰 요소에 담아준다.
+            // 유저의 닉네임을 뷰 요소에 담아준다.
             JSONObject jsonObject = new JSONObject(userInfoString);
-            String nickname = jsonObject.getString("nickname");
-            textView_nickname.setText(nickname);
+            textView_nickname.setText(jsonObject.getString("nickname"));
+
+            // 유저의 이미지를 뷰 요소에 담아준다.
+            Util util = new Util();
+            Bitmap bitmap = util.stringToBitmap(jsonObject.getString("img"));
+            imageView_img.setImageBitmap(bitmap);
 
         }
         catch (Exception e)

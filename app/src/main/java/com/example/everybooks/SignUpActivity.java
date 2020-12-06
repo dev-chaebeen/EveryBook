@@ -1,22 +1,43 @@
 package com.example.everybooks;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.example.everybooks.data.User;
+import com.example.everybooks.data.Util;
 import com.google.android.material.textfield.TextInputEditText;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity
 {
@@ -32,13 +53,17 @@ public class SignUpActivity extends AppCompatActivity
 
     // 회원가입
     User user;
-    //Drawable img;
+    String img;
     String nickname;
     String email;
     String password;
     String confirmPassword;
 
     final String TAG ="테스트";
+
+    // 인텐트 requestCode 상수
+    final int TAKE_PICTURE = 1000;
+    final int OPEN_GALLERY = 1001;
 
 
     @Override
@@ -63,7 +88,16 @@ public class SignUpActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                //img = imageView_add_photo.getDrawable();
+                // 이미지 뷰의 이미지를 비트맵으로 저장한다.
+                BitmapDrawable drawable = (BitmapDrawable) imageView_add_photo.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
+                // 비트맵을 문자열로 변환한다.
+                Util util = new Util();
+                img = util.bitMapToString(bitmap);
+
+                Log.d(TAG, "SignUpActivity, 회원가입 시 저장한 이미지 : " + img);
+
                 nickname = textInputEditText_nickname.getText().toString();
                 email = textInputEditText_email.getText().toString();
                 password = textInputEditText_password.getText().toString();
@@ -79,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity
                 {
                     // 정상적으로 입력한 경우 유저 객체를 생성해서 사용자가 입력한 값을 담는다.
                     user = new User();
-                    //user.setImg(img);
+                    user.setImg(img);
                     user.setNickname(nickname);
                     user.setEmail(email);
                     user.setPassword(password);
@@ -120,6 +154,237 @@ public class SignUpActivity extends AppCompatActivity
 
             }
         });
+
+
+        // 이미지를 클릭하면
+        imageView_add_photo.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+                // 책 추가 이미지 클릭하면 팝업 메뉴 띄우기
+                PopupMenu popupMenu = new PopupMenu(getApplicationContext(), v);
+                getMenuInflater().inflate(R.menu.img_menu, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+                {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+
+                        switch(menuItem.getItemId())
+                        {
+                            case R.id.camera :
+                                //openCamera();
+                                dispatchTakePictureIntent();
+                                break;
+
+                            case R.id.gallery :
+                                openGallery();
+                                break;
+
+                            case R.id.basic :
+                                imageView_add_photo.setImageResource(R.drawable.ic_account);
+                                break;
+                        }
+                        return true;
+                    }
+                });
+
+                popupMenu.show();// 팝업 메뉴 보이기
+
+            }
+        });
+
+    }
+
+    private void dispatchTakePictureIntent()
+    {
+        // 권한 체크
+        PermissionListener permissionListener = new PermissionListener()
+        {
+            @Override
+            public void onPermissionGranted()
+            {
+                // 권한 허가 상태일 때
+                Toast.makeText(getApplicationContext(), "권한 허가",Toast.LENGTH_SHORT).show();
+
+                // 카메라 열기
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePictureIntent, TAKE_PICTURE);
+
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+                    // 파일을 생성한다
+                    // Create the File where the photo should go
+                    File photoFile = null;
+                    try
+                    {
+                        photoFile = createImageFile();
+                    }
+                    catch (IOException ex)
+                    {
+                        System.out.println(ex.toString());
+                    }
+
+                    // 파일이 생성되면
+                    if (photoFile != null)
+                    {
+                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                                "com.example.everybooks",
+                                photoFile);
+
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        startActivityForResult(takePictureIntent, TAKE_PICTURE);
+                    }
+                }
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions)
+            {
+                // 권한 허가하지 않았을 때
+                Toast.makeText(getApplicationContext(), "권한을 허용하지 않으면 서비스를 이용할 수 없습니다.",Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        // 권한 체크
+        TedPermission.with(getApplicationContext())
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage(" 카메라 접근 권한이 필요합니다")
+                .setDeniedMessage(" [설정] > [권한] 에서 권한을 허용할 수 있습니다.")
+                .setPermissions(Manifest.permission.CAMERA)
+                .check();
+    }
+
+    // 갤러리 실행 메소드
+    public void openGallery()
+    {
+        // 권한 체크
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted()
+            {
+                // 권한 허가 상태일 때
+                Toast.makeText(getApplicationContext(), "권한 허가",Toast.LENGTH_SHORT).show();
+
+                // 갤러리 열기
+               /* Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Get Album"), OPEN_GALLERY);*/
+
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent, OPEN_GALLERY);
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions)
+            {
+                // 권한 허가하지 않았을 때
+                Toast.makeText(getApplicationContext(), "권한을 허용하지 않으면 서비스를 이용할 수 없습니다.",Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        // 권한 체크
+        TedPermission.with(getApplicationContext())
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage(" 갤러리 접근 권한이 필요합니다.")
+                .setDeniedMessage(" [설정] > [권한] 에서 권한을 허용할 수 있습니다.")
+                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        // 암묵적 인텐트 응답 결과에 따라 동작을 실행한다.
+        // 카메라로 찍은 사진, 갤러리에서 불러온 사진을 이미지뷰에 보여준다.
+        switch (requestCode)
+        {
+            case TAKE_PICTURE:
+                if(resultCode != RESULT_CANCELED)
+                {
+                    if (resultCode == RESULT_OK && intent.hasExtra("data") )
+                    {
+                        Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
+                        if (bitmap != null)
+                        {
+                            imageView_add_photo.setImageBitmap(bitmap);
+                        }
+                    }
+                }
+
+                break;
+
+            case OPEN_GALLERY:
+                if(requestCode == OPEN_GALLERY && resultCode == RESULT_OK)
+                {
+                    try
+                    {
+                        InputStream is = getContentResolver().openInputStream(intent.getData());
+                        Bitmap bm = BitmapFactory.decodeStream(is);
+                        is.close();
+                        imageView_add_photo.setImageBitmap(bm);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                }
+                else if(requestCode == OPEN_GALLERY && resultCode == RESULT_CANCELED)
+                {
+                    Toast.makeText(this,"선택 취소", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
+    }
+
+    // popup 메뉴 생성
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.img_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        int id = item.getItemId();
+        if(id==1)// 메뉴가 하나라면
+        {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // 사진 저장될 경로
+    String currentPhotoPath;
+
+    //사진을 파일로 만드는 메소드
+    private File createImageFile() throws IOException {
+
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES); // 그림 파일 저장 (/mnt/sdcard/Pictures)
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
 }

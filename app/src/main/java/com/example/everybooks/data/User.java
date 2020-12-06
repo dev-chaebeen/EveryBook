@@ -7,13 +7,10 @@ import org.json.JSONObject;
 
 public class User
 {
-
     String email;
     String password;
     String nickname;
-    //String img;
-
-
+    String img;
 
     public String getEmail() {
         return email;
@@ -39,6 +36,13 @@ public class User
         this.nickname = nickname;
     }
 
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 
     // 객체를 json 객체로 만드는 메소드
     public String toJSON()
@@ -46,7 +50,7 @@ public class User
         JSONObject jsonObject= new JSONObject();
         try {
 
-            // img
+            jsonObject.put("img", getImg());
             jsonObject.put("email", getEmail());
             jsonObject.put("password", getPassword());
             jsonObject.put("nickname", getNickname());
