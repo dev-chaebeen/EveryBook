@@ -97,6 +97,7 @@ public class ReadBookAdapter extends RecyclerView.Adapter<ReadBookAdapter.BookVi
         holder.textView_title.setText(book.getTitle());
         holder.textView_writer.setText(book.getWriter());
         holder.ratingBar_rate.setRating(book.getStarNum());
+
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

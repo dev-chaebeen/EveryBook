@@ -57,7 +57,9 @@ public class ReadingBookInfoActivity extends AppCompatActivity
     String publishDate;
     String startDate;
     String img;
+    String readTime;
     int bookId;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -363,7 +365,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                         publishDate = jsonObject.getString("publishDate");
                         startDate = jsonObject.getString("startDate");
                         img = jsonObject.getString("img");
-                        //readTime
+                        readTime = jsonObject.getString("readTime");
                     }
                 }
             }
@@ -379,6 +381,7 @@ public class ReadingBookInfoActivity extends AppCompatActivity
         textView_publisher.setText(publisher);
         textView_publish_date.setText(publishDate);
         textView_start_date.setText(startDate);
+        textView_time.setText(readTime);
 
         Util util = new Util();
         Bitmap bitmap = util.stringToBitmap(img);

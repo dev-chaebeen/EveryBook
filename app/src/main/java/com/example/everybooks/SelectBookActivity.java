@@ -36,7 +36,7 @@ public class SelectBookActivity extends AppCompatActivity
         recyclerView =  findViewById(R.id.select_book_list);
 
         recyclerView.setHasFixedSize(true);
-        adapter = new SelectBookAdapter(ReadingBookAdapter.readingBookList);
+        adapter = new SelectBookAdapter(getApplicationContext(), ReadingBookAdapter.readingBookList);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
 
         recyclerView.setAdapter(adapter);

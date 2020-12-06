@@ -1,6 +1,8 @@
 package com.example.everybooks;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +12,18 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Book;
+import com.example.everybooks.data.Util;
 
 import java.util.ArrayList;
 
 public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.BookViewHolder>
 {
-    ArrayList<Book> selectBookList = ReadingBookAdapter.readingBookList;
+    ArrayList<Book> selectBookList = new ArrayList<>();
 
     int position;
     Book book;
+
+    Context context;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder
@@ -66,9 +71,16 @@ public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.Bo
         }
     }
 
-    SelectBookAdapter(){}
+    public SelectBookAdapter(){}
 
-    SelectBookAdapter(ArrayList<Book> selectBookList) {
+    public SelectBookAdapter(Context context)
+    {
+        this.context = context;
+    }
+
+    public SelectBookAdapter(Context context, ArrayList<Book> selectBookList)
+    {
+        this.context = context;
         this.selectBookList = selectBookList;
     }
 
@@ -85,8 +97,9 @@ public class SelectBookAdapter extends RecyclerView.Adapter<SelectBookAdapter.Bo
     public void onBindViewHolder(SelectBookAdapter.BookViewHolder holder, int position) {
         Book book = selectBookList.get(position);
 
-        // holder.imageView_img.set...
-        //holder.imageView_img.setImageDrawable(book.getImg());
+        Util util = new Util();
+        Bitmap bitmap = util.stringToBitmap(book.getImg());
+        holder.imageView_img.setImageBitmap(bitmap);
         holder.textView_title.setText(book.getTitle());
         holder.textView_start_date.setText(book.getStartDate());
 

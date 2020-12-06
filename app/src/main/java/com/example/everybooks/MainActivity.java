@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity
     ReadingBookAdapter readingBookAdapter;
     ReadBookAdapter readBookAdapter;
     AllMemoAdapter allMemoAdapter;
+    SelectBookAdapter selectBookAdapter;
 
     // fragment 뷰들
     private HomeFragment homeFragment;
@@ -182,6 +183,7 @@ public class MainActivity extends AppCompatActivity
                 readingBookAdapter.notifyDataSetChanged();
                 readBookAdapter = new ReadBookAdapter(getApplicationContext(), readBookList);
                 readBookAdapter.notifyDataSetChanged();
+
             }
 
         }
