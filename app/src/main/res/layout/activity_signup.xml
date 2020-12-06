@@ -40,6 +40,7 @@
             android:background="@null"
             android:src="@drawable/ic_add_photo"
             android:gravity="center"
+            android:scaleType="fitCenter"
             android:layout_marginBottom="30dp"
             />
 

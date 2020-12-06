@@ -73,7 +73,7 @@ public class CalendarAdapter extends BaseAdapter
         textView_title.setText(book.getTitle());
         textView_writer.setText(book.getWriter());
         textView_publisher.setText(book.getPublisher());
-        textView_publish_date.setText(book.getPublishDate());
+        //textView_publish_date.setText(book.getPublishDate());
 
         return convertView;
     }

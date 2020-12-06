@@ -32,6 +32,7 @@
         android:layout_height="90dp"
         android:background="@null"
         android:layout_gravity="center"
+        android:scaleType="fitCenter"
         android:src="@drawable/icon_insert_photo" />
 
     <!--닉네임-->

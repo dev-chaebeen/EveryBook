@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Memo;
+import com.example.everybooks.data.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -161,8 +163,37 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
         Memo memo = allMemoList.get(position);
 
         // 메모에 저장되어 있는 bookId 로 해당하는 title, img 가져오기
-        // holder.textView_title
-        // holder.imageView_img
+        SharedPreferences bookInfo = context.getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
+        String bookListString = bookInfo.getString("bookList", null);
+
+        String title="";
+        String img="";
+
+
+        try
+        {
+            JSONArray jsonArray = new JSONArray(bookListString);
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                if(memo.getBookId() == jsonObject.getInt("bookId"))
+                {
+                   title = jsonObject.getString("title");
+                   img = jsonObject.getString("img");
+                }
+
+
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+        holder.textView_title.setText(title);
+        Util util = new Util();
+        Bitmap bitmap = util.stringToBitmap(img);
+        holder.imageView_img.setImageBitmap(bitmap);
         holder.textView_memo_text.setText(memo.getMemoText());
         holder.textView_memo_date.setText(memo.getMemoDate());
     }
