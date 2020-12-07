@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 public class CalendarAdapter extends BaseAdapter
 {
-    // todo static 수정하기
     static ArrayList<Book> theDayBookList = new ArrayList<>();
     Context context;
 

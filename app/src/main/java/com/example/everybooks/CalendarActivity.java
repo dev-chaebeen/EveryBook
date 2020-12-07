@@ -61,6 +61,7 @@ public class CalendarActivity extends AppCompatActivity
                     // 저장되어있는 책 리스트를 가져온 뒤 JsonObject 를 얻기 위해서 JsonArray 형식으로 변환한다.
                     // jsonObject 에 저장되어있는 endDate 가 캘린더에서 선택된 날짜와 같다면
                     // ArrayList<Book> thisDayBookList 에 저장한다.
+                    // month 는 실제보다 1 작기 때문에 +1 해준다.
                     SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
                     String bookListString = bookInfo.getString("bookList", null);
                     ArrayList<Book> thisDayBookList = new ArrayList<>();
@@ -133,12 +134,15 @@ public class CalendarActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        // 액티비티가 전면에 보일 때마다 그날 독서를 완료한 책 리스트를 보여준다.
-        String today = setYear + "." + setMonth + "." + setDate;
+        // 액티비티가 전면에 보일 때마다 클릭된 날의 독서를 완료한 책 리스트를 보여주기 위해서 클릭된 날을 저장한다.
+        String clickDate = setYear + "." + setMonth + "." + setDate;
 
-        // 저장되어있는 책 리스트 어댑터에 보내주기
         try
         {
+            // 저장되어있는 책 리스트를 가져온 뒤 JsonObject 를 얻기 위해서 JsonArray 형식으로 변환한다.
+            // jsonObject 에 저장되어있는 endDate 가 캘린더에서 선택된 날짜와 같다면
+            // ArrayList<Book> theDayBookList 에 저장한다.
+            // month 는 실제보다 1 작기 때문에 +1 해준다.
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
             String bookListString = bookInfo.getString("bookList", null);
             ArrayList<Book> theDayBookList = new ArrayList<>();
@@ -154,7 +158,7 @@ public class CalendarActivity extends AppCompatActivity
                 {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    if(jsonObject.getString("endDate").equals(today))
+                    if(jsonObject.getString("endDate").equals(clickDate))
                     {
                         int bookId = jsonObject.getInt("bookId");
                         String img = jsonObject.getString("img");
@@ -168,7 +172,6 @@ public class CalendarActivity extends AppCompatActivity
                         String state = jsonObject.getString("state");
                         String readTime = jsonObject.getString("readTime");
                         int starNum = jsonObject.getInt("starNum");
-
 
                         Book book = new Book();
                         book.setBookId(bookId);

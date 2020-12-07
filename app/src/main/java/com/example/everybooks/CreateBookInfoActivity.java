@@ -103,24 +103,23 @@ public class CreateBookInfoActivity extends AppCompatActivity
                 {
                     case R.id.save:
                         // save 클릭했을 때 수행할 동작
-                        Log.d(TAG, "save 버튼 클릭");
 
-                        // ImageView 의 resource를 bitmap 으로 가져오기
+                        // ImageView 의 이미지를 SharedPreference 에 저장하기 위해서
+                        // ImageView 의 resource 를 Bitmap 으로 가져온 뒤
                         BitmapDrawable drawable = (BitmapDrawable) imageView_img_book.getDrawable();
                         Bitmap bitmap = drawable.getBitmap();
 
-                        // Bitmap을 문자열로 바꾸기
+                        // Bitmap 을 문자열로 바꿔서 이미지를 문자열 변수에 저장한다.
                         Util util = new Util();
                         String imgString = util.bitMapToString(bitmap);
 
-                        //Log.d(TAG, "CreateBookInfoActivity, 문자열로 바꾼 bitmap : " + imgString);
-
-                        // bookInfo 라는 SharedPreferences 파일에서 bookId 를 가져온다.
+                        // 책들을 구분하는 값을 저장하기 위해서 bookId 를 사용한다.
+                        // bookInfo 라는 SharedPreferences 파일에서 bookId를 가져온다.
                         // 저장된 값이 존재하지 않는다면 0을 가져온다.
                         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
                         bookId = bookInfo.getInt("bookId", 0);
 
-                        // 입력받은 정보를 book 객체에 저장한다.
+                        // 사용자에게 입력받은 정보를 book 객체에 저장한 뒤 JsonArray 에 저장하기 위해서 jsonObject 형태로 바꾼다.
                         Book book = new Book();
                         book.setBookId(bookId);
                         book.setImg(imgString);
@@ -130,7 +129,6 @@ public class CreateBookInfoActivity extends AppCompatActivity
                         book.setPublishDate(editText_publish_date.getText().toString());
                         book.setState("toRead");
 
-                        //현재 년도, 월, 일을 책 등록일에 저장한다.
                         Calendar cal = Calendar.getInstance();
                         int year = cal.get ( cal.YEAR );
                         int month = cal.get ( cal.MONTH ) + 1 ;
@@ -145,7 +143,6 @@ public class CreateBookInfoActivity extends AppCompatActivity
 
                         try
                         {
-                            // json 객체에 입력받은 값을 저장한다.
                             JSONObject bookJson = new JSONObject();
 
                             bookJson.put("bookId", book.getBookId());
@@ -166,39 +163,28 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             editor.putInt("bookId", bookId + 1);
                             editor.commit();
 
-                            // Log.d(TAG, "1증가시키고 저장해둔 bookId" + bookInfo.getInt("bookId",0));
-
-
-                            // 기존에 저장된 jsonArray에 저장하기 위해서
-                            // SharedPreference bookInfo 파일에서 "toReadBookLIst" 키로 저장된 String 값을 불러온다.
+                            // SharedPreference bookInfo 파일에서 "toReadBookLIst" 키로 저장된 책 리스트를 불러온다.
                             bookListString = bookInfo.getString("bookList", null);
 
-                            // 저장된 값이 있을 때
+                            // 저장된 책 리스트가 있다면 문자열을 JsonArray 형식으로 바꾼 뒤
+                            // 사용자의 입력값을 저장해둔 jsonObject 를 추가한다.
                             if(bookListString != null)
                             {
                                 jsonArray = new JSONArray(bookListString);
-                                //Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
-
                                 jsonArray.put(bookJson);
-
                                 bookListString = jsonArray.toString();
-
                                 editor.putString("bookList", bookListString);
                                 editor.commit();
-
-                                //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
-
                             }
                             else
                             {
-                                // 처음 저장할 때
+                                // 저장된 책 리스트가 없다면 JsonArray 를 만들어서
+                                // 사용자의 입력값을 저장해둔 jsonObject 를 추가한다.
                                 jsonArray = new JSONArray();
                                 jsonArray.put(bookJson);
-
                                 bookListString = jsonArray.toString();
                                 editor.putString("bookList", bookListString);
                                 editor.commit();
-                                //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
                             }
 
                         }
@@ -207,18 +193,17 @@ public class CreateBookInfoActivity extends AppCompatActivity
                             System.out.println(e.toString());
                         }
 
-
                         intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
 
                         finish();
 
-
                         break;
 
                     case R.id.add_photo:
 
-                        // 책 추가 이미지 클릭하면 팝업 메뉴 띄우기
+                        // 책 추가 이미지 클릭하면 팝업 메뉴를 띄운다.
+                        // 1. 카메라  2.갤러리  3.기본이미지
                         PopupMenu popupMenu = new PopupMenu(getApplicationContext(), view);
                         getMenuInflater().inflate(R.menu.img_menu, popupMenu.getMenu());
 
@@ -308,11 +293,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
                 startActivityForResult(Intent.createChooser(intent, "Get Album"), OPEN_GALLERY);
-                /*
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, OPEN_GALLERY);*/
+
             }
 
             @Override
@@ -363,9 +344,9 @@ public class CreateBookInfoActivity extends AppCompatActivity
                    try
                     {
                         InputStream is = getContentResolver().openInputStream(intent.getData());
-                        Bitmap bm = BitmapFactory.decodeStream(is);
+                        Bitmap bitmap = BitmapFactory.decodeStream(is);
                         is.close();
-                        imageView_img_book.setImageBitmap(bm);
+                        imageView_img_book.setImageBitmap(bitmap);
                     }
                    catch (Exception e)
                    {
