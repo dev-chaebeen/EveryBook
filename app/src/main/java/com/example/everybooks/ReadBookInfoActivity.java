@@ -394,6 +394,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
         textView_start_date.setText(startDate);
         textView_end_date.setText(endDate);
         textView_time.setText(readTime);
+        ratingBar_rate.setRating(starNum);
 
         Util util = new Util();
         Bitmap bitmap = util.stringToBitmap(img);
