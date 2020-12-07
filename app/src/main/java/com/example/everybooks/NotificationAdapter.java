@@ -14,8 +14,16 @@ import java.util.ArrayList;
 
 public class NotificationAdapter extends BaseAdapter
 {
-    // todo static 수정하기
+    Context context;
     static ArrayList<Notification> notiList = new ArrayList<>();
+
+    public NotificationAdapter(){}
+
+    public NotificationAdapter(Context context, ArrayList<Notification> notiList)
+    {
+        this.context = context;
+        this.notiList = notiList;
+    }
 
     // 데이터 추가 메소드
     public void addItem(Notification noti)

@@ -3,7 +3,9 @@ package com.example.everybooks;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -14,6 +16,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.everybooks.data.Notification;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class NotificationActivity extends AppCompatActivity
 {
@@ -58,12 +65,6 @@ public class NotificationActivity extends AppCompatActivity
         // 각 요소가 클릭되면 동작 수행
         textView_add.setOnClickListener(click);
 
-        // 임시로 데이터를 넣어준다.
-        Notification noti = new Notification();
-        noti.setHour(14);
-        noti.setMinute(30);
-        noti.setText("알림 문구 설정");
-        NotificationAdapter.notiList.add(noti);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class NotificationActivity extends AppCompatActivity
     {
         super.onResume();
 
-        //리스트뷰에 어댑터를 붙여서 사용자에게 메모가 보이도록 한다.
+        //리스트뷰에 어댑터를 붙여서 사용자에게 알림이 보이도록 한다.
         listView.setAdapter(adapter);
 
         // 알림을 클릭하면 알림 데이터를 가지고 알림 편집 화면으로 이동한다.
@@ -91,7 +92,7 @@ public class NotificationActivity extends AppCompatActivity
             }
         });
 
-        // 각 메모를 길게 클릭하면 삭제하겠냐고 확인하는 문구가 뜬다.
+        // 각 알림을 길게 클릭하면 삭제하겠냐고 확인하는 문구가 뜬다.
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override
@@ -124,5 +125,43 @@ public class NotificationActivity extends AppCompatActivity
                 return true; // 롱클릭 이벤트 이후 클릭이벤트 발생하지 않도록 true 반환
             }
         });
+
+        // 저장되어있는 알림리스트 어댑터에 보내주기
+        try
+        {
+            SharedPreferences notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
+            String notiListString = notiInfo.getString("notiList", null);
+            ArrayList<Notification> notiList = new ArrayList<>();
+
+            if(notiListString != null)
+            {
+                JSONArray jsonArray = new JSONArray(notiListString);
+
+                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    Notification noti = new Notification();
+                    noti.setNotiId(jsonObject.getInt("notiId"));
+                    noti.setHour(jsonObject.getInt("hour"));
+                    noti.setMinute(jsonObject.getInt("minute"));
+                    noti.setText(jsonObject.getString("text"));
+
+                    notiList.add(0, noti);
+
+                }
+
+                NotificationAdapter notificationAdapter = new NotificationAdapter(getApplicationContext(), notiList);
+                notificationAdapter.notifyDataSetChanged();
+
+            }
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
     }
 }

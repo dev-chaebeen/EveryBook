@@ -44,7 +44,6 @@ public class User
         this.img = img;
     }
 
-    // 객체를 json 객체로 만드는 메소드
     public String toJSON()
     {
         JSONObject jsonObject= new JSONObject();

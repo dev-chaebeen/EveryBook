@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.everybooks.data.Book;
 import com.example.everybooks.data.Memo;
+import com.example.everybooks.data.Notification;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity
     ReadingBookAdapter readingBookAdapter;
     ReadBookAdapter readBookAdapter;
     AllMemoAdapter allMemoAdapter;
-    SelectBookAdapter selectBookAdapter;
+    NotificationAdapter notificationAdapter;
 
     // fragment 뷰들
     private HomeFragment homeFragment;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity
         ArrayList<Book> readingBookList = new ArrayList<>();
         ArrayList<Book> readBookList = new ArrayList<>();
         ArrayList<Memo> allMemoList = new ArrayList<>();
+        ArrayList<Notification> notiList = new ArrayList<>();
 
         // 메인 액티비티가 전면에 나올때마다 새로고침한다.
         //refresh();
@@ -223,6 +225,45 @@ public class MainActivity extends AppCompatActivity
 
                 allMemoAdapter = new AllMemoAdapter(getApplicationContext(), allMemoList);
                 allMemoAdapter.notifyDataSetChanged();
+            }
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+        // 저장되어있는 알림리스트 어댑터에 보내주기
+        try
+        {
+            SharedPreferences notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
+            String notiListString = notiInfo.getString("notiList", null);
+            Log.d(TAG, "MainActivity, 저장되어있는 알림 목록 : " + notiListString);
+
+            if(notiListString != null)
+            {
+                JSONArray jsonArray = new JSONArray(notiListString);
+
+                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    Notification noti = new Notification();
+                    noti.setNotiId(jsonObject.getInt("notiId"));
+                    noti.setHour(jsonObject.getInt("hour"));
+                    noti.setMinute(jsonObject.getInt("minute"));
+                    noti.setText(jsonObject.getString("text"));
+
+                    notiList.add(0, noti);
+
+                }
+
+                //어댑터에 보내기
+                Log.d(TAG, "MainActivity, 어댑터에 보내는 알림.size : " + notiList.size());
+
+                notificationAdapter = new NotificationAdapter(getApplicationContext(), notiList);
+                notificationAdapter.notifyDataSetChanged();
             }
 
         }

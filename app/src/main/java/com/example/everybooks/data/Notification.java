@@ -1,9 +1,11 @@
 package com.example.everybooks.data;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Notification
 {
-    //todo static 수정
-    static int notiId;
+    int notiId;
     String text;
     String[] days;
     int hour;
@@ -64,5 +66,24 @@ public class Notification
 
     public void setMinute(int minute) {
         this.minute = minute;
+    }
+
+    public JSONObject toJSON()
+    {
+        JSONObject jsonObject= new JSONObject();
+        try {
+
+            jsonObject.put("notiId", getNotiId());
+            jsonObject.put("text", getText());
+            jsonObject.put("hour", getHour());
+            jsonObject.put("minute", getMinute());
+
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
+
     }
 }

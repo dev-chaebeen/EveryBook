@@ -269,15 +269,15 @@ public class SignUpActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), "권한 허가",Toast.LENGTH_SHORT).show();
 
                 // 갤러리 열기
-               /* Intent intent = new Intent();
+                Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "Get Album"), OPEN_GALLERY);*/
+                startActivityForResult(Intent.createChooser(intent, "Get Album"), OPEN_GALLERY);
 
-                Intent intent = new Intent(Intent.ACTION_PICK);
+                /*Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, OPEN_GALLERY);
+                startActivityForResult(intent, OPEN_GALLERY);*/
             }
 
             @Override
