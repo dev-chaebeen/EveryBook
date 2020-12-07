@@ -33,17 +33,16 @@ public class AddNotificationActivity extends AppCompatActivity
     int min;
     String[] days;
 
+    ArrayList<Notification> notiList;
     String notiListString;
-
     JSONArray jsonArray;
     JSONObject jsonObject;
-
     SharedPreferences notiInfo;
     SharedPreferences.Editor editor;
-
-    ArrayList<Notification> notiList;
+    Calendar calendar;
 
     final String TAG = "테스트";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -56,57 +55,70 @@ public class AddNotificationActivity extends AppCompatActivity
         textView_time = findViewById(R.id.time);
         notification_text = findViewById(R.id.notification_text);
 
+        // 현재 시간으로 초기화
+        calendar = Calendar.getInstance();
+
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         View.OnClickListener click = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.save:
+
                         // Save 클릭하면 사용자에게 입력받은 데이터를 알림 리스트에 저장한다.
-                        notiList = new ArrayList<>();
+
+                        // SharedPreferences notiInfo 에 존재하는 데이터 : notiId, notiList
+                        // notiId   : 알림을 식별하기 위해 각 알림마다 부여되는 정수 데이터, 겹치지 않도록 하나의 알림이 추가되면 1 증가시켜서 sharedPreferences 에 저장한다.
+                        // notiList : JsonArray 형식의 데이터. 알림 데이터를 저장한다. 저장하는 데이터 : notiId, text, hour, minute , (days)
 
                         notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
+                        editor = notiInfo.edit();
                         notiId = notiInfo.getInt("notiId", 0);
 
+                        // 사용자에게 입력받은 데이터를 Notification 객체에 저장하고
+                        // JsonArray 에 추가하기 위해서 JsonObject 형식으로 변환한다.
                         Notification noti = new Notification();
                         noti.setNotiId(notiId);
                         noti.setHour(hour);
                         noti.setMinute(min);
                         noti.setText(notification_text.getText().toString());
-                        notiList.add(0, noti);
-
                         jsonObject = noti.toJSON();
 
+                        // 알림 어댑터에 알림 리스트를 넘겨주기 위해서 ArrayList<Notification>에 알림 객체를 담아준다.
+                        //notiList = new ArrayList<>();
+                        //notiList.add(0, noti);
+
+                        // 저장되어있는 알림 리스트를 받아온다.
                         notiListString  = notiInfo.getString("notiList", null);
-                        editor = notiInfo.edit();
 
                         try
                         {
-                            // 저장된 값이 있을 때
+                            // 저장된 알림리스트가 있다면 저장되어있는 알림 리스트를 JsonArray 형식으로 변환해서
+                            // 사용자가 입력한 데이터를 담고 있는 jsonObject 를 추가한다.
                             if(notiListString != null)
                             {
                                 jsonArray = new JSONArray(notiListString);
-                                //Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
-
                                 jsonArray.put(jsonObject);
 
                                 notiListString = jsonArray.toString();
                                 editor.putString("notiList", notiListString);
                                 editor.commit();
 
-                                Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
+                                //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
 
                             }
                             else
                             {
-                                // 처음 저장할 때
+                                // 저장된 알림리스트가 없다면 JsonArray 를 생성해서
+                                // 사용자가 입력한 데이터를 담고 있는 jsonObject 를 추가한다.
                                 jsonArray = new JSONArray();
                                 jsonArray.put(jsonObject);
 
                                 notiListString = jsonArray.toString();
                                 editor.putString("notiList", notiListString);
                                 editor.commit();
-                                Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
+
+                                //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
                             }
 
                         }
@@ -120,8 +132,11 @@ public class AddNotificationActivity extends AppCompatActivity
                         editor.putInt("notiId", notiId + 1);
                         editor.commit();
 
-                        NotificationAdapter notificationAdapter = new NotificationAdapter(getApplicationContext(), notiList);
-                        notificationAdapter.notifyDataSetChanged();
+                        //Log.d(TAG, "하나 추가한 뒤 notiList.size() : " + notiList.size());
+
+                        // 어댑터에 알림리스트를 보낸다.
+                        //NotificationAdapter notificationAdapter = new NotificationAdapter(getApplicationContext(), notiList);
+                        //notificationAdapter.notifyDataSetChanged();
 
                         finish();
 
@@ -138,9 +153,8 @@ public class AddNotificationActivity extends AppCompatActivity
         textView_time.setOnClickListener(click);
 
         // 초기 시간을 현재 시간으로 보여준다.
-        Calendar cal = Calendar.getInstance();
-        hour = cal.HOUR_OF_DAY;
-        min = cal.MINUTE;
+        hour = calendar.HOUR_OF_DAY;
+        min = calendar.MINUTE;
 
         textView_time.setText(hour + ":" + min);
 
@@ -158,9 +172,8 @@ public class AddNotificationActivity extends AppCompatActivity
                 };
 
         //현재 시간으로 타임피커 초기값을 설정한다.
-        Calendar cal = Calendar.getInstance();
         TimePickerDialog alert = new TimePickerDialog(this,
-                mTimeSetListener, cal.HOUR_OF_DAY, cal.MINUTE, true);
+                mTimeSetListener, calendar.HOUR_OF_DAY, calendar.MINUTE, true);
         alert.show();
     }
 
