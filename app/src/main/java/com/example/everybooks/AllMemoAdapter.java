@@ -57,10 +57,13 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
                     position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION)
                     {
+                        // 메모를 클릭했을 때 각 메모에 해당하는 책의 상세정보 화면으로 전환하기 위해서
+                        // 클릭한 아이템의 메모 객체를 가져온 뒤 메모의 bookId 를 얻는다.
                         memo = getItem(position);
                         int bookId = memo.getBookId();
                         String state = "";
 
+                        // 저장해둔 책 리스트를 얻어와서 bookId 에 해당하는 책의 독서 상태를 가져온다.
                         SharedPreferences bookInfo = v.getContext().getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
                         String bookListString = bookInfo.getString("bookList", null);
 
@@ -81,13 +84,18 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
                             System.out.println(e.toString());
                         }
 
-
+                        // 책의 독서상태가 reading 이라면 ReadingBookInfoActivity 로 화면을 전환한다.
+                        // ReadingBookInfoActivity 에서 bookId 를 통해 해당하는 책의 정보를 가져올 수 있도록
+                        // 인텐트에 bookId 를 담아서 화면을 전환한다.
                         if(state.equals("reading"))
                         {
                             Intent intent = new Intent(v.getContext(), ReadingBookInfoActivity.class);
                             intent.putExtra("bookId", memo.getBookId());
                             v.getContext().startActivity(intent);
                         }
+                        // 책의 독서상태가 read 라면 ReadBookInfoActivity 로 화면을 전환한다.
+                        // ReadBookInfoActivity 에서 bookId 를 통해 해당하는 책의 정보를 가져올 수 있도록
+                        // 인텐트에 bookId 를 담아서 화면을 전환한다.
                         else if(state.equals("read"))
                         {
                             Intent intent = new Intent(v.getContext(), ReadBookInfoActivity.class);
@@ -98,6 +106,7 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
                 }
             });
 
+            /*// 이 기능 없음
             // 아이템을 길게 클릭하면 메모를 삭제하겠냐는 다이얼로그가 등장한다.
             itemView.setOnLongClickListener(new View.OnLongClickListener()
             {
@@ -127,14 +136,12 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
                     builder.show();
                     return true; // 롱클릭 이벤트 이후 클릭 이벤트 발생하지 않도록 true 반환
                 }
-            });
+            });*/
         }
     }
 
-    // 기본 생성자
     public AllMemoAdapter(){}
 
-    // 생성자에서 데이터 리스트 객체를 전달받음.
     public AllMemoAdapter(Context context)
     {
         this.context = context;
@@ -145,7 +152,6 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
         this.context = context;
         this.allMemoList = arrayList;
     }
-
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴하는 메소드
     @Override
@@ -162,13 +168,12 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
     {
         Memo memo = allMemoList.get(position);
 
-        // 메모에 저장되어 있는 bookId 로 해당하는 title, img 가져오기
+        // 메모에 저장되어 있는 bookId 에 해당하는 title, img 가져온다.
         SharedPreferences bookInfo = context.getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
         String bookListString = bookInfo.getString("bookList", null);
 
         String title="";
         String img="";
-
 
         try
         {
@@ -181,8 +186,6 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
                    title = jsonObject.getString("title");
                    img = jsonObject.getString("img");
                 }
-
-
             }
         }
         catch (Exception e)
@@ -190,10 +193,12 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
             System.out.println(e.toString());
         }
 
-        holder.textView_title.setText(title);
+        // 가져온 데이터를 뷰 요소에 배치해준다.
+        // 이미지의 경우 문자열로 저장되어있으므로 bitmap 으로 변환해주는 함수를 이용한다.
         Util util = new Util();
         Bitmap bitmap = util.stringToBitmap(img);
         holder.imageView_img.setImageBitmap(bitmap);
+        holder.textView_title.setText(title);
         holder.textView_memo_text.setText(memo.getMemoText());
         holder.textView_memo_date.setText(memo.getMemoDate());
     }

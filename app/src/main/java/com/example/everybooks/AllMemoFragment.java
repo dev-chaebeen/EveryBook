@@ -44,7 +44,6 @@ public class AllMemoFragment extends Fragment
         memo_text = view.findViewById(R.id.memo_text);
         memo_date = view.findViewById(R.id.memo_date);
 
-
     }
 
     @Override

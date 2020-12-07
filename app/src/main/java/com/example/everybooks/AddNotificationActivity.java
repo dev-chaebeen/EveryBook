@@ -55,9 +55,6 @@ public class AddNotificationActivity extends AppCompatActivity
         textView_time = findViewById(R.id.time);
         notification_text = findViewById(R.id.notification_text);
 
-        // 현재 시간으로 초기화
-        calendar = Calendar.getInstance();
-
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         View.OnClickListener click = new View.OnClickListener() {
             @Override
@@ -83,10 +80,6 @@ public class AddNotificationActivity extends AppCompatActivity
                         noti.setMinute(min);
                         noti.setText(notification_text.getText().toString());
                         jsonObject = noti.toJSON();
-
-                        // 알림 어댑터에 알림 리스트를 넘겨주기 위해서 ArrayList<Notification>에 알림 객체를 담아준다.
-                        //notiList = new ArrayList<>();
-                        //notiList.add(0, noti);
 
                         // 저장되어있는 알림 리스트를 받아온다.
                         notiListString  = notiInfo.getString("notiList", null);
@@ -134,10 +127,6 @@ public class AddNotificationActivity extends AppCompatActivity
 
                         //Log.d(TAG, "하나 추가한 뒤 notiList.size() : " + notiList.size());
 
-                        // 어댑터에 알림리스트를 보낸다.
-                        //NotificationAdapter notificationAdapter = new NotificationAdapter(getApplicationContext(), notiList);
-                        //notificationAdapter.notifyDataSetChanged();
-
                         finish();
 
                         break;
@@ -158,6 +147,14 @@ public class AddNotificationActivity extends AppCompatActivity
 
         textView_time.setText(hour + ":" + min);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // 현재 시간으로 초기화
+        calendar = Calendar.getInstance();
     }
 
     private void dialogTimePicker(){
