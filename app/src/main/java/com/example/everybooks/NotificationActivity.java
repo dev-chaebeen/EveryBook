@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.everybooks.data.Memo;
 import com.example.everybooks.data.Notification;
 
 import org.json.JSONArray;
@@ -32,6 +33,8 @@ public class NotificationActivity extends AppCompatActivity
 
     // 인텐트
     Intent intent;
+    final String TAG = "테스트";
+    Notification noti;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -83,12 +86,12 @@ public class NotificationActivity extends AppCompatActivity
             {
                 intent = new Intent(getApplicationContext(), EditNotificationActivity.class);
 
-                Notification noti = (Notification) adapter.getItem(position);
-                intent.putExtra("position", position);
-                intent.putExtra("hour", noti.getHour());
-                intent.putExtra("minute", noti.getMinute());
-                intent.putExtra("text", noti.getText());
+                noti = (Notification) adapter.getItem(position);
+                intent.putExtra("notiId", noti.getNotiId());
                 startActivity(intent);
+
+                Log.d(TAG, "NotificationActivity, 인텐트로 보내는 notiId : " + noti.getNotiId());
+
             }
         });
 
@@ -104,6 +107,83 @@ public class NotificationActivity extends AppCompatActivity
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which)
                         {
+                            noti = (Notification) adapter.getItem(position);
+
+                            // 알림을 삭제하기 위해서 저장되어있는 알림리스트를 불러온다.
+                            SharedPreferences notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
+                            String notiListString = notiInfo.getString("notiList", null);
+                            ArrayList<Notification> notiList = new ArrayList<>();
+
+                            if (notiListString != null)
+                            {
+                                try
+                                {
+                                    JSONArray jsonArray = new JSONArray(notiListString);
+
+                                    // JsonArray 형태로는 객체를 삭제할 수 없기 때문에
+                                    // jsonArray 의 길이만큼 반복해서 jsonObject 를 가져오고,
+                                    // 삭제할 memoId 와 일치하지 않는 jsonObject 만 Memo 객체에 담은 뒤 ArrayList<Memo> 에 담는다.
+                                    for (int i = 0; i < jsonArray.length(); i++)
+                                    {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                        if(jsonObject.getInt("notiId") != noti.getNotiId())
+                                        {
+                                            Notification noti = new Notification();
+                                            noti.setNotiId(jsonObject.getInt("notiId"));
+                                            noti.setText(jsonObject.getString("text"));
+                                            noti.setHour(jsonObject.getInt("hour"));
+                                            noti.setMinute(jsonObject.getInt("minute"));
+                                            // days
+                                            notiList.add(noti);
+                                        }
+                                    }
+
+                                    Log.d(TAG, "저장되어있는 notiList.size : " + notiList.size());
+
+                                }
+                                catch (Exception e)
+                                {
+                                    System.out.println(e.toString());
+                                }
+
+
+                                /// JSONArray 로 변환해서 다시 저장하기
+                                JSONArray jsonArray = new JSONArray();
+
+                                for (int i = 0; i < notiList.size(); i++)
+                                {
+                                    Notification noti = notiList.get(i);
+
+                                    // json 객체에 입력받은 값을 저장한다.
+                                    try
+                                    {
+                                        JSONObject jsonObject = new JSONObject();
+
+                                        jsonObject.put("notiId", noti.getNotiId());
+                                        jsonObject.put("text", noti.getText());
+                                        jsonObject.put("hour", noti.getHour());
+                                        jsonObject.put("minute", noti.getMinute());
+                                        // days
+                                        jsonArray.put(jsonObject);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        System.out.println(e.toString());
+                                    }
+                                }
+
+                                notiListString = jsonArray.toString();
+
+                                notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = notiInfo.edit();
+                                editor.putString("notiList", notiListString);
+                                editor.commit();
+
+                                dialog.dismiss();
+
+                            }
+
                             // 확인 클릭했을 때 해당 알림을 삭제하고 삭제 결과를 리스트뷰에 반영하기 위해 어댑터를 새로고침한다.
                             NotificationAdapter.notiList.remove(position);
                             adapter.notifyDataSetChanged();
@@ -156,7 +236,6 @@ public class NotificationActivity extends AppCompatActivity
                 notificationAdapter.notifyDataSetChanged();
 
             }
-
         }
         catch (Exception e)
         {

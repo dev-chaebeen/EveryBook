@@ -19,6 +19,11 @@ public class NotificationAdapter extends BaseAdapter
 
     public NotificationAdapter(){}
 
+    public NotificationAdapter(Context context)
+    {
+        this.context = context;
+    }
+
     public NotificationAdapter(Context context, ArrayList<Notification> notiList)
     {
         this.context = context;

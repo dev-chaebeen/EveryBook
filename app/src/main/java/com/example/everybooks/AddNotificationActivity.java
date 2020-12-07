@@ -146,53 +146,6 @@ public class AddNotificationActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-       /* // 저장되어있는 알림리스트 어댑터에 보내주기
-        try
-        {
-            SharedPreferences notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
-            String notiListString = notiInfo.getString("notiList", null);
-            Log.d(TAG, "MainActivity, 저장되어있는 알림 목록 : " + notiListString);
-
-            if(notiListString != null)
-            {
-                JSONArray jsonArray = new JSONArray(notiListString);
-
-                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
-                for (int i = 0; i < jsonArray.length(); i++)
-                {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                    Notification noti = new Notification();
-                    noti.setNotiId(jsonObject.getInt("notiId"));
-                    noti.setHour(jsonObject.getInt("hour"));
-                    noti.setMinute(jsonObject.getInt("minute"));
-                    noti.setText(jsonObject.getString("text"));
-
-                    notiList.add(0, noti);
-
-                }
-
-                //어댑터에 보내기
-                Log.d(TAG, "MainActivity, 어댑터에 보내는 알림.size : " + notiList.size());
-
-                NotificationAdapter notificationAdapter = new NotificationAdapter(getApplicationContext(), notiList);
-                notificationAdapter.notifyDataSetChanged();
-
-            }
-
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.toString());
-        }
-*/
-    }
-
     private void dialogTimePicker(){
         TimePickerDialog.OnTimeSetListener mTimeSetListener =
                 new TimePickerDialog.OnTimeSetListener() {
