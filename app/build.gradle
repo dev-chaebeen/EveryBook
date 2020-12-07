@@ -38,6 +38,7 @@ android {
 
 dependencies {
 
+
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
@@ -54,6 +55,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
     // permission
     implementation "gun0912.ted:tedpermission:2.2.3"
+    // circle ImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
 
 }

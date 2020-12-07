@@ -24,7 +24,7 @@
         android:paddingLeft="10dp" />
 
     <!--등록된 이미지 -->
-    <ImageView
+   <!-- <ImageView
         android:id="@+id/img"
         android:layout_width="90dp"
         android:layout_height="90dp"
@@ -33,7 +33,7 @@
         android:scaleType="fitCenter"
         android:src="@drawable/icon_insert_photo" />
 
-    <!--닉네임-->
+    &lt;!&ndash;닉네임&ndash;&gt;
     <TextView
         android:id="@+id/nickname"
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
         android:textStyle="bold"
         android:textSize="20dp"
         >
-    </TextView>
+    </TextView>-->
 
     <!--프로필 수정-->
     <LinearLayout
@@ -52,7 +52,7 @@
         android:layout_height="30dp"
         android:orientation="horizontal"
 
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         >
         <ImageView
             android:layout_width="30dp"
