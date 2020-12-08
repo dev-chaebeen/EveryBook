@@ -50,7 +50,6 @@ public class CreateMemoActivity extends AppCompatActivity {
         // 인텐트로 전달받은 bookId 를 담는다
         bookId = getIntent().getIntExtra("bookId",-1);
 
-        // 각 요소를 클릭하면 수행할 동작 지정해두기
         click = new View.OnClickListener()
         {
             @Override
@@ -75,21 +74,15 @@ public class CreateMemoActivity extends AppCompatActivity {
 
                         String today = year + "." + month + "." + date + " " +  hour + ":"+ minute + ":" + second;
 
-                        // 입력받은 정보를 Memo 객체에 저장한다.
-                        Memo memo = new Memo();
-                        memo.setMemoId(memoId);
-                        memo.setBookId(bookId);
-                        memo.setMemoText(editText_memo_text.getText().toString());
-                        memo.setMemoDate(today);
-
                         try
                         {
-                            // json 객체에 입력받은 정보를 저장한다.
+                            // JsonArray 에 추가하기 위해서
+                            // 입력받은 메모 정보를 jsonObject 에 저장한다.
                             JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("memoId", memo.getMemoId());
-                            jsonObject.put("bookId", memo.getBookId());
-                            jsonObject.put("memoText", memo.getMemoText());
-                            jsonObject.put("memoDate", memo.getMemoDate());
+                            jsonObject.put("memoId", memoId);
+                            jsonObject.put("bookId", bookId);
+                            jsonObject.put("memoText", editText_memo_text.getText().toString());
+                            jsonObject.put("memoDate", today);
 
                             // 메모를 구분하기 위해 저장된 메모의 memoId 가 겹치지 않도록 memoInfo 에 저장된 memoId의 값을 1 증가시킨다.
                             SharedPreferences.Editor editor = memoInfo.edit();
@@ -98,37 +91,30 @@ public class CreateMemoActivity extends AppCompatActivity {
 
                             //Log.d(TAG, "1증가시키고 저장해둔 memoId" + memoInfo.getInt("memoId",0));
 
-                            // 기존에 저장된 jsonArray에 저장하기 위해서
-                            // SharedPreference bookInfo 파일에서 "toReadBookLIst" 키로 저장된 String 값을 불러온다.
+                            // 기존에 저장된 jsonArray 에 저장하기 위해서
+                            // SharedPreference bookInfo 파일에서 "memoList" 키로 저장된 String 값을 불러온다.
                             memoListString = memoInfo.getString("memoList", null);
 
-                            // 저장된 값이 있을 때
+                            // 저장된 문자열이 있을 때는 jsonArray 형태로 변환한다.
                             if(memoListString != null)
                             {
                                 jsonArray = new JSONArray(memoListString);
                                 //Log.d(TAG, "저장되어 있던 JsonArray 길이 : " + jsonArray.length());
-
-                                jsonArray.put(jsonObject);
-
-                                memoListString = jsonArray.toString();
-
-                                editor.putString("memoList", memoListString);
-                                editor.commit();
-
                                 //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
-
                             }
                             else
                             {
-                                // 처음 저장할 때
+                                // 저장된 문자열이 없을 때는 JsonArray 객체를 생성한다.
                                 jsonArray = new JSONArray();
-                                jsonArray.put(jsonObject);
-
-                                memoListString = jsonArray.toString();
-                                editor.putString("memoList", memoListString);
-                                editor.commit();
                                 //Log.d(TAG, "하나 추가한 뒤 JsonArray 길이 : " + jsonArray.length());
                             }
+
+                            // JsonArray 에 jsonObject 를 추가하고 문자열 형태로 바꾼 뒤
+                            // "memoList" 키를 이용해서 값을 저장한다.
+                            jsonArray.put(jsonObject);
+                            memoListString = jsonArray.toString();
+                            editor.putString("memoList", memoListString);
+                            editor.commit();
 
                         }
                         catch (Exception e)

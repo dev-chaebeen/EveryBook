@@ -131,37 +131,39 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                                 {
                                                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                                                    int bookId = jsonObject.getInt("bookId");
-                                                    String img = jsonObject.getString("img");
-                                                    String title = jsonObject.getString("title");
-                                                    String writer = jsonObject.getString("writer");
-                                                    String publisher = jsonObject.getString("publisher");
-                                                    String publishDate = jsonObject.getString("publishDate");
-                                                    String insertDate = jsonObject.getString("insertDate");
-                                                    String startDate = jsonObject.getString("startDate");
-                                                    String endDate = jsonObject.getString("endDate");
-                                                    String readTime = jsonObject.getString("readTime");
-                                                    String state = jsonObject.getString("state");
-                                                    int starNum = jsonObject.getInt("starNum");
+                                                    if(jsonObject.getInt("bookId") != bookId)
+                                                    {
+                                                        int bookId = jsonObject.getInt("bookId");
+                                                        String img = jsonObject.getString("img");
+                                                        String title = jsonObject.getString("title");
+                                                        String writer = jsonObject.getString("writer");
+                                                        String publisher = jsonObject.getString("publisher");
+                                                        String publishDate = jsonObject.getString("publishDate");
+                                                        String insertDate = jsonObject.getString("insertDate");
+                                                        String startDate = jsonObject.getString("startDate");
+                                                        String endDate = jsonObject.getString("endDate");
+                                                        String readTime = jsonObject.getString("readTime");
+                                                        String state = jsonObject.getString("state");
+                                                        int starNum = jsonObject.getInt("starNum");
 
-                                                    Book book = new Book();
-                                                    book.setBookId(bookId);
-                                                    //book.setImg(img);
-                                                    book.setTitle(title);
-                                                    book.setWriter(writer);
-                                                    book.setPublisher(publisher);
-                                                    book.setPublishDate(publishDate);
-                                                    book.setInsertDate(insertDate);
-                                                    book.setStartDate(startDate);
-                                                    book.setEndDate(endDate);
-                                                    book.setReadTime(readTime);
-                                                    book.setState(state);
-                                                    book.setStarNum(starNum);
-                                                    bookArrayList.add(0, book);
-
+                                                        Book book = new Book();
+                                                        book.setBookId(bookId);
+                                                        book.setImg(img);
+                                                        book.setTitle(title);
+                                                        book.setWriter(writer);
+                                                        book.setPublisher(publisher);
+                                                        book.setPublishDate(publishDate);
+                                                        book.setInsertDate(insertDate);
+                                                        book.setStartDate(startDate);
+                                                        book.setEndDate(endDate);
+                                                        book.setReadTime(readTime);
+                                                        book.setState(state);
+                                                        book.setStarNum(starNum);
+                                                        bookArrayList.add(0, book);
+                                                    }
                                                 }
 
-                                                Log.d(TAG, "저장되어있는 bookArrayList.size : " + bookArrayList.size());
+                                                Log.d(TAG, "삭제 뒤 저장되어있는 bookArrayList.size : " + bookArrayList.size());
 
                                             }
                                             catch (Exception e)
@@ -169,16 +171,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                                 System.out.println(e.toString());
                                             }
 
-                                            for (int j = 0; j < bookArrayList.size() ; j++)
-                                            {
-                                                Book book = bookArrayList.get(j);
-                                                if(bookId == book.getBookId())
-                                                {
-                                                    bookArrayList.remove(j);
-                                                }
-                                            }
-
-                                            Log.d(TAG, "삭제한 뒤 bookArrayList.size : " + bookArrayList.size());
 
                                             /// JSONArray 로 변환해서 다시 저장하기
                                             JSONArray jsonArray = new JSONArray();
@@ -218,8 +210,6 @@ public class ReadingBookInfoActivity extends AppCompatActivity
                                             SharedPreferences.Editor editor = bookInfo.edit();
                                             editor.putString("bookList", bookListString);
                                             editor.commit();
-
-                                            Log.d(TAG, "삭제한 뒤 저장되어있는 bookListString : " + bookListString);
 
                                         }
 

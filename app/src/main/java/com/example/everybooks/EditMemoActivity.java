@@ -27,7 +27,6 @@ public class EditMemoActivity extends AppCompatActivity
     // 인텐트로 전달받는 데이터
     String title;
     String memoText;
-    //int position;
     int memoId;
     final String TAG = "테스트";
 
@@ -48,7 +47,6 @@ public class EditMemoActivity extends AppCompatActivity
         editText_memo_text = findViewById(R.id.memo_text);
 
         // 인텐트로 전달받은 데이터 수신
-        //position = getIntent().getIntExtra("position", -1);
         memoId = getIntent().getIntExtra("memoId", -1);
         title = getIntent().getStringExtra("title");
         memoText = getIntent().getStringExtra("memoText");
@@ -64,6 +62,11 @@ public class EditMemoActivity extends AppCompatActivity
                     case R.id.save:
 
                         // save 를 클릭하면 전달받은 memoId 에 해당하는 메모 객체를 찾아서 메모 내용을 변경해준다.
+
+                        // memoInfo 파일에 문자열로 저장되어있는 메모리스트를 불러온다.
+                        // jsonObject 형태로 접근하기 위해서 문자열을 JsonArray 의 형태로 바꿔준다.
+                        // 전달받은 memoId 와 동일한 memoId 를 가지고 있는 jsonObject 의 값을 입력받은 값으로 바꿔준다.
+                        // jsonArray 를 문자열의 형태로 바꿔서 "memoList" 키의 값으로 저장한다.
                         SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
                         String memoListString = memoInfo.getString("memoList", null);
 
@@ -94,7 +97,7 @@ public class EditMemoActivity extends AppCompatActivity
                         finish();
 
 
-                        // 기존
+                        // 기존 코드
                         // save를 클릭하면 인텐트로 전달받은 position 에 해당하는 아이디를 가진 메모 객체를 찾아서 메모 내용을 변경해준다
                         /*
                         MemoAdapter memoAdapter = new MemoAdapter();
@@ -126,7 +129,7 @@ public class EditMemoActivity extends AppCompatActivity
     {
         super.onResume();
 
-        // 배치하기
+        // 인텐트로 전달받은 정보를 뷰 요소에 배치한다.
         textView_title.setText(title);
         editText_memo_text.setText(memoText);
     }

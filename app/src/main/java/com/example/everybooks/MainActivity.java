@@ -144,7 +144,6 @@ public class MainActivity extends AppCompatActivity
                     String readTime = jsonObject.getString("readTime");
                     int starNum = jsonObject.getInt("starNum");
 
-
                     Book book = new Book();
                     book.setBookId(bookId);
                     book.setImg(img);

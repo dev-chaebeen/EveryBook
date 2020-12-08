@@ -85,7 +85,7 @@ public class EditBookInfoActivity extends AppCompatActivity
         editText_publisher = findViewById(R.id.publisher);
         editText_publish_date = findViewById(R.id.publish_date);
 
-        // 전달받은 데이터 저장
+        // 인텐트로 전달받은 데이터 저장
         bookId = getIntent().getIntExtra("bookId", -1);
 
         click = new View.OnClickListener()
@@ -97,26 +97,25 @@ public class EditBookInfoActivity extends AppCompatActivity
                 {
                     case R.id.edit :
 
-                    // edit 을 클릭하면 사용자에게 입력받은 값을 저장해서 그 값으로 책의 정보를 수정한다.
-                    // 전달받은 책의 상태에 적합한 리스트에 책이 저장되도록 한다.
-                    String title = editText_title.getText().toString();
-                    String writer = editText_writer.getText().toString();
-                    String publisher = editText_publisher.getText().toString();
-                    String publishDate = editText_publish_date.getText().toString();
+                        // 사용자에게 입력받은 값을 변수에 담는다.
+                        String title = editText_title.getText().toString();
+                        String writer = editText_writer.getText().toString();
+                        String publisher = editText_publisher.getText().toString();
+                        String publishDate = editText_publish_date.getText().toString();
 
-                    // ImageView 의 resource를 bitmap 으로 가져오기
-                    BitmapDrawable drawable = (BitmapDrawable) imageView_img.getDrawable();
-                    Bitmap bitmap = drawable.getBitmap();
+                        // 이미지의 경우 문자열로 저장하기 위해서 ImageView 의 이미지를 bitmap 으로 가져온뒤 Bitmap 을 문자열로 바꾼다.
+                        BitmapDrawable drawable = (BitmapDrawable) imageView_img.getDrawable();
+                        Bitmap bitmap = drawable.getBitmap();
+                        Util util = new Util();
+                        String imgString = util.bitMapToString(bitmap);
 
-                    // Bitmap을 문자열로 바꾸기
-                    Util util = new Util();
-                    String imgString = util.bitMapToString(bitmap);
+                        Log.d(TAG, "바꾸려는 제목 : " + title );
 
-                    Log.d(TAG, "바꾸려는 제목 : " + title );
-
-
-                        // 읽을 책 리스트를 얻어와서 전달받은 bookId 와 일치하는 book 객체의 데이터를 입력받은 값으로 바꿔준다.
-
+                        // bookInfo 파일에 "bookList" 키의 값으로 저장되어있는 책 리스트 정보를 가져온다.
+                        // jsonObject 단위로 접근하기 위해 문자열을 JsonArray 형태로 바꾼다.
+                        // 인텐트로 전달받은 bookId 와 동일한 bookId 를 가진 jsonObject 찾는다.
+                        // jsonObject 의 값을 사용자에게 입력받은 값으로 바꾼다.
+                        // jsonArray 를 문자열의 형태로 다시 바꾼뒤 "bookList" 키의 값으로 저장한다.
                         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
                         String bookListString= bookInfo.getString("bookList", null);
 
@@ -148,7 +147,7 @@ public class EditBookInfoActivity extends AppCompatActivity
                             System.out.println(e.toString());
                         }
 
-
+                        // 정보 변경이 끝나면 메인 액티비티로 화면을 전환하고 현재 액티비티를 종료한다.
                         intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -158,7 +157,6 @@ public class EditBookInfoActivity extends AppCompatActivity
                     case R.id.delete :
 
                         // delete 를 클릭하면 책을 삭제한다.
-                        // 책의 상태에 따라 알맞은 리스트에서 삭제되도록 한다.
                         AlertDialog.Builder builder = new AlertDialog.Builder(EditBookInfoActivity.this);
                         builder.setMessage("책을 삭제하시겠습니까?");
                         builder.setPositiveButton("확인",
@@ -167,7 +165,11 @@ public class EditBookInfoActivity extends AppCompatActivity
                                     {
 
                                         Log.d(TAG, "읽을 책 편집 화면에서 삭제 버튼 클릭 ");
-                                        // 저장되어있는 읽을 책 리스트를 불러온다.
+
+                                        // 문자열로 저장되어있는 읽을 책 리스트를 불러온 뒤 jsonArray 의 형태로 바꾼다.
+                                        // JsonObject 단위로 삭제할 수 없기 때문에 전달받은 bookId 와 일치하지 않는 jsonObject 만 ArrayList<Book> 에 담는다.
+                                        // ArrayList<Book> 에 담긴 Book 객체를 jsonObject 로 바꾼 다음 JsonArray 에 담고 문자열의 형태로 바꾼다.
+                                        // 문자열을 "bookList" 키의 값으로 저장한다.
                                         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
                                         String bookListString = bookInfo.getString("bookList", null);
                                         ArrayList<Book> bookArrayList = new ArrayList<>();
@@ -178,42 +180,43 @@ public class EditBookInfoActivity extends AppCompatActivity
                                             {
                                                 JSONArray jsonArray = new JSONArray(bookListString);
 
-                                                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
                                                 for (int i = 0; i < jsonArray.length(); i++)
                                                 {
                                                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                                                    int bookId = jsonObject.getInt("bookId");
-                                                    String img = jsonObject.getString("img");
-                                                    String title = jsonObject.getString("title");
-                                                    String writer = jsonObject.getString("writer");
-                                                    String publisher = jsonObject.getString("publisher");
-                                                    String publishDate = jsonObject.getString("publishDate");
-                                                    String insertDate = jsonObject.getString("insertDate");
-                                                    String startDate = jsonObject.getString("startDate");
-                                                    String endDate = jsonObject.getString("endDate");
-                                                    String readTime = jsonObject.getString("readTime");
-                                                    String state = jsonObject.getString("state");
-                                                    int starNum = jsonObject.getInt("starNum");
+                                                    if(jsonObject.getInt("bookId") != bookId)
+                                                    {
+                                                        int bookId = jsonObject.getInt("bookId");
+                                                        String img = jsonObject.getString("img");
+                                                        String title = jsonObject.getString("title");
+                                                        String writer = jsonObject.getString("writer");
+                                                        String publisher = jsonObject.getString("publisher");
+                                                        String publishDate = jsonObject.getString("publishDate");
+                                                        String insertDate = jsonObject.getString("insertDate");
+                                                        String startDate = jsonObject.getString("startDate");
+                                                        String endDate = jsonObject.getString("endDate");
+                                                        String readTime = jsonObject.getString("readTime");
+                                                        String state = jsonObject.getString("state");
+                                                        int starNum = jsonObject.getInt("starNum");
 
-                                                    Book book = new Book();
-                                                    book.setBookId(bookId);
-                                                    book.setImg(img);
-                                                    book.setTitle(title);
-                                                    book.setWriter(writer);
-                                                    book.setPublisher(publisher);
-                                                    book.setPublishDate(publishDate);
-                                                    book.setInsertDate(insertDate);
-                                                    book.setStartDate(startDate);
-                                                    book.setEndDate(endDate);
-                                                    book.setReadTime(readTime);
-                                                    book.setState(state);
-                                                    book.setStarNum(starNum);
-                                                    bookArrayList.add(0, book);
-
+                                                        Book book = new Book();
+                                                        book.setBookId(bookId);
+                                                        book.setImg(img);
+                                                        book.setTitle(title);
+                                                        book.setWriter(writer);
+                                                        book.setPublisher(publisher);
+                                                        book.setPublishDate(publishDate);
+                                                        book.setInsertDate(insertDate);
+                                                        book.setStartDate(startDate);
+                                                        book.setEndDate(endDate);
+                                                        book.setReadTime(readTime);
+                                                        book.setState(state);
+                                                        book.setStarNum(starNum);
+                                                        bookArrayList.add(0, book);
+                                                    }
                                                 }
 
-                                                Log.d(TAG, "저장되어있는 bookList : " + bookArrayList.size());
+                                                Log.d(TAG, " 삭제 뒤 저장되어있는 bookList : " + bookArrayList.size());
 
                                             }
                                             catch (Exception e)
@@ -221,30 +224,12 @@ public class EditBookInfoActivity extends AppCompatActivity
                                                 System.out.println(e.toString());
                                             }
 
-                                            for (int j = 0; j < bookArrayList.size() ; j++)
-                                            {
-                                                Book book = bookArrayList.get(j);
-                                                if(bookId == book.getBookId())
-                                                {
-                                                    bookArrayList.remove(j);
-                                                    Log.d(TAG, "삭제할 북아이디, 인덱스 :" + book.getBookId() + "," + j);
-                                                }
-                                            }
-
-                                            Log.d(TAG, "삭제한 뒤 bookArrayList.size : " + bookArrayList.size());
-
-                                            // test
-                                            //ToReadBookAdapter adapter = new ToReadBookAdapter(getApplicationContext(), bookArrayList);
-
-
-                                            /// JSONArray 로 변환해서 다시 저장하기
                                             JSONArray jsonArray = new JSONArray();
 
                                             for (int i = 0; i < bookArrayList.size(); i++)
                                             {
                                                 Book book = bookArrayList.get(i);
 
-                                                // json 객체에 입력받은 값을 저장한다.
                                                 try
                                                 {
                                                     JSONObject bookJson = new JSONObject();
@@ -280,8 +265,7 @@ public class EditBookInfoActivity extends AppCompatActivity
 
                                         }
 
-                                        // 관련된 메모 삭제
-                                        // 저장되어있는 메모 리스트를 불러온다.
+                                        // 삭제되는 책과 관련된 메모를 삭제하기 위해서 저장되어있는 메모 리스트를 불러온다.
                                         SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
                                         String memoListString = memoInfo.getString("memoList", null);
                                         ArrayList<Memo> allMemoList = new ArrayList<>();
@@ -320,14 +304,14 @@ public class EditBookInfoActivity extends AppCompatActivity
                                             }
 
 
-                                            /// JSONArray 로 변환해서 다시 저장하기
+                                            // ArrayList<Memo> 에 담긴 Memo 객체를 JsonObject 로 바꾸고 JsonArray 에 담는다.
+                                            // JsonArray 를 문자열로 바꿔서 "memoList" 키의 값으로 저장한다.
                                             JSONArray jsonArray = new JSONArray();
 
                                             for (int i = 0; i < allMemoList.size(); i++)
                                             {
                                                 Memo memo = allMemoList.get(i);
 
-                                                // json 객체에 입력받은 값을 저장한다.
                                                 try
                                                 {
                                                     JSONObject jsonObject = new JSONObject();
@@ -353,12 +337,11 @@ public class EditBookInfoActivity extends AppCompatActivity
                                             editor.commit();
 
                                             //Log.d(TAG, "삭제한 뒤 저장되어있는 memoListString : " + afterMemoListString);
-
                                         }
-
 
                                         dialog.dismiss();
 
+                                        // 정보 삭제가 끝나면 메인 액티비티로 화면을 전환하고 현재 액티비티를 종료한다.
                                         intent = new Intent(getApplicationContext(), MainActivity.class);
                                         startActivity(intent);
 
@@ -430,7 +413,9 @@ public class EditBookInfoActivity extends AppCompatActivity
         String publishDate="";
         String imgString="";
 
-        // 전달받은 bookId 에 해당하는 정보를 보여주기 위해서
+        // 전달받은 bookId 에 해당하는 정보를 보여주기 위해서 저장되어있는 책 리스트를 불러온다.
+        // 문자열의 형태로 저장되어있기 때문에 jsonObject 로 접근하기 위해서 JsonArray 의 형태로 바꿔준다.
+        // 전달받은 bookId 와 동일한 bookId 를 가지고 있는 jsonObject 에 저장된 값을 변수에 담아준다.
         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
         String bookListString = bookInfo.getString("bookList", null);
 
@@ -457,6 +442,8 @@ public class EditBookInfoActivity extends AppCompatActivity
         }
 
 
+        // 변수에 담은 저장된 정보들을 뷰 요소에 배치해준다.
+        // 이미지의 경우 문자열로 저장되어 있기 때문에 비트맵으로 바꿔서 배치한다.
         Util util = new Util();
         Bitmap bitmap  = util.stringToBitmap(imgString);
         imageView_img.setImageBitmap(bitmap);

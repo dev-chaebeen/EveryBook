@@ -74,6 +74,15 @@ public class LoginActivity extends AppCompatActivity
                         break;
 
                     case R.id.login:
+
+                        // ! 거시적 → 미시적으로 설명해야한다.
+
+                        // 로그인 기능
+                        // 1. 사용자에게 이메일과 패스워드를 입력받는다.
+                        // 2. 입력받은 이메일이 저장된 회원정보에 존재하는지 확인한다.
+                        // 3. 등록된 이메일이라면 이메일을 키값으로 저장되어있는 비밀번호와 사용자에게 입력받은 비밀번호가 일치하는지 확인한다.
+                        // 4. 일치한다면 로그인 성공, 자동로그인 값으로 입력받은 이메일과 비밀번호를 저장한다.
+
                         // userInfo 파일을 불러와서 입력받은 이메일이 존재하는지 확인한다.
                         SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
                         String userInfoString = userInfo.getString(textInputEditText_email.getText().toString(), "false");
@@ -142,17 +151,15 @@ public class LoginActivity extends AppCompatActivity
         String email = getIntent().getStringExtra("email");
         textInputEditText_email.setText(email);
 
-        // 최초 로그인할 때 이후로는 자동로그인을 하기 위해서 autoLogin 파일에 저장해둔 loginUser 값을 받아온다.
-
+        // 최초 로그인 이후로는 자동로그인을 하기 위해서 autoLogin 파일에 저장해둔 loginUser 값을 받아온다.
         SharedPreferences autoLogin = getSharedPreferences("autoLogin",MODE_PRIVATE);
         loginUser = autoLogin.getString("loginUser", null);
 
         // SharedPreference autoLogin 에 저장된 loginUser 가 null 값이 아니라면
         if(loginUser != null)
         {
-
             // "email, password" 의 형태로 저장했기 때문에 "," 을 기준으로 문자열을 나눠서 String 배열에 값을 담는다.
-            // loginEmailPassword[0] 에 email , loginEmailPassword[1]에 password 가 담긴다.
+            // loginEmailPassword[0] 에 email , loginEmailPassword[1]에 password 값이 담긴다.
             String[] loginEmailPassword = loginUser.split(",");
 
             // autoLogin 에 저장되어있는 이메일 값이 userInfo 에 존재하는지 확인한다.
@@ -169,8 +176,8 @@ public class LoginActivity extends AppCompatActivity
             }
             else
             {
-                try {
-
+                try
+                {
                     // autoLogin 에 저장되어있는 이메일 값이 userInfo 에 존재한다면 해당하는 패스워드 정보를 가져온다.
                     JSONObject jsonObject = new JSONObject(userInfoString);
                     String password = jsonObject.getString("password");
@@ -186,20 +193,17 @@ public class LoginActivity extends AppCompatActivity
                     }
                     else
                     {
-                        // 일치하지 않는다면 로그인 화면으로 전환
+                        // 일치하지 않는다면 로그인 화면으로 전환한다.
                         intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);
                         finish();
                     }
-
-
-                } catch (JSONException e) {
+                }
+                catch (JSONException e)
+                {
                     e.printStackTrace();
                 }
             }
         }
-        // SharedPreference autoLogin 에 저장된 loginUser 가 null 이라면
-
     }
-
 }

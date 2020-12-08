@@ -101,6 +101,7 @@ public class EditProfileActivity extends AppCompatActivity
                     case R.id.edit_photo :
 
                         // edit_photo 클릭했을 때 팝업 메뉴 띄우기
+                        // 1. 카메라  2.갤러리  3. 기본이미지
                         PopupMenu popupMenu = new PopupMenu(getApplicationContext(), v);
                         getMenuInflater().inflate(R.menu.img_menu, popupMenu.getMenu());
 
@@ -112,7 +113,6 @@ public class EditProfileActivity extends AppCompatActivity
                                 switch(menuItem.getItemId())
                                 {
                                     case R.id.camera :
-                                        //openCamera();
                                         dispatchTakePictureIntent();
                                         break;
 
@@ -121,6 +121,8 @@ public class EditProfileActivity extends AppCompatActivity
                                         break;
 
                                     case R.id.basic :
+                                        // 기본이미지를 클릭하면 저장되어있는 기본이미지를 이미지뷰에 보여준 뒤
+                                        // 이미지뷰의 이미지를 Bitmap 으로 변환하고, Bitmap 을 문자열로 변환해서 img 변수 담아준다.
                                         imageView_img.setImageResource(R.drawable.ic_account);
 
                                         BitmapDrawable drawable = (BitmapDrawable) imageView_img.getDrawable();
@@ -129,18 +131,13 @@ public class EditProfileActivity extends AppCompatActivity
                                         img = util.bitMapToString(bitmap);
 
                                         Toast.makeText(getApplicationContext(), "사진이 변경되었습니다.", Toast.LENGTH_SHORT).show();
-
                                         break;
-
                                 }
-
                                 return true;
                             }
-
                         });
 
-                        popupMenu.show();// 팝업 메뉴 보이기
-
+                        popupMenu.show();
                         break;
 
                     case R.id.edit_nickname :
@@ -148,7 +145,6 @@ public class EditProfileActivity extends AppCompatActivity
                         break;
 
                     case R.id.withdraw :
-                        // withdraw 클릭했을 때 수행할 동작
                         withdraw();
                         break;
                 }
@@ -160,8 +156,8 @@ public class EditProfileActivity extends AppCompatActivity
         linearLayout_edit_nickname.setOnClickListener(click);
         linearLayout_withdraw.setOnClickListener(click);
 
-
         // 현재 로그인 되어 있는 이메일 정보를 가져온다.
+        // todo 명확하게 설명하기
         // email,password 의 문자열로 저장되어있으므로 , 을 기준으로 문자열을 나눠서 문자열 배열에 저장한다.
         // 배열의 0번째 칸에 email ,  1번째 칸에 password 정보가 담긴다.
         autoLogin = getSharedPreferences("autoLogin", MODE_PRIVATE);
@@ -189,9 +185,11 @@ public class EditProfileActivity extends AppCompatActivity
 
         //Log.d(TAG, "EditProfileActivity, 저장되어있던 이미지" + img);
 
-        //  유저 이미지, 닉네임, 이메일 정보 보여주기
+        // 유저 이미지, 닉네임, 이메일 정보를 뷰 요소에 배치해준다.
+        // 이미지의 경우 문자열로 저장되어있으므로 비트맵으로 변환해서 배치해준다.
+        // todo 어떤 클래스인지 설명하기
         Util util = new Util();
-        Bitmap bitmap =util.stringToBitmap(img);
+        Bitmap bitmap = util.stringToBitmap(img);
         imageView_img.setImageBitmap(bitmap);
         textView_user_nickname.setText(nickname);
         textView_user_email.setText(loginEmail);
@@ -199,7 +197,8 @@ public class EditProfileActivity extends AppCompatActivity
     }// onCreate()
 
     @Override
-    protected void onPause() {
+    protected void onPause()
+    {
         super.onPause();
 
         // 해당 이메일을 키로 저장되어있는 유저의 정보를 가져온다.
@@ -231,18 +230,17 @@ public class EditProfileActivity extends AppCompatActivity
         editText.setText(nickname);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("닉네임 변경");                    // 다이얼로그 제목
-        builder.setMessage("변경할 닉네임을 입력해주세요.");  // 다이얼로그 내용
+        builder.setTitle("닉네임 변경");
+        builder.setMessage("변경할 닉네임을 입력해주세요.");
         builder.setView(editText);
         builder.setPositiveButton("입력",
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which)
                 {
-                    // 입력 클릭했을 때
-                    // 변경한 닉네임 저장
-
                     try
                     {
+                        // 변경한 닉네임을 저장하기 위해서 회원정보를 담고 있는 jsonObject 의 닉네임을 변경해준다.
+                        // 현재 로그인 되어있는 유저 이메일을 키 값으로 jsonObject 를 문자열의 형태로 저장한다.
                         SharedPreferences.Editor editor = userInfo.edit();
                         jsonObject.put("nickname", editText.getText().toString());
                         editor.putString(loginEmail, jsonObject.toString());
@@ -254,10 +252,10 @@ public class EditProfileActivity extends AppCompatActivity
                     {
                            System.out.println(e.toString());
                     }
-                    // test 바꾼 닉네임 출력
+
                     Toast.makeText(getApplicationContext(), "닉네임이 변경되었습니다." ,Toast.LENGTH_SHORT).show();
 
-                    // 변경된 닉네임을 반영하기 위해 액티비티 다시 호출
+                    // 변경된 닉네임을 반영하기 위해 액티비티를 다시 호출한다.
                     intent = new Intent(getApplicationContext(), EditProfileActivity.class);
                     startActivity(intent);
 
@@ -286,18 +284,18 @@ public class EditProfileActivity extends AppCompatActivity
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        // 로그인된 이메일을 키로 가진 회원 정보 삭제
+                        // 로그인된 이메일을 키로 가진 회원 정보(jsonObject)를 삭제한다.
                         SharedPreferences.Editor editor = userInfo.edit();
                         editor.remove(loginEmail);
                         editor.commit();
                         Toast.makeText(getApplicationContext(), "탈퇴가 완료되었습니다." ,Toast.LENGTH_SHORT).show();
 
-                        // 자동로그인 정보 삭제
+                        // 자동로그인 정보를  같이 삭제한다.
                         editor = autoLogin.edit();
                         editor.clear();
                         editor.commit();
 
-                        // 로그인 화면으로 전환
+                        // 로그인 화면으로 전환한다
                         intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);
 

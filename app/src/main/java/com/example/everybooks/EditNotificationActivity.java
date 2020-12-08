@@ -63,6 +63,11 @@ public class EditNotificationActivity extends AppCompatActivity
                     case R.id.save:
 
                         // save 를 클릭하면 전달받은 notiId 에 해당하는 알림 객체를 찾아서 알림 내용을 변경해준다.
+
+                        // notiInfo 파일에 문자열로 저장되어있는 알림리스트를 불러온다.
+                        // jsonObject 형태로 접근하기 위해서 문자열을 JsonArray 의 형태로 바꿔준다.
+                        // 전달받은 notiId 와 동일한 notiId 를 가지고 있는 jsonObject 의 값을 입력받은 값으로 바꿔준다.
+                        // jsonArray 를 문자열의 형태로 바꿔서 "notiList" 키의 값으로 저장한다.
                         notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
                         notiListString = notiInfo.getString("notiList", null);
 
@@ -98,6 +103,7 @@ public class EditNotificationActivity extends AppCompatActivity
                         break;
 
                     case R.id.time :
+
                         // 시간을 클릭하면 시간을 입력받는 다이얼로그가 나타난다.
                         dialogTimePicker();
                 }
@@ -114,6 +120,11 @@ public class EditNotificationActivity extends AppCompatActivity
     {
         super.onResume();
 
+        // 전달받은 notiId 와 동일한 값을 가진 알림 정보를 보여준다.
+
+        // notiInfo 파일에 문자열로 저장되어있는 알림리스트를 불러온다.
+        // jsonObject 형태로 접근하기 위해서 문자열을 JsonArray 의 형태로 바꿔준다.
+        // 전달받은 notiId 와 동일한 notiId 를 가지고 있는 jsonObject 의 값을 뷰 요소에 배치해서 보여준다.
         notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
         notiListString = notiInfo.getString("notiList", null);
 
@@ -152,13 +163,15 @@ public class EditNotificationActivity extends AppCompatActivity
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute)
                     {
+                        // 타임피커로 시간을 설정하면 뷰 요소에 설정된 시간을 보여주고
+                        // 변수에 설정된 값을 담는다.
                         textView_time.setText(hourOfDay + ":" + minute);
                         hour = hourOfDay;
                         min = minute;
                     }
                 };
 
-        //전달받은 시간으로 타임피커 초기값을 설정한다.
+        // 알림에 저장되어있던 시간으로 타임피커 초기값을 설정한다.
         TimePickerDialog alert = new TimePickerDialog(this,
                 mTimeSetListener, hour , min , true);
         alert.show();
