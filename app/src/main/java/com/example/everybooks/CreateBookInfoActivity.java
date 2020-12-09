@@ -138,7 +138,7 @@ public class CreateBookInfoActivity extends AppCompatActivity
                         book.setInsertDate(today);
                         book.setStartDate("");
                         book.setEndDate("");
-                        book.setReadTime("");
+                        book.setReadTime("00:00:00");
                         book.setStarNum(0);
 
                         try

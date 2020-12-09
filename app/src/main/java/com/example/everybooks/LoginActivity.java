@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity
 
                         // ! 거시적 → 미시적으로 설명해야한다.
 
-                        // 로그인 기능
+                        // 로그인 기능 동작
                         // 1. 사용자에게 이메일과 패스워드를 입력받는다.
                         // 2. 입력받은 이메일이 저장된 회원정보에 존재하는지 확인한다.
                         // 3. 등록된 이메일이라면 이메일을 키값으로 저장되어있는 비밀번호와 사용자에게 입력받은 비밀번호가 일치하는지 확인한다.
@@ -146,8 +146,7 @@ public class LoginActivity extends AppCompatActivity
     {
         super.onResume();
 
-
-        // 인텐트에서 메일 데이터를 받아서 로그인 이메일 작성 창에 보여준다.
+        // 인텐트에서 이메일 데이터를 받아서 로그인 이메일 작성 창에 보여준다.
         String email = getIntent().getStringExtra("email");
         textInputEditText_email.setText(email);
 
