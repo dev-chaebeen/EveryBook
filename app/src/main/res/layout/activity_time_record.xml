@@ -161,13 +161,14 @@
         </LinearLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/book_gif"
             android:layout_width="90dp"
             android:layout_height="90dp"
             android:layout_gravity="center"
             android:src="@drawable/book_gif_1"
 
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="15dp"/>
 
         <TextView
             android:id="@+id/time"
@@ -190,7 +191,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:weightSum="2"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             >
 
             <!-- START 버튼-->
@@ -219,12 +220,6 @@
                 />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            android:layout_marginTop="10dp"
-            />
 
 
 

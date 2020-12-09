@@ -17,20 +17,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-
 import com.example.everybooks.data.Util;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TimeRecordActivity extends AppCompatActivity
 {
@@ -43,6 +40,7 @@ public class TimeRecordActivity extends AppCompatActivity
     TextView textView_time;
     Button button_start;
     Button button_stop;
+    CircleImageView circleImageView_book_gif;
 
     int bookId;
     String title;
@@ -59,8 +57,8 @@ public class TimeRecordActivity extends AppCompatActivity
     int second;
     boolean isStart;
 
-    private static Handler timeHandler;
-    Thread thread;
+    Thread timeThread;
+    Thread aniThread;
 
     Intent intent;
 
@@ -78,6 +76,7 @@ public class TimeRecordActivity extends AppCompatActivity
         textView_publisher = findViewById(R.id.publisher);
         textView_publish_date = findViewById(R.id.publish_date);
         textView_time = findViewById(R.id.time);
+        circleImageView_book_gif = findViewById(R.id.book_gif);
         button_start = findViewById(R.id.btn_start);
         button_stop = findViewById(R.id.btn_stop);
 
@@ -126,14 +125,13 @@ public class TimeRecordActivity extends AppCompatActivity
                 switch (v.getId())
                 {
                     case R.id.btn_start:
-                        // start 버튼을 클릭하면 저장되어있는 독서시간이 1초씩 증가한다.
-                        // 독서시간은 사용자가 책을 읽을 때 걸리는 시간을 기록해둔 값이다.
-
-                        // 문자열의 형태로 저장되어있는 readTime 의 형식을 시, 분, 초로 나눈다.
-                        // 스레드를 사용해 1초당 1씩 초가 증가하도록 한다.
+                        // start 버튼을 클릭하면 저장되어있는 독서시간이 1초씩 증가하고 책장이 넘어가는 애니메이션이 실행된다.
+                        // 독서시간은 사용자가 책을 읽을 때 걸리는 시간을 누적해서 기록해둔 값이다.
 
                         if(isStart)
                         {
+                            // 문자열의 형태로 저장되어있는 readTime 의 형식을 시, 분, 초로 나눈다.
+                            // 스레드를 사용해 1초당 1씩 초가 증가하도록 한다.
                             String[] hourMinuteSecond = readTime.split(":");
                             hour = Integer.parseInt(hourMinuteSecond[0]);
                             minute = Integer.parseInt(hourMinuteSecond[1]);
@@ -144,10 +142,17 @@ public class TimeRecordActivity extends AppCompatActivity
                             Log.d(TAG, "TimeRecordActivity, 스레드 실행 전 isStart : " + isStart);
 
                             TimeRecordThread timeRecordThread = new TimeRecordThread();
-                            thread = new Thread(timeRecordThread);
-                            thread.start();
-                            isStart = false;
+                            timeThread = new Thread(timeRecordThread);
+                            timeThread.start();
+
                             Log.d(TAG, "TimeRecordActivity, 스레드 실행 후 isStart : " + isStart);
+
+                            // 책장 넘어가는 스레드 실행
+                            GifThread gifThread = new GifThread();
+                            aniThread = new Thread(gifThread);
+                            aniThread.start();
+
+                            isStart = false;
 
                         }
 
@@ -160,10 +165,11 @@ public class TimeRecordActivity extends AppCompatActivity
 
                         // 스레드가 생성되지 않은 상황에서 stop 버튼 눌러도 동작하지 않도록 하기 위해서
                         // thread 가 null 이 아닐 때만 코드 동작하도록 한다.
-                        if(thread != null)
+                        if(timeThread != null)
                         {
                             // stop 버튼 클릭하면 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
-                            thread.interrupt();
+                            timeThread.interrupt();
+                            aniThread.interrupt();
 
                             // 다시 start 버튼을 클릭할 수 있도록 isStart 값을 true 로 바꾼다.
                             isStart = true;
@@ -202,47 +208,52 @@ public class TimeRecordActivity extends AppCompatActivity
         button_start.setOnClickListener(click);
         button_stop.setOnClickListener(click);
 
-        // 핸들러 클래스
-        timeHandler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                super.handleMessage(msg);
-
-                second = msg.arg1;
-
-                // 여기서 HH:MM:SS 형식으로 바꿔서 보여준다.
-
-                Log.d(TAG, "TimeRecordActivity, 형식 바꿀 때 시간 " + hour + ":" + minute + ":" + second);
-
-                // 24시간이 되면 일 단위가 1 증가하면서 시간 단위는 0이 되므로 분기해서 처리해준다.??
-                // 그러면 calendar 쓰는 이유가 있니ㅏ...
-                if(hour<24)
-                {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.HOUR_OF_DAY, hour);
-                    calendar.set(Calendar.MINUTE, minute);
-                    calendar.set(Calendar.SECOND, second);
-                    Util util = new Util();
-                    readTime= util.stringFromCalendar(calendar);
-                }
-                else
-                {
-
-                }
-
-                textView_time.setText(readTime);
-            }
-        };
-
-
-
-
 
     }
 
+    // 타임핸들러 클래스
+    Handler timeHandler = new Handler(Looper.getMainLooper())
+    {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+
+            second = msg.arg1;
+
+            // 여기서 HH:MM:SS 형식으로 바꿔서 보여준다.
+
+            Log.d(TAG, "TimeRecordActivity, 형식 바꿀 때 시간 " + hour + ":" + minute + ":" + second);
+
+            // 24시간이 되면 일 단위가 1 증가하면서 시간 단위는 0이 되므로 분기해서 처리해준다.??
+            // 그러면 calendar 쓰는 이유가 있니ㅏ...
+            if(hour<24)
+            {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND, second);
+                Util util = new Util();
+                readTime= util.stringFromCalendar(calendar);
+            }
+            else
+            {
+
+            }
+            textView_time.setText(readTime);
+        }
+    };
 
 
-
+    // 이미지 핸들러
+    Handler gifHandler = new Handler(Looper.getMainLooper())
+    {
+        @Override
+        public void handleMessage(@NonNull Message msg)
+        {
+            super.handleMessage(msg);
+            updateThread();
+        }
+    };
 
     @Override
     protected void onResume()
@@ -294,7 +305,7 @@ public class TimeRecordActivity extends AppCompatActivity
     }
 
 
-    // 스레드 클래스 생성
+    // 타임 스레드 클래스 생성
     class TimeRecordThread implements Runnable {
 
         boolean running = false;
@@ -314,6 +325,28 @@ public class TimeRecordActivity extends AppCompatActivity
                 }
                 catch (Exception e)
                 {
+                    return;
+                }
+            }
+        }
+    }
+
+
+    // 이미지 스레드 클래스 생성
+    class GifThread implements Runnable
+    {
+        @Override
+        public void run() {
+            while(true)
+            {
+                try
+                {
+                    gifHandler.sendMessage(gifHandler.obtainMessage());
+                    Thread.sleep(200);
+
+                }catch (Throwable t)
+                {
+                    System.out.println(t.toString());
                     return;
                 }
             }
@@ -361,5 +394,56 @@ public class TimeRecordActivity extends AppCompatActivity
         //알림창 실행
         manager.notify(1,notification);
 
+    }
+
+    private int i = 0;
+
+    private void updateThread()
+    {
+        int mod = i % 9;
+
+        switch (mod) {
+            case 0:
+                i++;
+                circleImageView_book_gif.setImageResource(R.drawable.book_gif_1);
+                break;
+
+            case 1:
+                i++;
+                circleImageView_book_gif.setImageResource(R.drawable.book_gif_2);
+                break;
+
+            case 2:
+                i++;
+                circleImageView_book_gif.setImageResource(R.drawable.book_gif_3);
+                break;
+
+            case 3:
+                i++;
+                circleImageView_book_gif.setImageResource(R.drawable.book_gif_4);
+                break;
+
+            case 4:
+                i++;
+                circleImageView_book_gif.setImageResource(R.drawable.book_gif_5);
+                break;
+            case 5:
+                i++;
+                circleImageView_book_gif.setImageResource(R.drawable.book_gif_6);
+                break;
+
+            case 6:
+                i++;
+                circleImageView_book_gif.setImageResource(R.drawable.book_gif_7);
+                break;
+            case 7:
+                i++;
+                circleImageView_book_gif.setImageResource(R.drawable.book_gif_8);
+                break;
+            case 8:
+                i++;
+                circleImageView_book_gif.setImageResource(R.drawable.book_gif_9);
+                break;
+        }
     }
 }
