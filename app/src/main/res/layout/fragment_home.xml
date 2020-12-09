@@ -110,7 +110,8 @@
                android:layout_width="match_parent"
                android:layout_height="50dp"
                android:layout_weight="3"
-               android:text="To READ" />
+               android:text="To READ"
+               />
 
            <Button
                android:id="@+id/btn_reading"

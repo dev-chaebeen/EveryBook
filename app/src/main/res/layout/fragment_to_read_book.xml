@@ -8,6 +8,19 @@
     android:layout_marginTop="10dp"
     >
 
+    <TextView
+        android:id="@+id/explain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        android:textSize="14sp"/>
+
     <!--리사이클러뷰-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/to_read_book_list"
@@ -27,6 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
 
    <!--  책리스트 container
     <androidx.constraintlayout.widget.ConstraintLayout

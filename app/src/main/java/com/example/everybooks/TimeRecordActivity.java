@@ -121,9 +121,7 @@ public class TimeRecordActivity extends AppCompatActivity
                         // 독서시간은 사용자가 책을 읽을 때 걸리는 시간을 기록해둔 값이다.
 
                         // 문자열의 형태로 저장되어있는 readTime 의 형식을 시, 분, 초로 나눈다.
-                        // 24시간이 넘어도 일 단위로 증가시키지 않기 위해서 Calendar 사용하지 않음??
-                        // 스레드를 사용해 1초당 1씩 초가 증가하도록 하고
-                        // 60초가 채워지면 분 + 1 , 60분이 채워지면 시 + 1 한다.
+                        // 스레드를 사용해 1초당 1씩 초가 증가하도록 한다.
 
                         if(isStart)
                         {
@@ -148,39 +146,42 @@ public class TimeRecordActivity extends AppCompatActivity
 
                     case R.id.btn_stop:
 
-                        // stop 버튼 클릭하면 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
-                        thread.interrupt();
-
-                        // 다시 start 버튼을 클릭할 수 있도록 isStart 값을 true 로 바꾼다.
-                        isStart = true;
-
-                        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-                        String bookListString = bookInfo.getString("bookList", null);
-
-                        try
+                        // 스레드가 생성되지 않은 상황에서 stop 버튼 눌러도 동작하지 않도록 하기 위해서
+                        // thread 가 null 이 아닐 때만 코드 동작하도록 한다.
+                        if(thread != null)
                         {
-                            JSONArray jsonArray = new JSONArray(bookListString);
-                            for (int i = 0; i < jsonArray.length(); i++)
+                            // stop 버튼 클릭하면 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
+                            thread.interrupt();
+
+                            // 다시 start 버튼을 클릭할 수 있도록 isStart 값을 true 로 바꾼다.
+                            isStart = true;
+
+                            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+                            String bookListString = bookInfo.getString("bookList", null);
+
+                            try
                             {
-                                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                if (bookId == jsonObject.getInt("bookId"))
+                                JSONArray jsonArray = new JSONArray(bookListString);
+                                for (int i = 0; i < jsonArray.length(); i++)
                                 {
-                                   jsonObject.put("readTime", readTime);
-                                    Log.d(TAG, "TimeRecordActivity, stop 버튼 클릭 후 변경한 jsonObject : " + jsonObject.getString("readTime"));
+                                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                                    if (bookId == jsonObject.getInt("bookId"))
+                                    {
+                                        jsonObject.put("readTime", readTime);
+                                        Log.d(TAG, "TimeRecordActivity, stop 버튼 클릭 후 변경한 jsonObject : " + jsonObject.getString("readTime"));
+                                    }
                                 }
+
+                                SharedPreferences.Editor editor = bookInfo.edit();
+                                editor.putString("bookList", jsonArray.toString());
+                                editor.commit();
+
+                            } catch (Exception e) {
+                                System.out.println(e.toString());
                             }
 
-                            SharedPreferences.Editor editor = bookInfo.edit();
-                            editor.putString("bookList", jsonArray.toString());
-                            editor.commit();
-
-
-
-                        } catch (Exception e) {
-                            System.out.println(e.toString());
+                            break;
                         }
-
-                        break;
                 }
             }
         };
@@ -199,15 +200,24 @@ public class TimeRecordActivity extends AppCompatActivity
 
                 // 여기서 HH:MM:SS 형식으로 바꿔서 보여준다.
 
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, hour);
-                calendar.set(Calendar.MINUTE, minute);
-                calendar.set(Calendar.SECOND, second);
-
                 Log.d(TAG, "TimeRecordActivity, 형식 바꿀 때 시간 " + hour + ":" + minute + ":" + second);
 
-                Util util = new Util();
-                readTime= util.stringFromCalendar(calendar);
+                // 24시간이 되면 일 단위가 1 증가하면서 시간 단위는 0이 되므로 분기해서 처리해준다.??
+                // 그러면 calendar 쓰는 이유가 있니ㅏ...
+                if(hour<24)
+                {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.HOUR_OF_DAY, hour);
+                    calendar.set(Calendar.MINUTE, minute);
+                    calendar.set(Calendar.SECOND, second);
+                    Util util = new Util();
+                    readTime= util.stringFromCalendar(calendar);
+                }
+                else
+                {
+
+                }
+
                 textView_time.setText(readTime);
             }
         };

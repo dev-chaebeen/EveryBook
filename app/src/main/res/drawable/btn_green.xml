@@ -14,7 +14,7 @@
         </shape>
     </item>
 
-    <!--클릭 상태라면-->
+   <!-- &lt;!&ndash;클릭 상태라면&ndash;&gt;
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <solid android:color="@color/dark_green">
@@ -27,7 +27,7 @@
         </shape>
     </item>
 
-    <!--버튼 사용할 수 없는 상태라면-->
+    &lt;!&ndash;버튼 사용할 수 없는 상태라면&ndash;&gt;
     <item android:state_enabled="false">
         <shape android:shape="rectangle">
             <solid android:color="@color/grey">
@@ -38,7 +38,16 @@
             </corners>
 
         </shape>
+    </item>-->
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/dark_green" />
+        </shape>
     </item>
-
+    <item android:state_pressed="false">
+        <shape>
+            <solid android:color="@color/green" />
+        </shape>
+    </item>
 
 </selector>
