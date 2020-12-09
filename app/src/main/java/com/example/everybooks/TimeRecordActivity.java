@@ -342,7 +342,7 @@ public class TimeRecordActivity extends AppCompatActivity
                 try
                 {
                     gifHandler.sendMessage(gifHandler.obtainMessage());
-                    Thread.sleep(200);
+                    Thread.sleep(150);
 
                 }catch (Throwable t)
                 {
