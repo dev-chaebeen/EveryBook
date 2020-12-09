@@ -134,32 +134,6 @@ public class TimeRecordActivity extends AppCompatActivity
 
                             Log.d(TAG, "TimeRecordActivity, readTime 에서 시분초 int로 가져오기 : " + hour + minute + second);
 
-                            // 스레드 클래스 생성
-                            class TimeRecordThread implements Runnable {
-
-                                boolean running = false;
-                                public void run()
-                                {
-                                    running = true;
-                                    while(running)
-                                    {
-                                        second += 1;
-                                        Message message = timeHandler.obtainMessage();
-                                        message.arg1 = second;
-                                        timeHandler.sendMessage(message);
-
-                                        try
-                                        {
-                                            Thread.sleep(1000);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-
                             Log.d(TAG, "TimeRecordActivity, 스레드 실행 전 isStart : " + isStart);
 
                             TimeRecordThread timeRecordThread = new TimeRecordThread();
@@ -192,7 +166,7 @@ public class TimeRecordActivity extends AppCompatActivity
                                 if (bookId == jsonObject.getInt("bookId"))
                                 {
                                    jsonObject.put("readTime", readTime);
-                                    Log.d(TAG, "TimeRecordActivity, stop 버튼 클릭 후 변경한 jsonObject : " + jsonObject.toString());
+                                    Log.d(TAG, "TimeRecordActivity, stop 버튼 클릭 후 변경한 jsonObject : " + jsonObject.getString("readTime"));
                                 }
                             }
 
@@ -297,6 +271,30 @@ public class TimeRecordActivity extends AppCompatActivity
 
     }
 
+    // 스레드 클래스 생성
+    class TimeRecordThread implements Runnable {
 
+        boolean running = false;
+        public void run()
+        {
+            running = true;
+            while(running)
+            {
+                second += 1;
+                Message message = timeHandler.obtainMessage();
+                message.arg1 = second;
+                timeHandler.sendMessage(message);
+
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch (Exception e)
+                {
+                    return;
+                }
+            }
+        }
+    }
 
 }
