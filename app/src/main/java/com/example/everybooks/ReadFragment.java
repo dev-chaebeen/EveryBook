@@ -62,7 +62,7 @@ public class ReadFragment extends Fragment
 
         if(ReadBookAdapter.readBookList.size()== 0)
         {
-            textView_explain.setText("여기는 읽은 책을 보관하는 곳이에요 ! \n 책을 클릭해서 메모를 남겨보세요.");
+            textView_explain.setText("여기는 읽은 책을 보관하는 곳이에요 ! \n 책을 클릭해서 메모를 남길 수 있어요.");
         }
     }
 

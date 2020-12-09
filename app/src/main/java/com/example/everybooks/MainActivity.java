@@ -55,8 +55,7 @@ public class MainActivity extends AppCompatActivity
     final String TAG = "테스트";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // 화면 생성
         setContentView(R.layout.activity_bottom_navi);

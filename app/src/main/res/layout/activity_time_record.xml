@@ -62,11 +62,12 @@
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textStyle="bold"
-            android:textSize="20sp"
-            android:layout_marginTop="10dp"
+            android:textSize="18sp"
+            android:text="dkdk"
+            android:layout_marginBottom="10dp"
             >
         </TextView>
 
@@ -76,8 +77,8 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:background="@null"
+            android:src="@drawable/book_fiftypeople"
             android:layout_gravity="center"
-
             />
 
         <!--책 정보-->
@@ -87,7 +88,6 @@
             android:layout_gravity="center"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
             >
             <!-- 작가 이름 -->
             <TextView
@@ -144,7 +144,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             >
 
             <TextView
@@ -153,57 +153,79 @@
                 android:layout_weight="3"
                 android:gravity="center"
                 android:text="독서 시간"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
+                android:layout_marginBottom="10dp"
                 >
             </TextView>
         </LinearLayout>
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center"
+            android:src="@drawable/book_gif_1"
+
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
         <TextView
             android:id="@+id/time"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:textSize="40dp"
-
+            android:layout_height="60dp"
+            android:textSize="30dp"
+            android:text="01:11:12"
             android:layout_gravity="center"
             android:gravity="center"
             android:background="@drawable/btn_grey"
 
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
             >
         </TextView>
-
 
         <!-- 버튼 2개 -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:gravity="center"
+            android:weightSum="2"
+            android:layout_marginTop="10dp"
             >
 
             <!-- START 버튼-->
             <Button
                 android:id="@+id/btn_start"
-                android:layout_width="180dp"
-                android:layout_height="60dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:text="START"
-                android:textSize="16dp"
+                android:textSize="14dp"
                 android:layout_marginRight="10dp"
-
+                android:background="@drawable/btn_green"
+                android:layout_weight="1"
                 />
 
             <!--STOP 버튼-->
             <Button
                 android:id="@+id/btn_stop"
-                android:layout_width="180dp"
-                android:layout_height="60dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="STOP"
-                android:textSize="16dp"
+                android:textSize="14dp"
+                android:background="@drawable/btn_green"
+                android:layout_weight="1"
                 />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            android:layout_marginTop="10dp"
+            />
+
 
 
 

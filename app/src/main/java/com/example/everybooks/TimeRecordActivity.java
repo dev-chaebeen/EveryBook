@@ -1,7 +1,13 @@
 package com.example.everybooks;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.example.everybooks.data.Util;
 
@@ -54,6 +61,8 @@ public class TimeRecordActivity extends AppCompatActivity
 
     private static Handler timeHandler;
     Thread thread;
+
+    Intent intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,6 +150,9 @@ public class TimeRecordActivity extends AppCompatActivity
                             Log.d(TAG, "TimeRecordActivity, 스레드 실행 후 isStart : " + isStart);
 
                         }
+
+                        showNoti();
+
 
                         break;
 
@@ -281,6 +293,7 @@ public class TimeRecordActivity extends AppCompatActivity
 
     }
 
+
     // 스레드 클래스 생성
     class TimeRecordThread implements Runnable {
 
@@ -307,4 +320,46 @@ public class TimeRecordActivity extends AppCompatActivity
         }
     }
 
+
+    NotificationManager manager;
+    NotificationCompat.Builder builder;
+    String CHANNEL_ID = "channel1";
+    String CHANEL_NAME = "Channel1";
+
+    public void showNoti()
+    {
+        builder = null;
+        manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        //버전 오레오 이상일 경우
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            manager.createNotificationChannel(new NotificationChannel(CHANNEL_ID, CHANEL_NAME, NotificationManager.IMPORTANCE_DEFAULT));
+            builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
+            //하위 버전일 경우
+        } else {
+            builder = new NotificationCompat.Builder(getApplicationContext());
+        }
+
+        intent = new Intent(this, MainActivity.class);
+        intent.putExtra("bookId", bookId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        //알림창 제목
+        builder.setContentTitle("Every Book");
+        //알림창 메시지
+        builder.setContentText("독서시간을 기록중입니다.");
+        //알림창 아이콘
+        builder.setSmallIcon(R.drawable.ic_etc_black_24dp);
+        //알림창 터치시 상단 알림상태창에서 알림이 자동으로 삭제되게 합니다.
+        builder.setAutoCancel(true);
+
+        //pendingIntent를 builder에 설정 해줍니다.
+        // 알림창 터치시 인텐트가 전달할 수 있도록 해줍니다.
+        builder.setContentIntent(pendingIntent);
+
+        Notification notification = builder.build();
+        //알림창 실행
+        manager.notify(1,notification);
+
+    }
 }

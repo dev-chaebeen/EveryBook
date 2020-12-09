@@ -231,6 +231,10 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
 
                     removeItem(position);
                     dialog.dismiss();
+
+                    // test
+                /*    intent = new Intent(v.getContext(), MainActivity.class);
+                    v.getContext().startActivity(intent);*/
                 }
             })
 

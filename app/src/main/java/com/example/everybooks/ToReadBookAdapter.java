@@ -36,6 +36,8 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
     Context context;
     final String TAG = "테스트";
 
+    Intent intent;
+
     // static 지우면 안된다.
     static ArrayList<Book> toReadBookList = new ArrayList<>();
 
@@ -151,6 +153,11 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                                 removeItem(position);
 
                                 dialog.dismiss();
+
+                                //test
+                                /*
+                                intent = new Intent(v.getContext(), MainActivity.class);
+                                v.getContext().startActivity(intent);*/
 
                             }
                         });
