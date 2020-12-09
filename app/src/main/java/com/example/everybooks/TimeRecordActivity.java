@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class TimeRecordActivity extends AppCompatActivity
 {
@@ -48,7 +50,7 @@ public class TimeRecordActivity extends AppCompatActivity
     int hour;
     int minute;
     int second;
-    boolean isStart = true;
+    boolean isStart;
 
     private static Handler timeHandler;
     Thread thread;
@@ -74,15 +76,15 @@ public class TimeRecordActivity extends AppCompatActivity
         // bookId 는 각각의 책을 구분하기 위해서 책이 가지고 있는 고유한 정수값이다.
         bookId = getIntent().getIntExtra("bookId", -1);
 
+        // 한번 start 버튼을 클릭한 상태에서는 다시 클릭해도 독서시간을 1초 씩 증가시키는 스레드를 새로 생성하지 않도록 하기 위해서
+        // boolean 변수에 start 버튼 클릭 가능 여부를 저장한다.
+        isStart = true;
+
         // 인텐트로 전달받은 bookId 의 책 정보를 화면에서 보여주기 위해서
         // 저장되어있는 책 리스트를 불러오고 인텐트로 전달받은 bookId 와 동일한 bookId 를 가지고 있는 책을 찾아 정보를 가져온다.
         // 가져오는 정보는 책 제목, 표지, 작가, 출판사, 출판일, 독서 시간이다.
         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
         String bookListString = bookInfo.getString("bookList", null);
-        
-        // 한번 start 버튼을 클릭한 상태에서는 다시 클릭해도 독서시간을 1초 씩 증가시키는 스레드를 새로 생성하지 않도록 하기 위해서
-        // boolean 변수에 start 버튼 클릭 여부를 저장한다.
-        isStart = true;
 
         try
         {
@@ -146,9 +148,11 @@ public class TimeRecordActivity extends AppCompatActivity
                                         message.arg1 = second;
                                         timeHandler.sendMessage(message);
 
-                                        try {
+                                        try
+                                        {
                                             Thread.sleep(1000);
-                                        } catch (Exception e)
+                                        }
+                                        catch (Exception e)
                                         {
                                             return;
                                         }
@@ -176,19 +180,28 @@ public class TimeRecordActivity extends AppCompatActivity
                         // 다시 start 버튼을 클릭할 수 있도록 isStart 값을 true 로 바꾼다.
                         isStart = true;
 
-                        readTime = hour + ":" + minute + ":" + second;
                         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
                         String bookListString = bookInfo.getString("bookList", null);
 
-                        try {
+                        try
+                        {
                             JSONArray jsonArray = new JSONArray(bookListString);
-                            for (int i = 0; i < jsonArray.length(); i++) {
+                            for (int i = 0; i < jsonArray.length(); i++)
+                            {
                                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
                                 if (bookId == jsonObject.getInt("bookId"))
                                 {
                                    jsonObject.put("readTime", readTime);
+                                    Log.d(TAG, "TimeRecordActivity, stop 버튼 클릭 후 변경한 jsonObject : " + jsonObject.toString());
                                 }
                             }
+
+                            SharedPreferences.Editor editor = bookInfo.edit();
+                            editor.putString("bookList", jsonArray.toString());
+                            editor.commit();
+
+
+
                         } catch (Exception e) {
                             System.out.println(e.toString());
                         }
@@ -210,8 +223,18 @@ public class TimeRecordActivity extends AppCompatActivity
 
                 second = msg.arg1;
 
-                // 여기서 HH:MM:SS 형식으로 바꿔서 보여준다
-                textView_time.setText(": " + second);
+                // 여기서 HH:MM:SS 형식으로 바꿔서 보여준다.
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND, second);
+
+                Log.d(TAG, "TimeRecordActivity, 형식 바꿀 때 시간 " + hour + ":" + minute + ":" + second);
+
+                Util util = new Util();
+                readTime= util.stringFromCalendar(calendar);
+                textView_time.setText(readTime);
             }
         };
 
@@ -229,6 +252,34 @@ public class TimeRecordActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
+
+        // 인텐트로 전달받은 bookId 의 책 정보를 화면에서 보여주기 위해서
+        // 저장되어있는 책 리스트를 불러오고 인텐트로 전달받은 bookId 와 동일한 bookId 를 가지고 있는 책을 찾아 정보를 가져온다.
+        // 가져오는 정보는 책 제목, 표지, 작가, 출판사, 출판일, 독서 시간이다.
+        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+        String bookListString = bookInfo.getString("bookList", null);
+
+        try
+        {
+            JSONArray jsonArray = new JSONArray(bookListString);
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                if (bookId == jsonObject.getInt("bookId"))
+                {
+                    title = jsonObject.getString("title");
+                    img = jsonObject.getString("img");
+                    writer = jsonObject.getString("writer");
+                    publisher = jsonObject.getString("publisher");
+                    publishDate = jsonObject.getString("publishDate");
+                    readTime = jsonObject.getString("readTime");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
 
         // 책 정보를 뷰 요소에 배치해서 보여준다.
         // 이미지의 경우 문자열의 형태로 저장되어있으므로 비트맵으로 변환해서 배치한다.
