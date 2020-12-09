@@ -225,11 +225,11 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
                     }
 
 
-                    //book.setStarNum((int)ratingBar.getRating());
-                    //ReadBookAdapter readBookAdapter = new ReadBookAdapter();
-                    //readBookAdapter.addItem(book);
+                    book.setStarNum((int)ratingBar.getRating());
+                    ReadBookAdapter readBookAdapter = new ReadBookAdapter();
+                    readBookAdapter.addItem(book);
 
-                    //removeItem(position);
+                    removeItem(position);
                     dialog.dismiss();
                 }
             })

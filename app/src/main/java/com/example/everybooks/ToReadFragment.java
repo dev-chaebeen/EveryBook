@@ -41,6 +41,7 @@ public class ToReadFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         view = inflater.inflate(R.layout.fragment_to_read_book, container, false);
+
         return view;
     }
 
@@ -75,6 +76,7 @@ public class ToReadFragment extends Fragment
         };
 
         floatingActionButton_add_book.setOnClickListener(click);
+
     }
 
     @Override
@@ -91,11 +93,10 @@ public class ToReadFragment extends Fragment
         super.onResume();
 
         Log.d(TAG, "ToReadFragment, toReadBookList.size : " + ToReadBookAdapter.toReadBookList.size() );
-        if(ToReadBookAdapter.toReadBookList.size()>0)
-        {
-            showItemList();
-        }
-        else if(ToReadBookAdapter.toReadBookList.size() == 0)
+
+        showItemList();
+
+        if(ToReadBookAdapter.toReadBookList.size() == 0)
         {
             textView_explain.setText("여기는 읽을 책을 보관하는 곳이에요. \n 하단의 + 버튼을 클릭하거나\n " +
                     "검색을 통해서 책을 추가할 수 있어요. \n\n ⚡ Reading 버튼을 클릭해보세요 ⚡ ");
@@ -107,8 +108,8 @@ public class ToReadFragment extends Fragment
         // 리사이클러뷰 생성
         recyclerView = view.findViewById(R.id.to_read_book_list);
         recyclerView.setHasFixedSize(true);
-        adapter = new ToReadBookAdapter(getContext());
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        adapter = new ToReadBookAdapter(getContext());
         recyclerView.setAdapter(adapter);
     }
 

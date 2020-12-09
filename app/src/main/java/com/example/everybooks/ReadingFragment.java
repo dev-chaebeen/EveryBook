@@ -55,11 +55,10 @@ public class ReadingFragment extends Fragment
         super.onResume();
 
         Log.d(TAG, "ReadingFragment, readingBookList.size : " + ReadingBookAdapter.readingBookList.size() );
-        if(ReadingBookAdapter.readingBookList.size()>0)
-        {
-            showItemList();
-        }
-        else if(ReadingBookAdapter.readingBookList.size()== 0)
+
+        showItemList();
+
+        if(ReadingBookAdapter.readingBookList.size()== 0)
         {
             textView_explain.setText("여기는 읽고 있는 책을 보관하는 곳이에요 ! \n 책을 클릭해서 메모를 남겨보세요.\n " +
                     "책을 다 읽으면 길게 클릭해보세요 ! ");
