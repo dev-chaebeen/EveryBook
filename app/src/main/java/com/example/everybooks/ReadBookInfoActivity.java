@@ -497,6 +497,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
 
                                         Log.d(TAG, "저장되어있는 allMemoList.size : " + allMemoList.size());
 
+
                                     }
                                     catch (Exception e)
                                     {

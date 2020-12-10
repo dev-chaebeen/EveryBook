@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
 
                 memoHandler.sendMessage(message);
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                 } catch (Exception e) {
                     return;
                 }
@@ -151,7 +151,13 @@ public class MainActivity extends AppCompatActivity
 
                 // 프래그먼트 갱신
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.detach(homeFragment).attach(homeFragment).commit();
+                fragmentTransaction.detach(homeFragment).attach(homeFragment).commitAllowingStateLoss();
+
+                // 에러발생  Fatal Exception: java.lang.illegalStateException Can not perform this action after onSaveInstanceState
+                // 원인 : Fragment 를 생성할 때, commit() 메서드를 호출하는 시점은 Activity 가 상태를 저장하기 전에 이루어져야 하는데, Activity 의 상태 저장 후에 이루어졌기 때문
+                // 해결 : Activity 가 상태를 저장하고 난 후에 commit()를 하기 위해서는 commitAllowingStateLoss() 메서드를 이용
+                // 출처: https://eso0609.tistory.com/69
+
 
                 //getSupportFragmentManager().beginTransaction().add(R.id.main_frame, homeFragment).commit();
 
@@ -306,7 +312,7 @@ public class MainActivity extends AppCompatActivity
 
 
         // 스레드 test
-        if(thread == null)
+        if(thread == null && allMemoList.size()>0)
         {
             MemoThread memoThread = new MemoThread();
             thread = new Thread(memoThread);
@@ -425,15 +431,26 @@ public class MainActivity extends AppCompatActivity
             finish();
             toast.cancel();
         }
-    }// end onBackPressed()
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // 랜덤메모 스레드 멈추기
+        if(thread !=null)
+        {
+            thread.interrupt();
+        }
+
+    }
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
 
-        // 랜덤메모 스레드 멈추기
-        thread.interrupt();
+
 
         toast = Toast.makeText(this, "또 기록하러 와주세요 ", Toast.LENGTH_SHORT);
         toast.show();
