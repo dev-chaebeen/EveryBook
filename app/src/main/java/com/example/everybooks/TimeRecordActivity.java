@@ -60,6 +60,7 @@ public class TimeRecordActivity extends AppCompatActivity
     Thread timeThread;
     Thread aniThread;
 
+    int timeInSeconds;
     Intent intent;
 
     @Override
@@ -141,6 +142,11 @@ public class TimeRecordActivity extends AppCompatActivity
 
                             Log.d(TAG, "TimeRecordActivity, 스레드 실행 전 isStart : " + isStart);
 
+                            // 초 단위로 바꾸기
+                            long timeInSeconds = hour * 60 * 60 + minute * 60 + second;
+
+                            Log.d(TAG, " 저장되어있던 초단위 시간 : " + timeInSeconds);
+
                             TimeRecordThread timeRecordThread = new TimeRecordThread();
                             timeThread = new Thread(timeRecordThread);
                             timeThread.start();
@@ -218,13 +224,11 @@ public class TimeRecordActivity extends AppCompatActivity
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
 
-            second = msg.arg1;
+            timeInSeconds = msg.arg1;
 
             // 여기서 HH:MM:SS 형식으로 바꿔서 보여준다.
 
-            Log.d(TAG, "TimeRecordActivity, 형식 바꿀 때 시간 " + hour + ":" + minute + ":" + second);
-
-            // 24시간이 되면 일 단위가 1 증가하면서 시간 단위는 0이 되므로 분기해서 처리해준다.??
+          /*  // 24시간이 되면 일 단위가 1 증가하면서 시간 단위는 0이 되므로 분기해서 처리해준다.??
             // 그러면 calendar 쓰는 이유가 있니ㅏ...
             if(hour<24)
             {
@@ -238,7 +242,16 @@ public class TimeRecordActivity extends AppCompatActivity
             else
             {
 
-            }
+            }*/
+            int secs = timeInSeconds;
+            int mins = secs / 60;
+            secs = secs % 60;
+            int hours = mins / 60;
+            mins = mins % 60;
+
+            Log.d(TAG, " 형식 변환한 뒤 : " + hours + ":" + mins + ":" + secs);
+
+            readTime = "" + String.format("%02d", hours) + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs);
             textView_time.setText(readTime);
         }
     };
@@ -309,22 +322,17 @@ public class TimeRecordActivity extends AppCompatActivity
     class TimeRecordThread implements Runnable {
 
         boolean running = false;
-        public void run()
-        {
+        public void run() {
             running = true;
-            while(running)
-            {
-                second += 1;
+            while (running) {
+                timeInSeconds += 1;
                 Message message = timeHandler.obtainMessage();
-                message.arg1 = second;
+                message.arg1 =  timeInSeconds;
                 timeHandler.sendMessage(message);
 
-                try
-                {
+                try {
                     Thread.sleep(1000);
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     return;
                 }
             }
@@ -372,7 +380,9 @@ public class TimeRecordActivity extends AppCompatActivity
             builder = new NotificationCompat.Builder(getApplicationContext());
         }
 
-        intent = new Intent(this, MainActivity.class);
+        
+        // 시간 측정 멈춰있음 서비스 아니라서 그런가 
+        intent = new Intent(this, TimeRecordActivity.class);
         intent.putExtra("bookId", bookId);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

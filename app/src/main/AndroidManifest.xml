@@ -70,6 +70,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <service android:name=".TimeRecordService"/>
+
     </application>
 
     <uses-permission android:name="android.permission.CAMERA" /><!--카메라 권한-->

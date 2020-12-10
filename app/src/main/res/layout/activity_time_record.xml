@@ -170,6 +170,14 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="15dp"/>
 
+      <!--  <Chronometer
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:textSize="30dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/btn_grey" />-->
+
         <TextView
             android:id="@+id/time"
             android:layout_width="match_parent"
