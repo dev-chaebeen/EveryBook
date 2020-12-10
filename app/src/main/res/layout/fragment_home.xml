@@ -64,7 +64,6 @@
             android:layout_height="60dp"
             android:layout_gravity="left|center"
             android:scaleType="fitCenter"
-            android:src="@drawable/book_fiftypeople"
             />
 
         <LinearLayout
@@ -81,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left|center"
                 android:textSize="13sp"
-                android:text="memo"
+                android:text="작성한 메모가 일정 간격으로 나타나는 공간입니다"
                 />
 
         </LinearLayout>

@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
 
                 memoHandler.sendMessage(message);
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(3000);
                 } catch (Exception e) {
                     return;
                 }
@@ -311,8 +311,10 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        // 스레드 test
-        if(thread == null && allMemoList.size()>0)
+        // 스레드 시작
+        //if(thread == null && allMemoList.size() >0)
+        // test
+        if(allMemoList.size() >0)
         {
             MemoThread memoThread = new MemoThread();
             thread = new Thread(memoThread);

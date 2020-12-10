@@ -77,49 +77,49 @@ public class HomeFragment extends Fragment
         {
             randomNum = getArguments().getInt("randomNum");
             Log.d(TAG, "HomeFragment 전달받은 랜덤 : " + randomNum);
-        }
 
-
-        SharedPreferences memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
-        String memoListString = memoInfo.getString("memoList", null);
-        try
-        {
-            JSONArray jsonArray = new JSONArray(memoListString);
-
-            JSONObject jsonObject = (JSONObject) jsonArray.get(randomNum);
-            memoText = jsonObject.getString("memoText");
-            bookId = jsonObject.getInt("bookId");
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.toString());
-        }
-
-        // 메모에 저장되어 있는 bookId 에 해당하는 title, img 가져온다.
-        SharedPreferences bookInfo = view.getContext().getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
-        String bookListString = bookInfo.getString("bookList", null);
-
-        try
-        {
-            JSONArray jsonArray = new JSONArray(bookListString);
-            for (int i = 0; i < jsonArray.length(); i++)
+            SharedPreferences memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
+            String memoListString = memoInfo.getString("memoList", null);
+            try
             {
-                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                if(bookId == jsonObject.getInt("bookId"))
+                JSONArray jsonArray = new JSONArray(memoListString);
+
+                JSONObject jsonObject = (JSONObject) jsonArray.get(randomNum);
+                memoText = jsonObject.getString("memoText");
+                bookId = jsonObject.getInt("bookId");
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.toString());
+            }
+
+            // 메모에 저장되어 있는 bookId 에 해당하는 title, img 가져온다.
+            SharedPreferences bookInfo = view.getContext().getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
+            String bookListString = bookInfo.getString("bookList", null);
+
+            try
+            {
+                JSONArray jsonArray = new JSONArray(bookListString);
+                for (int i = 0; i < jsonArray.length(); i++)
                 {
-                    img = jsonObject.getString("img");
+                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                    if(bookId == jsonObject.getInt("bookId"))
+                    {
+                        img = jsonObject.getString("img");
+                    }
                 }
             }
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.toString());
+            catch (Exception e)
+            {
+                System.out.println(e.toString());
+            }
+
+            textView_memo_text.setText(memoText);
+            Util util = new Util();
+            Bitmap bitmap = util.stringToBitmap(img);
+            imageView_img.setImageBitmap(bitmap);
         }
 
-        textView_memo_text.setText(memoText);
-        Util util = new Util();
-        Bitmap bitmap = util.stringToBitmap(img);
-        imageView_img.setImageBitmap(bitmap);
         Log.d(TAG, "HomeFragment onCreateView ");
 
         return view;
@@ -131,14 +131,14 @@ public class HomeFragment extends Fragment
         super.onAttach(context);
 
         // test 최초 한번만 나온다..
-        /*// MainActivity 에서 보낸 랜덤 메모 데이터 받기
+        // MainActivity 에서 보낸 랜덤 메모 데이터 받기
         Bundle bundle = this.getArguments();
 
         if (bundle != null)
         {
             randomNum = getArguments().getInt("randomNum");
-            Log.d(TAG, "HomeFragment 전달받은 랜덤 : " + randomNum);
-        }*/
+            Log.d(TAG, "HomeFragment 전달받은 랜덤 onAttach : " + randomNum);
+        }
 
     }
 
