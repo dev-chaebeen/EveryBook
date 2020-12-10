@@ -5,13 +5,19 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
@@ -58,18 +64,11 @@ public class TimeRecordActivity extends AppCompatActivity
     String publishDate;
     String readTime;
 
-    final String TAG = "테스트";
-
-    int hour;
-    int minute;
-    int second;
     boolean isStart;
-
-    Thread timeThread;
     Thread aniThread;
 
-    int timeInSeconds;
     Intent intent;
+    final String TAG = "테스트";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -148,31 +147,29 @@ public class TimeRecordActivity extends AppCompatActivity
                         {
                             isStart = true;
 
-                            // 시간을 측정하는 동안은 어플 내의 다른 기능을 이용할 수 없다고 안내한다.
+                            // 시간을 측정하는 동안은 계속 TimeRecordActivity 화면으로 전환하기 때문에
+                            // 어플의 다른 기능을 이용할 수 없다고 안내한다.
                             AlertDialog.Builder builder = new AlertDialog.Builder(TimeRecordActivity.this);
                             builder.setMessage("독서 시간을 기록하는 동안은\n 다른 기능을 사용할 수 없어요!\n 기록을 시작할까요? ");
                             builder.setPositiveButton("확인",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which)
-                                        {
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
 
-                                            // 책장 넘어가는 스레드 실행
-                                            GifThread gifThread = new GifThread();
-                                            aniThread = new Thread(gifThread);
-                                            aniThread.start();
+                                        // 책장 넘어가는 이미지 스레드 실행
+                                        GifThread gifThread = new GifThread();
+                                        aniThread = new Thread(gifThread);
+                                        aniThread.start();
 
-                                            // Time
-                                            Log.d(TAG, "TimeRecordActivity 에서 서비스로 보내는 readTime" + readTime);
-                                            Intent intent = new Intent(getApplicationContext(), TimeRecordService.class);
+                                        // TimeRecordService 실행
+                                        Intent intent = new Intent(getApplicationContext(), TimeRecordService.class);
+                                        intent.putExtra("readTime", readTime);
+                                        intent.putExtra("bookId", bookId);
+                                        startService(intent);
 
-                                            intent.putExtra("readTime", readTime);
-                                            intent.putExtra("isStart", isStart);
-                                            intent.putExtra("bookId", bookId);
-                                            startService(intent);
-
-                                            dialog.dismiss();
-                                        }
-                                    });
+                                        dialog.dismiss();
+                                    }
+                                });
 
                             builder.setNegativeButton("취소",
                                     new DialogInterface.OnClickListener() {
@@ -185,60 +182,25 @@ public class TimeRecordActivity extends AppCompatActivity
                             builder.show();
                         }
 
+                        // 독서 시간을 기록 중이라는 알림을 상단창에 띄운다.
                         showNoti();
                         break;
 
                     case R.id.btn_stop:
 
+                        // stop 버튼을 클릭하면 서비스를 종료한다.
                         intent = new Intent(getApplicationContext(), TimeRecordService.class);
                         stopService(intent);
 
+                        // 책장 넘어가는 이미지 스레드를 멈춘다.
                         if(aniThread != null)
                         {
                             aniThread.interrupt();
                         }
 
-                        // 다시 start 버튼을 클릭할 수 있도록 isStart 값을 false 로 바꾼다.
+                        // start 버튼을 다시 클릭할 수 있도록 isStart 값을 false 로 바꾼다.
                         isStart = false;
 
-                        /*
-                        // 기존
-                        // 스레드가 생성되지 않은 상황에서 stop 버튼 눌러도 동작하지 않도록 하기 위해서
-                        // thread 가 null 이 아닐 때만 코드 동작하도록 한다.
-                        if(timeThread != null)
-                        {
-                            // stop 버튼 클릭하면 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
-                            timeThread.interrupt();
-                            aniThread.interrupt();
-
-                            // 다시 start 버튼을 클릭할 수 있도록 isStart 값을 false 로 바꾼다.
-                            isStart = false;
-
-                            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-                            String bookListString = bookInfo.getString("bookList", null);
-
-                            try
-                            {
-                                JSONArray jsonArray = new JSONArray(bookListString);
-                                for (int i = 0; i < jsonArray.length(); i++)
-                                {
-                                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                    if (bookId == jsonObject.getInt("bookId"))
-                                    {
-                                        jsonObject.put("readTime", readTime);
-                                        Log.d(TAG, "TimeRecordActivity, stop 버튼 클릭 후 변경한 jsonObject : " + jsonObject.getString("readTime"));
-                                    }
-                                }
-
-                                SharedPreferences.Editor editor = bookInfo.edit();
-                                editor.putString("bookList", jsonArray.toString());
-                                editor.commit();
-
-                            } catch (Exception e) {
-                                System.out.println(e.toString());
-                            }
-                        }
-                        */
                         break;
                 }
             }
@@ -247,10 +209,7 @@ public class TimeRecordActivity extends AppCompatActivity
         // 각 요소가 클릭되면
         button_start.setOnClickListener(click);
         button_stop.setOnClickListener(click);
-
-
     }
-
 
     @Override
     protected void onResume()
@@ -274,7 +233,8 @@ public class TimeRecordActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(Intent intent)
+    {
         if(intent != null){
 
             Log.d(TAG, "onNewIntent");
@@ -282,50 +242,19 @@ public class TimeRecordActivity extends AppCompatActivity
             bookId = intent.getIntExtra("bookId", -1);
             readTime  = intent.getStringExtra("readTime");
             Log.d(TAG, "서비스에서 전달받은 readTime" + readTime);
-            textView_time.setText(readTime);
 
-        /* // 인텐트로 전달받은 bookId 의 책 정보를 화면에서 보여주기 위해서
-        // 저장되어있는 책 리스트를 불러오고 인텐트로 전달받은 bookId 와 동일한 bookId 를 가지고 있는 책을 찾아 정보를 가져온다.
-        // 가져오는 정보는 책 제목, 표지, 작가, 출판사, 출판일, 독서 시간이다.
-        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-        String bookListString = bookInfo.getString("bookList", null);
-
-        try
-        {
-            JSONArray jsonArray = new JSONArray(bookListString);
-            for (int i = 0; i < jsonArray.length(); i++)
-            {
-                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                if (bookId == jsonObject.getInt("bookId"))
-                {
-                    title = jsonObject.getString("title");
-                    img = jsonObject.getString("img");
-                    writer = jsonObject.getString("writer");
-                    publisher = jsonObject.getString("publisher");
-                    publishDate = jsonObject.getString("publishDate");
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.toString());
-        }
-*/
             // 책 정보를 뷰 요소에 배치해서 보여준다.
             // 이미지의 경우 문자열의 형태로 저장되어있으므로 비트맵으로 변환해서 배치한다.
             // Util 클래스는 문자열을 비트맵 형식으로, 비트맵을 문자열로 바꿔주는 메소드를 포함한 클래스이다.
-            textView_title.setText(title);
-
             Util util = new Util();
             Bitmap bitmap = util.stringToBitmap(img);
 
+            textView_title.setText(title);
             imageView_img.setImageBitmap(bitmap);
             textView_writer.setText(writer);
             textView_publisher.setText(publisher);
             textView_publish_date.setText(publishDate);
-
-
-
+            textView_time.setText(readTime);
         }
 
         super.onNewIntent(intent);
@@ -350,12 +279,6 @@ public class TimeRecordActivity extends AppCompatActivity
             builder = new NotificationCompat.Builder(getApplicationContext());
         }
 
-        
-        // 시간 측정 멈춰있음 서비스 아니라서 그런가 
-        intent = new Intent(this, TimeRecordActivity.class);
-        intent.putExtra("bookId", bookId);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
 
         //알림창 제목
         builder.setContentTitle("Every Book");
@@ -366,11 +289,15 @@ public class TimeRecordActivity extends AppCompatActivity
         //알림창 터치시 상단 알림상태창에서 알림이 자동으로 삭제되게 합니다.
         builder.setAutoCancel(true);
 
-        //pendingIntent를 builder에 설정 해줍니다.
-        // 알림창 터치시 인텐트가 전달할 수 있도록 해줍니다.
+        // 알림창을 클릭하면 bookId 데이터를 인텐트에 담고 TimeRecordActivity 로 화면을 전환한다.
+        // bookId 를 전달하는 이유는 해당하는 책의 정보를 보여주기 위함이다.
+        intent = new Intent(this, TimeRecordActivity.class);
+        intent.putExtra("bookId", bookId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
         Notification notification = builder.build();
+
         //알림창 실행
         manager.notify(1,notification);
 

@@ -72,7 +72,8 @@
 
         <service android:name=".TimeRecordService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true"
+            android:stopWithTask="false" />
 
     </application>
 

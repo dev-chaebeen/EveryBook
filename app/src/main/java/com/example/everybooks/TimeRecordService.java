@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,9 +38,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TimeRecordService extends Service
 {
-    // 뷰 요소 선언
-    CircleImageView circleImageView_book_gif;
-
     int bookId;
     String readTime;
 
@@ -51,7 +50,6 @@ public class TimeRecordService extends Service
 
     int timeInSeconds;
     Thread timeThread;
-    Thread aniThread;
     Intent intent;
 
     @Nullable
@@ -83,12 +81,10 @@ public class TimeRecordService extends Service
         }
         else
         {
-            // Start
 
             // 문자열의 형태로 저장되어있는 readTime 의 형식을 시, 분, 초로 나눈다.
             // 스레드를 사용해 1초당 1씩 초가 증가하도록 한다.
 
-            // test readTime String 있엇는데 지움
             readTime = intent.getStringExtra("readTime");
             bookId = intent.getIntExtra("bookId", -1);
 
@@ -112,10 +108,8 @@ public class TimeRecordService extends Service
             TimeRecordThread timeRecordThread = new TimeRecordThread();
             timeThread = new Thread(timeRecordThread);
             timeThread.start();
-
         }
 
-        // return Service.START_STICKY; // 서비스가 종료되어도 자동으로 재시작한다.
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -125,15 +119,11 @@ public class TimeRecordService extends Service
 
         Log.d(TAG, "TimeRecordService, onDestroy");
 
-        // Stop
-        // 스레드가 생성되지 않은 상황에서 stop 버튼 눌러도 동작하지 않도록 하기 위해서
+        // 스레드가 생성되지 않은 상황에서는 stop 버튼을 눌러도 코드가 동작하지 않도록 하기 위해서
         // thread 가 null 이 아닐 때만 코드 동작하도록 한다.
         if (timeThread != null) {
             // stop 버튼 클릭하면 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
             timeThread.interrupt();
-
-            // 다시 start 버튼을 클릭할 수 있도록 isStart 값을 true 로 바꾼다.
-            isStart = true;
 
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
             String bookListString = bookInfo.getString("bookList", null);
@@ -159,10 +149,48 @@ public class TimeRecordService extends Service
             } catch (Exception e) {
                 System.out.println(e.toString());
             }
-
         }
 
-        //this.stopSelf();
+        this.stopSelf();
+    }
+
+    public void onTaskRemoved(Intent rootIntent) { //핸들링 하는 부분
+        Log.e(TAG,"onTaskRemoved - 강제 종료 " + rootIntent);
+        Toast.makeText(this, "onTaskRemoved ", Toast.LENGTH_SHORT).show();
+
+// 스레드가 생성되지 않은 상황에서는 stop 버튼을 눌러도 코드가 동작하지 않도록 하기 위해서
+        // thread 가 null 이 아닐 때만 코드 동작하도록 한다.
+        if (timeThread != null) {
+            // stop 버튼 클릭하면 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
+            timeThread.interrupt();
+
+            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+            String bookListString = bookInfo.getString("bookList", null);
+
+            try {
+                JSONArray jsonArray = new JSONArray(bookListString);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                    if (bookId == jsonObject.getInt("bookId"))
+                    {
+                        jsonObject.put("readTime", readTime);
+                    }
+                }
+
+                SharedPreferences.Editor editor = bookInfo.edit();
+                editor.putString("bookList", jsonArray.toString());
+                editor.commit();
+
+                Log.d(TAG, "TimeRecordService, 강제종료 후 저장된 readTime : " + readTime);
+
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+        }
+
+
+        stopSelf(); //서비스 종료
     }
 
 
@@ -195,29 +223,27 @@ public class TimeRecordService extends Service
         }
     };
 
+    // 타임 스레드 클래스 생성
+    class TimeRecordThread implements Runnable {
 
+        boolean running = false;
 
-        // 타임 스레드 클래스 생성
-        class TimeRecordThread implements Runnable {
+        public void run() {
+            running = true;
+            while (running) {
+                timeInSeconds += 1;
+                Message message = timeHandler.obtainMessage();
+                message.arg1 =  timeInSeconds;
+                timeHandler.sendMessage(message);
 
-            boolean running = false;
-
-            public void run() {
-                running = true;
-                while (running) {
-                    timeInSeconds += 1;
-                    Message message = timeHandler.obtainMessage();
-                    message.arg1 =  timeInSeconds;
-                    timeHandler.sendMessage(message);
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        return;
-                    }
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    return;
                 }
             }
         }
+    }
 
 
 
