@@ -176,6 +176,7 @@ public class TimeRecordActivity extends AppCompatActivity
 
                             intent.putExtra("readTime", readTime);
                             intent.putExtra("isStart", isStart);
+                            intent.putExtra("bookId", bookId);
                             startService(intent);
 
 

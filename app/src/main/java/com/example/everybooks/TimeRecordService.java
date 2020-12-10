@@ -88,7 +88,9 @@ public class TimeRecordService extends Service
             // 문자열의 형태로 저장되어있는 readTime 의 형식을 시, 분, 초로 나눈다.
             // 스레드를 사용해 1초당 1씩 초가 증가하도록 한다.
 
-            String readTime = intent.getStringExtra("readTime");
+            // test readTime String 있엇는데 지움
+            readTime = intent.getStringExtra("readTime");
+            bookId = intent.getIntExtra("bookId", -1);
 
             Log.d(TAG, "TimeRecordService 에서 받은 readTime" + readTime );
 
