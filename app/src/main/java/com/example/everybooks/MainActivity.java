@@ -5,8 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -34,6 +40,13 @@ public class MainActivity extends AppCompatActivity
     ReadBookAdapter readBookAdapter;
     AllMemoAdapter allMemoAdapter;
     NotificationAdapter notificationAdapter;
+
+    // test
+    ArrayList<Book> toReadBookList;
+    ArrayList<Book> readingBookList;
+    ArrayList<Book> readBookList;
+    ArrayList<Memo> allMemoList;
+    ArrayList<Notification> notiList;
 
     // fragment 뷰들
     private HomeFragment homeFragment;
@@ -54,6 +67,13 @@ public class MainActivity extends AppCompatActivity
 
     final String TAG = "테스트";
 
+    Thread thread;
+    Handler memoHandler;
+    Random random;
+    Memo memo;
+
+    String img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,24 +90,79 @@ public class MainActivity extends AppCompatActivity
         profileLogoutFragment = new ProfileLogoutFragment();
         profileFragment = new ProfileFragment();
 
+        // test
         setFragment(HOME);// 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
 
-
+        random = new Random();
     }
+
+    // 랜덤 메모 스레드 클래스 생성
+    // 5초마다 작성한 메모를 랜덤으로 보여준다.
+    class MemoThread implements Runnable
+    {
+        boolean running = false;
+
+        public void run() {
+            running = true;
+            while (running) {
+                Message message = memoHandler.obtainMessage();
+
+                int randomNum = random.nextInt(allMemoList.size());
+
+                message.arg1 =  randomNum;
+
+                memoHandler.sendMessage(message);
+                try {
+                    Thread.sleep(10000);
+                } catch (Exception e) {
+                    return;
+                }
+            }
+        }
+    }
+
 
     @Override
     protected void onResume()
     {
         super.onResume();
 
-        ArrayList<Book> toReadBookList = new ArrayList<>();
-        ArrayList<Book> readingBookList = new ArrayList<>();
-        ArrayList<Book> readBookList = new ArrayList<>();
-        ArrayList<Memo> allMemoList = new ArrayList<>();
-        ArrayList<Notification> notiList = new ArrayList<>();
+        // test 전역으로 변경
+        toReadBookList = new ArrayList<>();
+        readingBookList = new ArrayList<>();
+        readBookList = new ArrayList<>();
+        allMemoList = new ArrayList<>();
+        notiList = new ArrayList<>();
 
-        // 메인 액티비티가 전면에 나올때마다 새로고침한다.
-        //refresh();
+        // 랜덤 메모 핸들러
+        memoHandler = new Handler(Looper.getMainLooper())
+        {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+
+                int randomNum = msg.arg1;
+                Log.d(TAG, "핸들러 "+ randomNum);
+
+                Bundle bundle = new Bundle(1);
+                bundle.putInt("randomNum", randomNum);
+
+                homeFragment.setArguments(bundle);
+
+                // 프래그먼트 갱신
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.detach(homeFragment).attach(homeFragment).commit();
+
+                //getSupportFragmentManager().beginTransaction().add(R.id.main_frame, homeFragment).commit();
+
+
+                /*FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.main_frame, homeFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commitAllowingStateLoss();*/
+
+            }
+        };
 
         // 하단 네비 바 아이템 클릭하면 해당하는 프래그먼트로 변경
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
@@ -183,9 +258,7 @@ public class MainActivity extends AppCompatActivity
                 readingBookAdapter.notifyDataSetChanged();
                 readBookAdapter = new ReadBookAdapter(getApplicationContext(), readBookList);
                 readBookAdapter.notifyDataSetChanged();
-
             }
-
         }
         catch (Exception e)
         {
@@ -231,6 +304,16 @@ public class MainActivity extends AppCompatActivity
             System.out.println(e.toString());
         }
 
+
+        // 스레드 test
+        if(thread == null)
+        {
+            MemoThread memoThread = new MemoThread();
+            thread = new Thread(memoThread);
+            thread.start();
+        }
+
+
         // 저장되어있는 알림리스트 어댑터에 보내주기
         try
         {
@@ -269,9 +352,6 @@ public class MainActivity extends AppCompatActivity
         {
             System.out.println(e.toString());
         }
-
-
-
     }
 
     // 프레그먼트 교체가 일어나는 메소드
@@ -348,124 +428,13 @@ public class MainActivity extends AppCompatActivity
     }// end onBackPressed()
 
     @Override
-    protected void onPause()
-    {
-        super.onPause();
-
-        // 책 리스트
-       // ArrayList<Book> toReadBookList = new ArrayList<>();
-        //ArrayList<Book> readingBookList = new ArrayList<>();
-       // ArrayList<Book> readBookList = new ArrayList<>();
-
-        //toReadBookList = ToReadBookAdapter.toReadBookList;
-       // readingBookList = ReadingBookAdapter.readingBookList;
-       // readBookList = ReadBookAdapter.readBookList;
-
-        /// JSONArray 로 변환해서 다시 저장하기
-        /*
-        JSONArray jsonArray = new JSONArray();
-
-
-        // 읽을 책 저장
-        for (int i = 0; i < toReadBookList.size(); i++)
-        {
-            Book book = toReadBookList.get(i);
-
-            // json 객체에 입력받은 값을 저장한다.
-            try
-            {
-                JSONObject bookJson = new JSONObject();
-                bookJson.put("bookId", book.getBookId());
-                //bookJson.put("img", img);
-                bookJson.put("title", book.getTitle());
-                bookJson.put("writer", book.getWriter());
-                bookJson.put("publisher", book.getPublisher());
-                bookJson.put("publishDate", book.getPublishDate());
-                bookJson.put("state", book.getState());
-                bookJson.put("insertDate", book.getInsertDate());
-                bookJson.put("startDate", book.getStartDate());
-                bookJson.put("endDate", book.getEndDate());
-                bookJson.put("readTime", book.getReadTime());
-                jsonArray.put(bookJson);
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.toString());
-            }
-        }
-
-        // 읽는 책 저장
-        for (int i = 0; i < readingBookList.size(); i++)
-        {
-            Book book = readingBookList.get(i);
-
-            // json 객체에 입력받은 값을 저장한다.
-            try
-            {
-                JSONObject bookJson = new JSONObject();
-                bookJson.put("bookId", book.getBookId());
-                //bookJson.put("img", img);
-                bookJson.put("title", book.getTitle());
-                bookJson.put("writer", book.getWriter());
-                bookJson.put("publisher", book.getPublisher());
-                bookJson.put("publishDate", book.getPublishDate());
-                bookJson.put("state", book.getState());
-                bookJson.put("insertDate", book.getInsertDate());
-                bookJson.put("startDate", book.getStartDate());
-                bookJson.put("endDate", book.getEndDate());
-                bookJson.put("readTime", book.getReadTime());
-                jsonArray.put(bookJson);
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.toString());
-            }
-        }
-
-        // 읽은 책 저장
-        for (int i = 0; i < readBookList.size(); i++)
-        {
-            Book book = readBookList.get(i);
-
-            // json 객체에 입력받은 값을 저장한다.
-            try
-            {
-                JSONObject bookJson = new JSONObject();
-                bookJson.put("bookId", book.getBookId());
-                //bookJson.put("img", img);
-                bookJson.put("title", book.getTitle());
-                bookJson.put("writer", book.getWriter());
-                bookJson.put("publisher", book.getPublisher());
-                bookJson.put("publishDate", book.getPublishDate());
-                bookJson.put("state", book.getState());
-                bookJson.put("insertDate", book.getInsertDate());
-                bookJson.put("startDate", book.getStartDate());
-                bookJson.put("endDate", book.getEndDate());
-                bookJson.put("readTime", book.getReadTime());
-                jsonArray.put(bookJson);
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.toString());
-            }
-        }
-
-        String bookListString = jsonArray.toString();
-        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-        SharedPreferences.Editor editor = bookInfo.edit();
-        editor.putString("bookList", bookListString);
-        editor.commit();
-*/
-
-        // 어댑터에 있는 메모리스트 저장 - ing
-        ArrayList<Memo> memoList = new ArrayList<>();
-
-    }
-
-    @Override
     protected void onDestroy()
     {
         super.onDestroy();
+
+        // 랜덤메모 스레드 멈추기
+        thread.interrupt();
+
         toast = Toast.makeText(this, "또 기록하러 와주세요 ", Toast.LENGTH_SHORT);
         toast.show();
     }
@@ -475,6 +444,7 @@ public class MainActivity extends AppCompatActivity
     {
         toReadBookAdapter.notifyDataSetChanged();
     }
+
 
 
 }

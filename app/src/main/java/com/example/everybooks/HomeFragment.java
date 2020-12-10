@@ -1,16 +1,27 @@
 package com.example.everybooks;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.everybooks.data.Util;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class HomeFragment extends Fragment
 {
@@ -25,6 +36,17 @@ public class HomeFragment extends Fragment
     Spinner spinner_order;
     ImageView imageView_mic;
 
+    ImageView imageView_img;
+    TextView textView_title;
+    TextView textView_memo_text;
+
+    final String TAG = "테스트";
+    String memoText;
+    int bookId;
+    String title;
+    String img;
+    int randomNum;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -38,15 +60,98 @@ public class HomeFragment extends Fragment
         button_read = view.findViewById(R.id.btn_read);
         searchView_search = view.findViewById(R.id.search);
         spinner_order = view.findViewById(R.id.spinner_order);
+
         imageView_mic = view.findViewById(R.id.mic);
+        imageView_img = view.findViewById(R.id.img);
+        textView_memo_text = view.findViewById(R.id.memo_text);
+        textView_title = view.findViewById(R.id.title);
+
+
+        Log.d(TAG, "HomeFragment");
+
+
+        // MainActivity 에서 보낸 랜덤 메모 데이터 받기
+        Bundle bundle = this.getArguments();
+
+        if (bundle != null)
+        {
+            randomNum = getArguments().getInt("randomNum");
+            Log.d(TAG, "HomeFragment 전달받은 랜덤 : " + randomNum);
+        }
+
+
+        SharedPreferences memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
+        String memoListString = memoInfo.getString("memoList", null);
+        try
+        {
+            JSONArray jsonArray = new JSONArray(memoListString);
+
+            JSONObject jsonObject = (JSONObject) jsonArray.get(randomNum);
+            memoText = jsonObject.getString("memoText");
+            bookId = jsonObject.getInt("bookId");
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+        // 메모에 저장되어 있는 bookId 에 해당하는 title, img 가져온다.
+        SharedPreferences bookInfo = view.getContext().getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
+        String bookListString = bookInfo.getString("bookList", null);
+
+        try
+        {
+            JSONArray jsonArray = new JSONArray(bookListString);
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                if(bookId == jsonObject.getInt("bookId"))
+                {
+                    img = jsonObject.getString("img");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+        textView_memo_text.setText(memoText);
+        Util util = new Util();
+        Bitmap bitmap = util.stringToBitmap(img);
+        imageView_img.setImageBitmap(bitmap);
+        Log.d(TAG, "HomeFragment onCreateView ");
 
         return view;
     }
 
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        // test 최초 한번만 나온다..
+        /*// MainActivity 에서 보낸 랜덤 메모 데이터 받기
+        Bundle bundle = this.getArguments();
+
+        if (bundle != null)
+        {
+            randomNum = getArguments().getInt("randomNum");
+            Log.d(TAG, "HomeFragment 전달받은 랜덤 : " + randomNum);
+        }*/
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
 
         // To Read / Reading / Read 버튼을 클릭하면 해당하는 리스트를 보여줄 수 있도록 클릭이벤트를 등록한다.
         button_to_read.setOnClickListener(new View.OnClickListener()

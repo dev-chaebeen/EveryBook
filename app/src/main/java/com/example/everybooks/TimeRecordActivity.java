@@ -5,19 +5,13 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
@@ -32,14 +26,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
-import com.example.everybooks.data.Book;
-import com.example.everybooks.data.Memo;
 import com.example.everybooks.data.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -50,7 +39,7 @@ public class TimeRecordActivity extends AppCompatActivity
     ImageView imageView_img;
     TextView textView_writer;
     TextView textView_publisher;
-    TextView textView_publish_date;
+    TextView textView_start_date;
     TextView textView_time;
     Button button_start;
     Button button_stop;
@@ -61,7 +50,7 @@ public class TimeRecordActivity extends AppCompatActivity
     String img;
     String writer;
     String publisher;
-    String publishDate;
+    String startDate;
     String readTime;
 
     boolean isStart;
@@ -82,7 +71,7 @@ public class TimeRecordActivity extends AppCompatActivity
         imageView_img = findViewById(R.id.img);
         textView_writer = findViewById(R.id.writer);
         textView_publisher = findViewById(R.id.publisher);
-        textView_publish_date = findViewById(R.id.publish_date);
+        textView_start_date = findViewById(R.id.start_date);
         textView_time = findViewById(R.id.time);
         circleImageView_book_gif = findViewById(R.id.book_gif);
         button_start = findViewById(R.id.btn_start);
@@ -114,7 +103,7 @@ public class TimeRecordActivity extends AppCompatActivity
                     img = jsonObject.getString("img");
                     writer = jsonObject.getString("writer");
                     publisher = jsonObject.getString("publisher");
-                    publishDate = jsonObject.getString("publishDate");
+                    startDate = jsonObject.getString("startDate");
                     readTime = jsonObject.getString("readTime");
                 }
             }
@@ -161,6 +150,7 @@ public class TimeRecordActivity extends AppCompatActivity
                                         aniThread = new Thread(gifThread);
                                         aniThread.start();
 
+                                        // 기존
                                         // TimeRecordService 실행
                                         Intent intent = new Intent(getApplicationContext(), TimeRecordService.class);
                                         intent.putExtra("readTime", readTime);
@@ -227,7 +217,7 @@ public class TimeRecordActivity extends AppCompatActivity
         imageView_img.setImageBitmap(bitmap);
         textView_writer.setText(writer);
         textView_publisher.setText(publisher);
-        textView_publish_date.setText(publishDate);
+        textView_start_date.setText(startDate);
         textView_time.setText(readTime);
 
     }
@@ -253,7 +243,7 @@ public class TimeRecordActivity extends AppCompatActivity
             imageView_img.setImageBitmap(bitmap);
             textView_writer.setText(writer);
             textView_publisher.setText(publisher);
-            textView_publish_date.setText(publishDate);
+            textView_start_date.setText(startDate);
             textView_time.setText(readTime);
         }
 
@@ -336,78 +326,6 @@ public class TimeRecordActivity extends AppCompatActivity
             updateThread();
         }
     };
-/*
-
-    // 타임 스레드 클래스 생성
-    class TimeRecordThread implements Runnable {
-
-        boolean running = false;
-        public void run() {
-            running = true;
-            while (running) {
-                timeInSeconds += 1;
-                Message message = timeHandler.obtainMessage();
-                message.arg1 =  timeInSeconds;
-                timeHandler.sendMessage(message);
-
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                    return;
-                }
-            }
-        }
-    }
-
-
-
-
-
-    // 타임핸들러 클래스
-    Handler timeHandler = new Handler(Looper.getMainLooper())
-    {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-
-            timeInSeconds = msg.arg1;
-
-            // 여기서 HH:MM:SS 형식으로 바꿔서 보여준다.
-
-          */
-/*  // 24시간이 되면 일 단위가 1 증가하면서 시간 단위는 0이 되므로 분기해서 처리해준다.??
-            // 그러면 calendar 쓰는 이유가 있니ㅏ...
-            if(hour<24)
-            {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, hour);
-                calendar.set(Calendar.MINUTE, minute);
-                calendar.set(Calendar.SECOND, second);
-                Util util = new Util();
-                readTime= util.stringFromCalendar(calendar);
-            }
-            else
-            {
-
-            }*//*
-
-            int secs = timeInSeconds;
-            int mins = secs / 60;
-            secs = secs % 60;
-            int hours = mins / 60;
-            mins = mins % 60;
-
-            Log.d(TAG, " 형식 변환한 뒤 : " + hours + ":" + mins + ":" + secs);
-
-            readTime = "" + String.format("%02d", hours) + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs);
-            textView_time.setText(readTime);
-        }
-    };
-
-
-
-*/
-
 
     private int i = 0;
 
@@ -459,4 +377,5 @@ public class TimeRecordActivity extends AppCompatActivity
                 break;
         }
     }
+
 }

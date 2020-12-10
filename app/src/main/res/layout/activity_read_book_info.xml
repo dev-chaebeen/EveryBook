@@ -251,7 +251,6 @@
             >
         </TextView>
 
-
         <ListView
             android:id="@+id/read_memo_list"
             android:layout_width="match_parent"

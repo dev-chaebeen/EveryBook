@@ -137,14 +137,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:text="Publish Date" />
+            android:text="Publish Date"
+         />
 
         <!--publish date 입력-->
         <EditText
             android:id="@+id/publish_date"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:gravity="left" />
+            android:gravity="left"
+            android:hint="YYYY.MM.DD"/>
 
 
     </LinearLayout><!--회색바 아래-->

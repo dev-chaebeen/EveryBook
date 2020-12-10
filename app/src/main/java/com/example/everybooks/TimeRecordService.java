@@ -70,8 +70,7 @@ public class TimeRecordService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.d(TAG, "TimeRecordService, onStartCommand");
-
+        // 기존
         // 시스템에 의해 서비스가 자동으로 다시 시작될 수 있기 때문에 intent 객체 또한 null 값 일수 있다.
         // 그러므로 intent 객체가 null 인지 먼저 체크한 후 null 값일 경우 Service.START_STICKY 를 리턴한다.
         // 이 값을 반환하면 서비스가 비정상 종료되어도 시스템이 자동으로 재시작될 수 있다.
@@ -150,18 +149,17 @@ public class TimeRecordService extends Service
                 System.out.println(e.toString());
             }
         }
-
         this.stopSelf();
     }
 
-    public void onTaskRemoved(Intent rootIntent) { //핸들링 하는 부분
-        Log.e(TAG,"onTaskRemoved - 강제 종료 " + rootIntent);
-        Toast.makeText(this, "onTaskRemoved ", Toast.LENGTH_SHORT).show();
 
-// 스레드가 생성되지 않은 상황에서는 stop 버튼을 눌러도 코드가 동작하지 않도록 하기 위해서
+    // 강제 종료 되는 시점
+    public void onTaskRemoved(Intent rootIntent)
+    {
+        // 스레드가 생성되지 않은 상황에서는 강제종료 시에도 코드가 동작하지 않도록 하기 위해서
         // thread 가 null 이 아닐 때만 코드 동작하도록 한다.
         if (timeThread != null) {
-            // stop 버튼 클릭하면 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
+            // 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
             timeThread.interrupt();
 
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
@@ -189,13 +187,13 @@ public class TimeRecordService extends Service
             }
         }
 
-
         stopSelf(); //서비스 종료
+
     }
 
-
     // 타임핸들러 클래스
-    Handler timeHandler = new Handler(Looper.getMainLooper()) {
+    Handler timeHandler = new Handler(Looper.getMainLooper())
+    {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -244,7 +242,4 @@ public class TimeRecordService extends Service
             }
         }
     }
-
-
-
 }

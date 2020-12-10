@@ -1,8 +1,11 @@
 package com.example.everybooks;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
 
@@ -11,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.everybooks.data.Book;
+import com.example.everybooks.data.Memo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,6 +32,7 @@ public class CalendarActivity extends AppCompatActivity
     int setMonth;
     int setDate;
 
+    Intent intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) 
@@ -200,6 +205,22 @@ public class CalendarActivity extends AppCompatActivity
 
                 //리스트뷰에 어댑터를 붙여서 사용자에게 내용이 보이도록 한다.
                 listView.setAdapter(adapter);
+
+                // 각 책을 클릭하면 BookId  데이터를 담아서
+                // 상세 화면으로 이동한다.
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(AdapterView parent, View v, int position, long id)
+                    {
+                        intent = new Intent(getApplicationContext(), ReadBookInfoActivity.class);
+
+                        Book book = (Book)adapter.getItem(position);
+                        intent.putExtra("bookId", book.getBookId());
+
+                        startActivity(intent);
+                    }
+                });
             }
 
         }
