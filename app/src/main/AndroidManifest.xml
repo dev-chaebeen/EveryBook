@@ -70,7 +70,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <service android:name=".TimeRecordService"/>
+        <service android:name=".TimeRecordService"
+            android:enabled="true"
+            android:exported="true"/>
 
     </application>
 

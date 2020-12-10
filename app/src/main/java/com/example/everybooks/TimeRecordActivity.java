@@ -87,7 +87,7 @@ public class TimeRecordActivity extends AppCompatActivity
 
         // 한번 start 버튼을 클릭한 상태에서는 다시 클릭해도 독서시간을 1초 씩 증가시키는 스레드를 새로 생성하지 않도록 하기 위해서
         // boolean 변수에 start 버튼 클릭 가능 여부를 저장한다.
-        isStart = true;
+        isStart = false;
 
         // 인텐트로 전달받은 bookId 의 책 정보를 화면에서 보여주기 위해서
         // 저장되어있는 책 리스트를 불러오고 인텐트로 전달받은 bookId 와 동일한 bookId 를 가지고 있는 책을 찾아 정보를 가져온다.
@@ -117,6 +117,8 @@ public class TimeRecordActivity extends AppCompatActivity
             System.out.println(e.toString());
         }
 
+        Log.d(TAG, "TimeRecordActivity, onCreate() 저장되어있던 readTime" + readTime);
+
         // 각 요소를 클릭하면 수행할 동작 지정해두기
         View.OnClickListener click = new View.OnClickListener()
         {
@@ -128,10 +130,13 @@ public class TimeRecordActivity extends AppCompatActivity
                     case R.id.btn_start:
                         // start 버튼을 클릭하면 저장되어있는 독서시간이 1초씩 증가하고 책장이 넘어가는 애니메이션이 실행된다.
                         // 독서시간은 사용자가 책을 읽을 때 걸리는 시간을 누적해서 기록해둔 값이다.
+                        isStart = true;
 
                         if(isStart)
                         {
-                            // 문자열의 형태로 저장되어있는 readTime 의 형식을 시, 분, 초로 나눈다.
+
+                            // 기존 코드
+                           /* // 문자열의 형태로 저장되어있는 readTime 의 형식을 시, 분, 초로 나눈다.
                             // 스레드를 사용해 1초당 1씩 초가 증가하도록 한다.
                             String[] hourMinuteSecond = readTime.split(":");
                             hour = Integer.parseInt(hourMinuteSecond[0]);
@@ -158,7 +163,21 @@ public class TimeRecordActivity extends AppCompatActivity
                             aniThread = new Thread(gifThread);
                             aniThread.start();
 
-                            isStart = false;
+
+                            */
+
+                            // 책장 넘어가는 스레드 실행
+                            GifThread gifThread = new GifThread();
+                            aniThread = new Thread(gifThread);
+                            aniThread.start();
+
+                            Log.d(TAG, "TimeRecordActivity 에서 서비스로 보내는 readTime" + readTime);
+                            Intent intent = new Intent(getApplicationContext(), TimeRecordService.class);
+
+                            intent.putExtra("readTime", readTime);
+                            intent.putExtra("isStart", isStart);
+                            startService(intent);
+
 
                         }
 
@@ -169,6 +188,16 @@ public class TimeRecordActivity extends AppCompatActivity
 
                     case R.id.btn_stop:
 
+                        intent = new Intent(getApplicationContext(), TimeRecordService.class);
+                        stopService(intent);
+
+                        if(aniThread != null)
+                        {
+                            aniThread.interrupt();
+                        }
+
+                        /*
+                        // 기존
                         // 스레드가 생성되지 않은 상황에서 stop 버튼 눌러도 동작하지 않도록 하기 위해서
                         // thread 가 null 이 아닐 때만 코드 동작하도록 한다.
                         if(timeThread != null)
@@ -177,8 +206,8 @@ public class TimeRecordActivity extends AppCompatActivity
                             timeThread.interrupt();
                             aniThread.interrupt();
 
-                            // 다시 start 버튼을 클릭할 수 있도록 isStart 값을 true 로 바꾼다.
-                            isStart = true;
+                            // 다시 start 버튼을 클릭할 수 있도록 isStart 값을 false 로 바꾼다.
+                            isStart = false;
 
                             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
                             String bookListString = bookInfo.getString("bookList", null);
@@ -203,9 +232,9 @@ public class TimeRecordActivity extends AppCompatActivity
                             } catch (Exception e) {
                                 System.out.println(e.toString());
                             }
-
-                            break;
                         }
+                        */
+                        break;
                 }
             }
         };
@@ -217,63 +246,13 @@ public class TimeRecordActivity extends AppCompatActivity
 
     }
 
-    // 타임핸들러 클래스
-    Handler timeHandler = new Handler(Looper.getMainLooper())
-    {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-
-            timeInSeconds = msg.arg1;
-
-            // 여기서 HH:MM:SS 형식으로 바꿔서 보여준다.
-
-          /*  // 24시간이 되면 일 단위가 1 증가하면서 시간 단위는 0이 되므로 분기해서 처리해준다.??
-            // 그러면 calendar 쓰는 이유가 있니ㅏ...
-            if(hour<24)
-            {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, hour);
-                calendar.set(Calendar.MINUTE, minute);
-                calendar.set(Calendar.SECOND, second);
-                Util util = new Util();
-                readTime= util.stringFromCalendar(calendar);
-            }
-            else
-            {
-
-            }*/
-            int secs = timeInSeconds;
-            int mins = secs / 60;
-            secs = secs % 60;
-            int hours = mins / 60;
-            mins = mins % 60;
-
-            Log.d(TAG, " 형식 변환한 뒤 : " + hours + ":" + mins + ":" + secs);
-
-            readTime = "" + String.format("%02d", hours) + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs);
-            textView_time.setText(readTime);
-        }
-    };
-
-
-    // 이미지 핸들러
-    Handler gifHandler = new Handler(Looper.getMainLooper())
-    {
-        @Override
-        public void handleMessage(@NonNull Message msg)
-        {
-            super.handleMessage(msg);
-            updateThread();
-        }
-    };
 
     @Override
     protected void onResume()
     {
         super.onResume();
 
-        // 인텐트로 전달받은 bookId 의 책 정보를 화면에서 보여주기 위해서
+       /* // 인텐트로 전달받은 bookId 의 책 정보를 화면에서 보여주기 위해서
         // 저장되어있는 책 리스트를 불러오고 인텐트로 전달받은 bookId 와 동일한 bookId 를 가지고 있는 책을 찾아 정보를 가져온다.
         // 가져오는 정보는 책 제목, 표지, 작가, 출판사, 출판일, 독서 시간이다.
         SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
@@ -299,7 +278,7 @@ public class TimeRecordActivity extends AppCompatActivity
         catch (Exception e)
         {
             System.out.println(e.toString());
-        }
+        }*/
 
         // 책 정보를 뷰 요소에 배치해서 보여준다.
         // 이미지의 경우 문자열의 형태로 저장되어있으므로 비트맵으로 변환해서 배치한다.
@@ -315,50 +294,21 @@ public class TimeRecordActivity extends AppCompatActivity
         textView_publish_date.setText(publishDate);
         textView_time.setText(readTime);
 
+
+
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if(intent != null){
 
-    // 타임 스레드 클래스 생성
-    class TimeRecordThread implements Runnable {
-
-        boolean running = false;
-        public void run() {
-            running = true;
-            while (running) {
-                timeInSeconds += 1;
-                Message message = timeHandler.obtainMessage();
-                message.arg1 =  timeInSeconds;
-                timeHandler.sendMessage(message);
-
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                    return;
-                }
-            }
+            readTime  = intent.getStringExtra("readTime");
+            Log.d(TAG, "서비스에서 전달받은 readTime" + readTime);
+            //textView_time.setText(readTime);
+            // 호출 순서 onNewIntent() - onResume();??
         }
-    }
 
-
-    // 이미지 스레드 클래스 생성
-    class GifThread implements Runnable
-    {
-        @Override
-        public void run() {
-            while(true)
-            {
-                try
-                {
-                    gifHandler.sendMessage(gifHandler.obtainMessage());
-                    Thread.sleep(150);
-
-                }catch (Throwable t)
-                {
-                    System.out.println(t.toString());
-                    return;
-                }
-            }
-        }
+        super.onNewIntent(intent);
     }
 
 
@@ -405,6 +355,112 @@ public class TimeRecordActivity extends AppCompatActivity
         manager.notify(1,notification);
 
     }
+
+
+
+    // 이미지 스레드 클래스 생성
+    class GifThread implements Runnable
+    {
+        @Override
+        public void run() {
+            while(true)
+            {
+                try
+                {
+                    gifHandler.sendMessage(gifHandler.obtainMessage());
+                    Thread.sleep(150);
+
+                }catch (Throwable t)
+                {
+                    System.out.println(t.toString());
+                    return;
+                }
+            }
+        }
+    }
+
+    // 이미지 핸들러
+    Handler gifHandler = new Handler(Looper.getMainLooper())
+    {
+        @Override
+        public void handleMessage(@NonNull Message msg)
+        {
+            super.handleMessage(msg);
+            updateThread();
+        }
+    };
+/*
+
+    // 타임 스레드 클래스 생성
+    class TimeRecordThread implements Runnable {
+
+        boolean running = false;
+        public void run() {
+            running = true;
+            while (running) {
+                timeInSeconds += 1;
+                Message message = timeHandler.obtainMessage();
+                message.arg1 =  timeInSeconds;
+                timeHandler.sendMessage(message);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    return;
+                }
+            }
+        }
+    }
+
+
+
+
+
+    // 타임핸들러 클래스
+    Handler timeHandler = new Handler(Looper.getMainLooper())
+    {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+
+            timeInSeconds = msg.arg1;
+
+            // 여기서 HH:MM:SS 형식으로 바꿔서 보여준다.
+
+          */
+/*  // 24시간이 되면 일 단위가 1 증가하면서 시간 단위는 0이 되므로 분기해서 처리해준다.??
+            // 그러면 calendar 쓰는 이유가 있니ㅏ...
+            if(hour<24)
+            {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND, second);
+                Util util = new Util();
+                readTime= util.stringFromCalendar(calendar);
+            }
+            else
+            {
+
+            }*//*
+
+            int secs = timeInSeconds;
+            int mins = secs / 60;
+            secs = secs % 60;
+            int hours = mins / 60;
+            mins = mins % 60;
+
+            Log.d(TAG, " 형식 변환한 뒤 : " + hours + ":" + mins + ":" + secs);
+
+            readTime = "" + String.format("%02d", hours) + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs);
+            textView_time.setText(readTime);
+        }
+    };
+
+
+
+*/
+
 
     private int i = 0;
 
