@@ -162,7 +162,7 @@ public class TimeRecordService extends Service
 
         }
 
-        this.stopSelf();
+        //this.stopSelf();
     }
 
 
@@ -188,7 +188,7 @@ public class TimeRecordService extends Service
             intent = new Intent(getApplicationContext(), TimeRecordActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("readTime",readTime);
-
+            intent.putExtra("bookId", bookId);
             Log.d(TAG, "TimeRecordService 에서 액티비티로 보내는 readTime" + readTime);
 
             startActivity(intent);

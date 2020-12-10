@@ -130,10 +130,11 @@ public class TimeRecordActivity extends AppCompatActivity
                     case R.id.btn_start:
                         // start 버튼을 클릭하면 저장되어있는 독서시간이 1초씩 증가하고 책장이 넘어가는 애니메이션이 실행된다.
                         // 독서시간은 사용자가 책을 읽을 때 걸리는 시간을 누적해서 기록해둔 값이다.
-                        isStart = true;
 
-                        if(isStart)
+
+                        if(!isStart)
                         {
+                            isStart = true;
 
                             // 기존 코드
                            /* // 문자열의 형태로 저장되어있는 readTime 의 형식을 시, 분, 초로 나눈다.
@@ -183,8 +184,6 @@ public class TimeRecordActivity extends AppCompatActivity
                         }
 
                         showNoti();
-
-
                         break;
 
                     case R.id.btn_stop:
@@ -196,6 +195,9 @@ public class TimeRecordActivity extends AppCompatActivity
                         {
                             aniThread.interrupt();
                         }
+
+                        // 다시 start 버튼을 클릭할 수 있도록 isStart 값을 false 로 바꾼다.
+                        isStart = false;
 
                         /*
                         // 기존
@@ -295,18 +297,61 @@ public class TimeRecordActivity extends AppCompatActivity
         textView_publish_date.setText(publishDate);
         textView_time.setText(readTime);
 
-
-
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         if(intent != null){
 
+            Log.d(TAG, "onNewIntent");
+
+            bookId = intent.getIntExtra("bookId", -1);
             readTime  = intent.getStringExtra("readTime");
             Log.d(TAG, "서비스에서 전달받은 readTime" + readTime);
-            //textView_time.setText(readTime);
-            // 호출 순서 onNewIntent() - onResume();??
+            textView_time.setText(readTime);
+
+        /* // 인텐트로 전달받은 bookId 의 책 정보를 화면에서 보여주기 위해서
+        // 저장되어있는 책 리스트를 불러오고 인텐트로 전달받은 bookId 와 동일한 bookId 를 가지고 있는 책을 찾아 정보를 가져온다.
+        // 가져오는 정보는 책 제목, 표지, 작가, 출판사, 출판일, 독서 시간이다.
+        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+        String bookListString = bookInfo.getString("bookList", null);
+
+        try
+        {
+            JSONArray jsonArray = new JSONArray(bookListString);
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                if (bookId == jsonObject.getInt("bookId"))
+                {
+                    title = jsonObject.getString("title");
+                    img = jsonObject.getString("img");
+                    writer = jsonObject.getString("writer");
+                    publisher = jsonObject.getString("publisher");
+                    publishDate = jsonObject.getString("publishDate");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+*/
+            // 책 정보를 뷰 요소에 배치해서 보여준다.
+            // 이미지의 경우 문자열의 형태로 저장되어있으므로 비트맵으로 변환해서 배치한다.
+            // Util 클래스는 문자열을 비트맵 형식으로, 비트맵을 문자열로 바꿔주는 메소드를 포함한 클래스이다.
+            textView_title.setText(title);
+
+            Util util = new Util();
+            Bitmap bitmap = util.stringToBitmap(img);
+
+            imageView_img.setImageBitmap(bitmap);
+            textView_writer.setText(writer);
+            textView_publisher.setText(publisher);
+            textView_publish_date.setText(publishDate);
+
+
+
         }
 
         super.onNewIntent(intent);
