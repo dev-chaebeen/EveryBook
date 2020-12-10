@@ -1,9 +1,11 @@
 package com.example.everybooks;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -17,14 +19,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
+import com.example.everybooks.data.Book;
+import com.example.everybooks.data.Memo;
 import com.example.everybooks.data.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -129,58 +137,52 @@ public class TimeRecordActivity extends AppCompatActivity
                 {
                     case R.id.btn_start:
                         // start 버튼을 클릭하면 저장되어있는 독서시간이 1초씩 증가하고 책장이 넘어가는 애니메이션이 실행된다.
-                        // 독서시간은 사용자가 책을 읽을 때 걸리는 시간을 누적해서 기록해둔 값이다.
+                        // 독서시간은 사용자가 특정한 한 권의 책을 읽는 시간을 누적한 값이다.
 
+                        // start 버튼을 클릭하면 isStart 값은 true 가 되고
+                        // stop 버튼을 클릭하면 isStart  값이 false 가 된다.
 
+                        // start 버튼을 클릭한 상태에서 다시 클릭하면 스레드가 중복되어 실행되기 때문에
+                        // isStart 값이 false 일 때만 코드가 동작하도록 했다.
                         if(!isStart)
                         {
                             isStart = true;
 
-                            // 기존 코드
-                           /* // 문자열의 형태로 저장되어있는 readTime 의 형식을 시, 분, 초로 나눈다.
-                            // 스레드를 사용해 1초당 1씩 초가 증가하도록 한다.
-                            String[] hourMinuteSecond = readTime.split(":");
-                            hour = Integer.parseInt(hourMinuteSecond[0]);
-                            minute = Integer.parseInt(hourMinuteSecond[1]);
-                            second = Integer.parseInt(hourMinuteSecond[2]);
+                            // 시간을 측정하는 동안은 어플 내의 다른 기능을 이용할 수 없다고 안내한다.
+                            AlertDialog.Builder builder = new AlertDialog.Builder(TimeRecordActivity.this);
+                            builder.setMessage("독서 시간을 기록하는 동안은\n 다른 기능을 사용할 수 없어요!\n 기록을 시작할까요? ");
+                            builder.setPositiveButton("확인",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which)
+                                        {
 
-                            Log.d(TAG, "TimeRecordActivity, readTime 에서 시분초 int로 가져오기 : " + hour + minute + second);
+                                            // 책장 넘어가는 스레드 실행
+                                            GifThread gifThread = new GifThread();
+                                            aniThread = new Thread(gifThread);
+                                            aniThread.start();
 
-                            Log.d(TAG, "TimeRecordActivity, 스레드 실행 전 isStart : " + isStart);
+                                            // Time
+                                            Log.d(TAG, "TimeRecordActivity 에서 서비스로 보내는 readTime" + readTime);
+                                            Intent intent = new Intent(getApplicationContext(), TimeRecordService.class);
 
-                            // 초 단위로 바꾸기
-                            long timeInSeconds = hour * 60 * 60 + minute * 60 + second;
+                                            intent.putExtra("readTime", readTime);
+                                            intent.putExtra("isStart", isStart);
+                                            intent.putExtra("bookId", bookId);
+                                            startService(intent);
 
-                            Log.d(TAG, " 저장되어있던 초단위 시간 : " + timeInSeconds);
+                                            dialog.dismiss();
+                                        }
+                                    });
 
-                            TimeRecordThread timeRecordThread = new TimeRecordThread();
-                            timeThread = new Thread(timeRecordThread);
-                            timeThread.start();
+                            builder.setNegativeButton("취소",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which)
+                                        {
+                                            Toast.makeText( getApplicationContext(), "취소" ,Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
-                            Log.d(TAG, "TimeRecordActivity, 스레드 실행 후 isStart : " + isStart);
-
-                            // 책장 넘어가는 스레드 실행
-                            GifThread gifThread = new GifThread();
-                            aniThread = new Thread(gifThread);
-                            aniThread.start();
-
-
-                            */
-
-                            // 책장 넘어가는 스레드 실행
-                            GifThread gifThread = new GifThread();
-                            aniThread = new Thread(gifThread);
-                            aniThread.start();
-
-                            Log.d(TAG, "TimeRecordActivity 에서 서비스로 보내는 readTime" + readTime);
-                            Intent intent = new Intent(getApplicationContext(), TimeRecordService.class);
-
-                            intent.putExtra("readTime", readTime);
-                            intent.putExtra("isStart", isStart);
-                            intent.putExtra("bookId", bookId);
-                            startService(intent);
-
-
+                            builder.show();
                         }
 
                         showNoti();
@@ -254,34 +256,6 @@ public class TimeRecordActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-
-       /* // 인텐트로 전달받은 bookId 의 책 정보를 화면에서 보여주기 위해서
-        // 저장되어있는 책 리스트를 불러오고 인텐트로 전달받은 bookId 와 동일한 bookId 를 가지고 있는 책을 찾아 정보를 가져온다.
-        // 가져오는 정보는 책 제목, 표지, 작가, 출판사, 출판일, 독서 시간이다.
-        SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
-        String bookListString = bookInfo.getString("bookList", null);
-
-        try
-        {
-            JSONArray jsonArray = new JSONArray(bookListString);
-            for (int i = 0; i < jsonArray.length(); i++)
-            {
-                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                if (bookId == jsonObject.getInt("bookId"))
-                {
-                    title = jsonObject.getString("title");
-                    img = jsonObject.getString("img");
-                    writer = jsonObject.getString("writer");
-                    publisher = jsonObject.getString("publisher");
-                    publishDate = jsonObject.getString("publishDate");
-                    readTime = jsonObject.getString("readTime");
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.toString());
-        }*/
 
         // 책 정보를 뷰 요소에 배치해서 보여준다.
         // 이미지의 경우 문자열의 형태로 저장되어있으므로 비트맵으로 변환해서 배치한다.
