@@ -15,18 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import com.example.everybooks.data.Util;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.Random;
 
@@ -43,24 +38,40 @@ public class HomeFragment extends Fragment
     Spinner spinner_order;
     ImageView imageView_mic;
 
-    ImageView imageView_img;
-    TextView textView_title;
-    TextView textView_memo_text;
-
-
     final String TAG = "테스트";
-    String memoText;
-    int bookId;
-    String title;
-    String img;
     int randomNum;
     int length;
 
     Handler memoHandler;
     Thread thread;
 
-    // test
     FragmentManager fragmentManager;
+
+    // 랜덤 메모 스레드
+    // 사용자가 작성한 메모를 일정한 시간 간격마다 랜덤으로 보여주기 위해서
+    // 사용자가 작성한 메모의 수 이내의 랜덤 숫자를 3초마다 발생시키는 스레드이다.
+    class MemoThread implements Runnable {
+        boolean running = false;
+
+        public void run() {
+            running = true;
+            while (running) {
+                Message message = memoHandler.obtainMessage();
+
+                Random random = new Random();
+                randomNum = random.nextInt(length);
+
+                message.arg1 = randomNum;
+
+                memoHandler.sendMessage(message);
+                try {
+                    Thread.sleep(3000);
+                } catch (Exception e) {
+                    return;
+                }
+            }
+        }
+    }
 
     @Nullable
     @Override
@@ -68,10 +79,6 @@ public class HomeFragment extends Fragment
     {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         getChildFragmentManager().beginTransaction().add(R.id.home_frame, new ToReadFragment()).commit();
-        //getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commit();
-
-        // test
-        fragmentManager = getChildFragmentManager();
 
         // 뷰 요소 초기화
         button_to_read = view.findViewById(R.id.btn_to_read);
@@ -79,16 +86,15 @@ public class HomeFragment extends Fragment
         button_read = view.findViewById(R.id.btn_read);
         searchView_search = view.findViewById(R.id.search);
         spinner_order = view.findViewById(R.id.spinner_order);
-
         imageView_mic = view.findViewById(R.id.mic);
-        imageView_img = view.findViewById(R.id.img);
-        textView_memo_text = view.findViewById(R.id.memo_text);
-        textView_title = view.findViewById(R.id.title);
 
-        Log.d(TAG, "HomeFragment");
+        fragmentManager = getChildFragmentManager();
 
-        // test
-        // 랜덤 메모 핸들러
+        Log.d(TAG, "HomeFragment onCreateView()");
+
+        // 핸들러
+        // 랜덤 메모 스레드에서 생성된 랜덤 수를 랜덤 메모 프래그먼트로 보내면서
+        // 프래그먼트를 생성하는 핸들러
         memoHandler = new Handler(Looper.getMainLooper())
         {
             @Override
@@ -98,20 +104,7 @@ public class HomeFragment extends Fragment
                 int randomNum = msg.arg1;
                 Log.d(TAG, "HomeFragment 핸들러 " + randomNum);
 
-                //Bundle bundle = new Bundle(1);
-                //bundle.putInt("randomNum", randomNum);
-
-
-                //randomMemoFragment.setArguments(bundle);
-
-                // 프래그먼트 갱신
-
-               // RandomMemoFragment randomMemoFragment = new RandomMemoFragment(randomNum);
-                //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                //fragmentTransaction.detach(homeFragment).attach(homeFragment).commitAllowingStateLoss();
-
-
-                // test 확인
+                //
                 fragmentManager.beginTransaction().replace(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
 
                 //getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
@@ -201,21 +194,7 @@ public class HomeFragment extends Fragment
     }
 
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
 
-        // test 최초 한번만 나온다..
-        // MainActivity 에서 보낸 랜덤 메모 데이터 받기
-        Bundle bundle = this.getArguments();
-
-        if (bundle != null)
-        {
-            randomNum = getArguments().getInt("randomNum");
-            Log.d(TAG, "HomeFragment 전달받은 랜덤 onAttach : " + randomNum);
-        }
-
-    }
 
     @Override
     public void onResume() {
@@ -235,15 +214,24 @@ public class HomeFragment extends Fragment
             }
 
 
-            // 스레드 시작
-            //if(thread == null && allMemoList.size() >0)
-            //
+            // 랜덤메모 스레드 시작
+            // 사용자가 작성한 메모를 랜덤으로 선정해 3초 간격으로 화면에 보여주기 위해서
+            // (thread == null && length > 0) 조건에서는 HomeFragment 로 다시 돌아왔을 때
+            // 스레드에 의해서 랜덤메모 프래그먼트가 생성될때까지 화면에 나타나지 않는 문제가 발생한다.
+            // 그래서 메모가
             if(length >0)
             {
-                MemoThread memoThread = new MemoThread();
-                thread = new Thread(memoThread);
-                thread.start();
+                fragmentManager.beginTransaction().replace(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
+
+                if(thread == null)
+                {
+                    MemoThread memoThread = new MemoThread();
+                    thread = new Thread(memoThread);
+                    thread.start();
+                }
             }
+
+
         }
         catch (Exception e)
         {
@@ -306,32 +294,15 @@ public class HomeFragment extends Fragment
         });
     }
 
-    // 랜덤 메모 스레드 클래스 생성
-    // 5초마다 작성한 메모를 랜덤으로 보여준다.
-    class MemoThread implements Runnable {
-        boolean running = false;
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
 
-        public void run() {
-            running = true;
-            while (running) {
-                Message message = memoHandler.obtainMessage();
-
-                Random random = new Random();
-                randomNum = random.nextInt(length);
-
-                message.arg1 = randomNum;
-
-                memoHandler.sendMessage(message);
-                try {
-                    Thread.sleep(3000);
-                } catch (Exception e) {
-                    return;
-                }
-            }
+        if(thread !=null)
+        {
+            thread.interrupt();
+            thread = null;
         }
     }
-
-
-
 }
 

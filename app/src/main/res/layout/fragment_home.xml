@@ -113,7 +113,7 @@
 
         </TextView>
 
-        <Spinner
+      <!--  <Spinner
             android:id="@+id/spinner_order"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
             android:gravity="right"
             android:layout_marginLeft="150dp"
 
-            />
+            />-->
 
     </LinearLayout>
 
