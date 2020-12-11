@@ -29,7 +29,7 @@ import androidx.core.content.FileProvider;
 
 import com.example.everybooks.data.Book;
 import com.example.everybooks.data.Memo;
-import com.example.everybooks.data.Util;
+import com.example.everybooks.util.Util;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 

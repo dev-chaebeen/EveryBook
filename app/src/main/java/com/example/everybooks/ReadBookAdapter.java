@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Book;
-import com.example.everybooks.data.Util;
+import com.example.everybooks.util.Util;
 
 import java.util.ArrayList;
 import java.util.Calendar;

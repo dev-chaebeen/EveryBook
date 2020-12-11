@@ -18,7 +18,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Book;
-import com.example.everybooks.data.Util;
+import com.example.everybooks.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -25,8 +25,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
-import com.example.everybooks.data.Util;
+import com.example.everybooks.util.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -150,15 +151,11 @@ public class TimeRecordActivity extends AppCompatActivity
                                         aniThread = new Thread(gifThread);
                                         aniThread.start();
 
-
                                         // TimeRecordService 실행
                                         Intent intent = new Intent(getApplicationContext(), TimeRecordService.class);
                                         intent.putExtra("readTime", readTime);
                                         intent.putExtra("bookId", bookId);
                                         startService(intent);
-
-
-
 
                                         dialog.dismiss();
                                     }
@@ -194,6 +191,8 @@ public class TimeRecordActivity extends AppCompatActivity
                         // start 버튼을 다시 클릭할 수 있도록 isStart 값을 false 로 바꾼다.
                         isStart = false;
 
+                        // 알림창의 알림을 지운다.
+                        removeNotification();
                         break;
                 }
             }
@@ -261,6 +260,7 @@ public class TimeRecordActivity extends AppCompatActivity
     NotificationCompat.Builder builder;
     String CHANNEL_ID = "channel1";
     String CHANEL_NAME = "Channel1";
+    int NOTIFICATION_ID = 1;
 
     public void showNoti()
     {
@@ -275,11 +275,10 @@ public class TimeRecordActivity extends AppCompatActivity
             builder = new NotificationCompat.Builder(getApplicationContext());
         }
 
-
         //알림창 제목
         builder.setContentTitle("Every Book");
         //알림창 메시지
-        builder.setContentText("독서시간을 기록중입니다.");
+        builder.setContentText("⏱ 독서시간을 기록중입니다.");
         //알림창 아이콘
         builder.setSmallIcon(R.drawable.ic_etc_black_24dp);
         //알림창 터치시 상단 알림상태창에서 알림이 자동으로 삭제되게 합니다.
@@ -295,11 +294,15 @@ public class TimeRecordActivity extends AppCompatActivity
         Notification notification = builder.build();
 
         //알림창 실행
-        manager.notify(1,notification);
+        manager.notify(NOTIFICATION_ID,notification);
 
     }
 
+    private void removeNotification() {
 
+        // Notification 제거
+        NotificationManagerCompat.from(this).cancel(NOTIFICATION_ID);
+    }
 
     // 이미지 스레드 클래스 생성
     class GifThread implements Runnable

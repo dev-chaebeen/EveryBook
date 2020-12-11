@@ -1,4 +1,4 @@
-package com.example.everybooks.data;
+package com.example.everybooks.util;
 
 import android.Manifest;
 import android.content.Context;

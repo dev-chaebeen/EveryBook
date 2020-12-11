@@ -17,11 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.everybooks.data.Util;
+import com.example.everybooks.util.Util;
 
 import org.json.JSONObject;
-
-import java.util.function.BiConsumer;
 
 public class ProfileFragment extends Fragment
 {

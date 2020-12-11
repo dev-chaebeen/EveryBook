@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.everybooks.data.Book;
 import com.example.everybooks.data.Memo;
-import com.example.everybooks.data.Util;
+import com.example.everybooks.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
