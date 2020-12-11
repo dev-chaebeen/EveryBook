@@ -1,9 +1,14 @@
 package com.example.everybooks;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -44,11 +49,123 @@ public class TimeRecordService extends Service
     public void onCreate()
     {
         super.onCreate();
-
         Log.d(TAG, "TimeRecordService, onCreate()");
 
     }
+
     @Override
+    public int onStartCommand( Intent intent, int flags, int startId )
+    {
+        NotificationCompat.Builder builder;
+
+        if( Build.VERSION.SDK_INT >= 26 )
+        {
+            String CHANNEL_ID = "channel_id";
+            NotificationChannel clsChannel = new NotificationChannel( CHANNEL_ID, "서비스 앱", NotificationManager.IMPORTANCE_DEFAULT );
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel( clsChannel );
+
+            builder = new NotificationCompat.Builder(this, CHANNEL_ID );
+        }
+        else
+        {
+            builder = new NotificationCompat.Builder(this );
+        }
+
+        if(intent == null)
+        {
+            return Service.START_STICKY;
+        }
+        else
+        {
+            // 문자열의 형태로 저장되어있는 readTime 의 형식을 시, 분, 초로 나눈다.
+            // 스레드를 사용해 1초당 1씩 초가 증가하도록 한다.
+
+            readTime = intent.getStringExtra("readTime");
+            bookId = intent.getIntExtra("bookId", -1);
+
+            Log.d(TAG, "TimeRecordService 에서 받은 readTime" + readTime );
+
+            String[] hourMinuteSecond = readTime.split(":");
+            hour = Integer.parseInt(hourMinuteSecond[0]);
+            minute = Integer.parseInt(hourMinuteSecond[1]);
+            second = Integer.parseInt(hourMinuteSecond[2]);
+
+            Log.d(TAG, "TimeRecordService, readTime 에서 시분초 int로 가져오기 : " + hour + minute + second);
+
+            Log.d(TAG, "TimeRecordService, 스레드 실행 전 isStart : " + isStart);
+
+            // 초 단위로 바꾸기
+            timeInSeconds = hour * 60 * 60 + minute * 60 + second;
+
+            Log.d(TAG, " 저장되어있던 초단위 시간 : " + timeInSeconds);
+
+            // 1초 씩 증가하는 스레드 시작
+            if(timeThread == null)
+            {
+                TimeRecordThread timeRecordThread = new TimeRecordThread();
+                timeThread = new Thread(timeRecordThread);
+                timeThread.start();
+            }
+        }
+
+        intent = new Intent(this, TimeRecordActivity.class);
+        intent.putExtra("bookId", bookId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        // QQQ: notification 에 보여줄 타이틀, 내용을 수정한다.
+        builder.setSmallIcon( R.drawable.ic_etc_black_24dp)
+                .setContentTitle( "EveryBook" ).setContentText( "독서 시간을 기록중입니다 ! " )
+                .setContentIntent( pendingIntent );
+
+        // foreground 서비스로 실행한다.
+        startForeground( 1, builder.build() );
+
+        // QQQ: 쓰레드 등을 실행하여서 서비스에 적합한 로직을 구현한다.
+
+        //return START_STICKY;
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // 스레드가 생성되지 않은 상황에서는 stop 버튼을 눌러도 코드가 동작하지 않도록 하기 위해서
+        // thread 가 null 이 아닐 때만 코드 동작하도록 한다.
+        if (timeThread != null) {
+            // stop 버튼 클릭하면 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
+            timeThread.interrupt();
+
+            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+            String bookListString = bookInfo.getString("bookList", null);
+
+            try {
+                JSONArray jsonArray = new JSONArray(bookListString);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                    if (bookId == jsonObject.getInt("bookId"))
+                    {
+                        jsonObject.put("readTime", readTime);
+                        Log.d(TAG, "TimeRecordService, onDestroy 후 저장할 readTime : " + readTime);
+                    }
+                }
+
+                SharedPreferences.Editor editor = bookInfo.edit();
+                editor.putString("bookList", jsonArray.toString());
+                editor.commit();
+
+                Log.d(TAG, "TimeRecordService, onDestroy 후 저장된 readTime : " + readTime);
+
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
+
+
+    /* @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         // 기존
@@ -94,9 +211,9 @@ public class TimeRecordService extends Service
         }
 
         return super.onStartCommand(intent, flags, startId);
-    }
+    }*/
 
-    @Override
+  /* @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -174,7 +291,7 @@ public class TimeRecordService extends Service
 
         stopSelf(); //서비스 종료
 
-    }
+    }*/
 
     // 타임핸들러 클래스
     Handler timeHandler = new Handler(Looper.getMainLooper())

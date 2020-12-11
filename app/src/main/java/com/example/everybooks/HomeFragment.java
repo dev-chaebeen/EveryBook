@@ -234,5 +234,18 @@ public class HomeFragment extends Fragment
             thread = null;
         }
     }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        // 프래그먼트가 화면에 안보일 때 스레드가 null 이 아니라면 스레드를 멈춘다.
+        // 화면이 다시 보일 때 시작하는 스레드가 중복되어 실행되지 않도록 스레드를 null 로 초기환한다.
+        if(thread !=null)
+        {
+            thread.interrupt();
+            thread = null;
+        }
+    }
 }
 
