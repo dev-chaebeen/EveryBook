@@ -14,8 +14,6 @@
         app:itemTextColor="@color/dark_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu">
-
-
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <!--프레임 레이아웃-->

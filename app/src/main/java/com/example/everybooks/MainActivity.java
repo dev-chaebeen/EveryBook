@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity
     Random random;
     Memo memo;
 
+    int randomNum;
+
     String img;
 
     @Override
@@ -90,7 +92,6 @@ public class MainActivity extends AppCompatActivity
         profileLogoutFragment = new ProfileLogoutFragment();
         profileFragment = new ProfileFragment();
 
-        // test
         setFragment(HOME);// 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
 
         random = new Random();
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity
             while (running) {
                 Message message = memoHandler.obtainMessage();
 
-                int randomNum = random.nextInt(allMemoList.size());
+                randomNum = random.nextInt(allMemoList.size());
 
                 message.arg1 =  randomNum;
 
@@ -134,7 +135,8 @@ public class MainActivity extends AppCompatActivity
         allMemoList = new ArrayList<>();
         notiList = new ArrayList<>();
 
-        // 랜덤 메모 핸들러
+        // 기존
+        /*// 랜덤 메모 핸들러
         memoHandler = new Handler(Looper.getMainLooper())
         {
             @Override
@@ -147,28 +149,37 @@ public class MainActivity extends AppCompatActivity
                 Bundle bundle = new Bundle(1);
                 bundle.putInt("randomNum", randomNum);
 
+                // 기존
                 homeFragment.setArguments(bundle);
-
                 // 프래그먼트 갱신
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.detach(homeFragment).attach(homeFragment).commitAllowingStateLoss();
+
+                // test
+
+                homeFragment.setArguments(bundle);
+                // 프래그먼트 갱신
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.detach(homeFragment).attach(homeFragment).commitAllowingStateLoss();
+
+                // test
+                //RandomMemoFragment randomMemoFragment = new RandomMemoFragment();
+
+                //fragmentTransaction.replace(R.id.random_memo_frame, randomMemoFragment);
+
+
+                //fragmentTransaction.detach(randomMemoFragment).attach(randomMemoFragment).commitAllowingStateLoss();
+
+                // 다른 액티비티 갔다가 메인액티비티로 돌아왔을 때 이 코드가 실행되기 전까지는 프래그먼트가 나타나지 않는 문제 발생
 
                 // 에러발생  Fatal Exception: java.lang.illegalStateException Can not perform this action after onSaveInstanceState
                 // 원인 : Fragment 를 생성할 때, commit() 메서드를 호출하는 시점은 Activity 가 상태를 저장하기 전에 이루어져야 하는데, Activity 의 상태 저장 후에 이루어졌기 때문
                 // 해결 : Activity 가 상태를 저장하고 난 후에 commit()를 하기 위해서는 commitAllowingStateLoss() 메서드를 이용
                 // 출처: https://eso0609.tistory.com/69
 
-
-                //getSupportFragmentManager().beginTransaction().add(R.id.main_frame, homeFragment).commit();
-
-
-                /*FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.main_frame, homeFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commitAllowingStateLoss();*/
-
             }
         };
+*/
 
         // 하단 네비 바 아이템 클릭하면 해당하는 프래그먼트로 변경
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
@@ -311,15 +322,16 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+        // 기존
         // 스레드 시작
         //if(thread == null && allMemoList.size() >0)
-        // test
-        if(allMemoList.size() >0)
+        //
+       /* if(allMemoList.size() >0)
         {
             MemoThread memoThread = new MemoThread();
             thread = new Thread(memoThread);
             thread.start();
-        }
+        }*/
 
 
         // 저장되어있는 알림리스트 어댑터에 보내주기
@@ -451,8 +463,6 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
-
-
 
         toast = Toast.makeText(this, "또 기록하러 와주세요 ", Toast.LENGTH_SHORT);
         toast.show();

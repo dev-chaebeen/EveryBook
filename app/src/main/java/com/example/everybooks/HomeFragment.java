@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +20,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.everybooks.data.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.Random;
 
 public class HomeFragment extends Fragment
 {
@@ -40,12 +46,17 @@ public class HomeFragment extends Fragment
     TextView textView_title;
     TextView textView_memo_text;
 
+
     final String TAG = "테스트";
     String memoText;
     int bookId;
     String title;
     String img;
     int randomNum;
+    int length;
+
+    Handler memoHandler;
+    Thread thread;
 
     @Nullable
     @Override
@@ -53,6 +64,7 @@ public class HomeFragment extends Fragment
     {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         getChildFragmentManager().beginTransaction().add(R.id.home_frame, new ToReadFragment()).commit();
+        //getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commit();
 
         // 뷰 요소 초기화
         button_to_read = view.findViewById(R.id.btn_to_read);
@@ -66,12 +78,59 @@ public class HomeFragment extends Fragment
         textView_memo_text = view.findViewById(R.id.memo_text);
         textView_title = view.findViewById(R.id.title);
 
-
         Log.d(TAG, "HomeFragment");
 
+        // test
+        // test
+        // 랜덤 메모 핸들러
+        memoHandler = new Handler(Looper.getMainLooper())
+        {
+            @Override
+            public void handleMessage (@NonNull Message msg){
+                super.handleMessage(msg);
 
+                int randomNum = msg.arg1;
+                Log.d(TAG, "HomeFragment 핸들러 " + randomNum);
+
+                //Bundle bundle = new Bundle(1);
+                //bundle.putInt("randomNum", randomNum);
+
+
+                //randomMemoFragment.setArguments(bundle);
+
+                // 프래그먼트 갱신
+
+               // RandomMemoFragment randomMemoFragment = new RandomMemoFragment(randomNum);
+                //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                //fragmentTransaction.detach(homeFragment).attach(homeFragment).commitAllowingStateLoss();
+                getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commit();
+                //getChildFragmentManager().beginTransaction().detach(randomMemoFragment).attach(randomMemoFragment).commitAllowingStateLoss();
+
+
+                // 다른 액티비티 갔다가 메인액티비티로 돌아왔을 때 이 코드가 실행되기 전까지는 프래그먼트가 나타나지 않는 문제 발생
+
+                // 에러발생  Fatal Exception: java.lang.illegalStateException Can not perform this action after onSaveInstanceState
+                // 원인 : Fragment 를 생성할 때, commit() 메서드를 호출하는 시점은 Activity 가 상태를 저장하기 전에 이루어져야 하는데, Activity 의 상태 저장 후에 이루어졌기 때문
+                // 해결 : Activity 가 상태를 저장하고 난 후에 commit()를 하기 위해서는 commitAllowingStateLoss() 메서드를 이용
+                // 출처: https://eso0609.tistory.com/69
+
+            }
+        };
+
+
+        // 기존
+       // MainActivity 에서 보낸 랜덤 수 받기
+       /* Bundle bundle = this.getArguments();
+
+        if (bundle != null)
+        {
+            randomNum = getArguments().getInt("randomNum");
+            Log.d(TAG, "HomeFragment 전달받은 랜덤 : " + randomNum);
+
+
+        // 기존
         // MainActivity 에서 보낸 랜덤 메모 데이터 받기
-        Bundle bundle = this.getArguments();
+       /* Bundle bundle = this.getArguments();
 
         if (bundle != null)
         {
@@ -120,7 +179,7 @@ public class HomeFragment extends Fragment
             imageView_img.setImageBitmap(bitmap);
         }
 
-        Log.d(TAG, "HomeFragment onCreateView ");
+        Log.d(TAG, "HomeFragment onCreateView ");*/
 
         return view;
     }
@@ -145,6 +204,37 @@ public class HomeFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
+
+        try
+        {
+
+            SharedPreferences memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
+            String memoListString = memoInfo.getString("memoList", null);
+            if(memoListString != null)
+            {
+                JSONArray jsonArray = new JSONArray(memoListString);
+                length = jsonArray.length();
+
+                Log.d(TAG, "HomeFragment 메모 length :" + length);
+            }
+
+
+            // 스레드 시작
+            //if(thread == null && allMemoList.size() >0)
+            //
+            if(length >0)
+            {
+                MemoThread memoThread = new MemoThread();
+                thread = new Thread(memoThread);
+                thread.start();
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString());
+        }
+
+
 
     }
 
@@ -200,4 +290,32 @@ public class HomeFragment extends Fragment
         });
     }
 
+    // 랜덤 메모 스레드 클래스 생성
+    // 5초마다 작성한 메모를 랜덤으로 보여준다.
+    class MemoThread implements Runnable {
+        boolean running = false;
+
+        public void run() {
+            running = true;
+            while (running) {
+                Message message = memoHandler.obtainMessage();
+
+                Random random = new Random();
+                randomNum = random.nextInt(length);
+
+                message.arg1 = randomNum;
+
+                memoHandler.sendMessage(message);
+                try {
+                    Thread.sleep(3000);
+                } catch (Exception e) {
+                    return;
+                }
+            }
+        }
+    }
+
+
+
 }
+
