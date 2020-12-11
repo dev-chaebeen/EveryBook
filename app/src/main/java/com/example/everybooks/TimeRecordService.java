@@ -108,12 +108,16 @@ public class TimeRecordService extends Service
             }
         }
 
-        intent = new Intent(this, TimeRecordActivity.class);
-        intent.putExtra("bookId", bookId);
+        // PendingIntent : Notification 으로 작업을 수행할 때 인텐트를 실행하기 위해서 사용한다.
+
+        // test
+        intent = new Intent(this, MainActivity.class);
+        // 기존
+        //intent = new Intent(this, TimeRecordActivity.class);
+        //intent.putExtra("bookId", bookId);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
-        // QQQ: notification 에 보여줄 타이틀, 내용을 수정한다.
         builder.setSmallIcon( R.drawable.ic_etc_black_24dp)
                 .setContentTitle( "EveryBook" ).setContentText( "독서 시간을 기록중입니다 ! " )
                 .setContentIntent( pendingIntent );
@@ -157,6 +161,42 @@ public class TimeRecordService extends Service
                 editor.commit();
 
                 Log.d(TAG, "TimeRecordService, onDestroy 후 저장된 readTime : " + readTime);
+
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
+
+    // 강제 종료 시점
+    public void onTaskRemoved(Intent rootIntent)
+    {
+        // 스레드가 생성되지 않은 상황에서는 강제종료 시에도 코드가 동작하지 않도록 하기 위해서
+        // thread 가 null 이 아닐 때만 코드 동작하도록 한다.
+        if (timeThread != null) {
+            // 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
+            timeThread.interrupt();
+            timeThread = null;
+
+            SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
+            String bookListString = bookInfo.getString("bookList", null);
+
+            try {
+                JSONArray jsonArray = new JSONArray(bookListString);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                    if (bookId == jsonObject.getInt("bookId"))
+                    {
+                        jsonObject.put("readTime", readTime);
+                    }
+                }
+
+                SharedPreferences.Editor editor = bookInfo.edit();
+                editor.putString("bookList", jsonArray.toString());
+                editor.commit();
+
+                Log.d(TAG, "TimeRecordService, 강제종료 후 저장된 readTime : " + readTime);
 
             } catch (Exception e) {
                 System.out.println(e.toString());
