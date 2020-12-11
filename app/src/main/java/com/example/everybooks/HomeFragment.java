@@ -153,9 +153,10 @@ public class HomeFragment extends Fragment
                 // 저장된 메모가 1개 이상이면 랜덤메모 프래그먼트를 생성한다.
                 fragmentManager.beginTransaction().replace(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
 
-                if(thread == null)
+                if(thread == null && length >1)
                 {
-                    // 랜덤메모 스레드 시작
+                    // thread 가 null 이고 저장된 메모가 2개일 때부터 랜덤메모 스레드 시작
+                    // 저장된 메모가 1개라면 스레드를 이용해 바꿔줄 필요가 없기 때문이다.
                     // 사용자가 작성한 메모를 랜덤으로 선정해 3초 간격으로 화면에 보여주기 위해서 랜덤 숫자를 생성하는 스레드이다.
                     MemoThread memoThread = new MemoThread();
                     thread = new Thread(memoThread);
