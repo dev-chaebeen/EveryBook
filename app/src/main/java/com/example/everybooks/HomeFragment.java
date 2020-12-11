@@ -92,9 +92,7 @@ public class HomeFragment extends Fragment
 
         Log.d(TAG, "HomeFragment onCreateView()");
 
-        // 핸들러
-        // 랜덤 메모 스레드에서 생성된 랜덤 수를 랜덤 메모 프래그먼트로 보내면서
-        // 프래그먼트를 생성하는 핸들러
+        // 랜덤 메모 스레드에서 생성된 랜덤 수를 랜덤 메모 프래그먼트로 전달하면서 프래그먼트를 생성하는 핸들러
         memoHandler = new Handler(Looper.getMainLooper())
         {
             @Override
@@ -104,105 +102,37 @@ public class HomeFragment extends Fragment
                 int randomNum = msg.arg1;
                 Log.d(TAG, "HomeFragment 핸들러 " + randomNum);
 
-                //
+                // 랜덤 메모 프래그먼트를 교체한다.
                 fragmentManager.beginTransaction().replace(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
 
-                //getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
+                // 기존 코드 2. getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
                 // 에러 발생 fragment-has-not-been-attached-yet
                 // 원인 : 부모 프래그먼트가 생성되기 전에 자식 프래그먼트를 추가하려고 해서..?
-                // 해결 :
+                // 해결 : getChildFragmentManager() 를 전역변수로 둠..?
                 // 출처 : https://stackoverflow.com/questions/43562394/fragment-has-not-been-attached-yet
 
-                //getChildFragmentManager().beginTransaction().detach(randomMemoFragment).attach(randomMemoFragment).commitAllowingStateLoss();
-
-
-                // 다른 액티비티 갔다가 메인액티비티로 돌아왔을 때 이 코드가 실행되기 전까지는 프래그먼트가 나타나지 않는 문제 발생
-
+                // 기존 코드 1. getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commit();
                 // 에러발생  Fatal Exception: java.lang.illegalStateException Can not perform this action after onSaveInstanceState
                 // 원인 : Fragment 를 생성할 때, commit() 메서드를 호출하는 시점은 Activity 가 상태를 저장하기 전에 이루어져야 하는데, Activity 의 상태 저장 후에 이루어졌기 때문
-                // 해결 : Activity 가 상태를 저장하고 난 후에 commit()를 하기 위해서는 commitAllowingStateLoss() 메서드를 이용
+                // 해결 : Activity 가 상태를 저장하고 난 후에 commit()를 하기 위해서는 commitAllowingStateLoss() 메서드를 이용한다.
                 // 출처: https://eso0609.tistory.com/69
 
             }
         };
 
-
-        // 기존
-       // MainActivity 에서 보낸 랜덤 수 받기
-       /* Bundle bundle = this.getArguments();
-
-        if (bundle != null)
-        {
-            randomNum = getArguments().getInt("randomNum");
-            Log.d(TAG, "HomeFragment 전달받은 랜덤 : " + randomNum);
-
-
-        // 기존
-        // MainActivity 에서 보낸 랜덤 메모 데이터 받기
-       /* Bundle bundle = this.getArguments();
-
-        if (bundle != null)
-        {
-            randomNum = getArguments().getInt("randomNum");
-            Log.d(TAG, "HomeFragment 전달받은 랜덤 : " + randomNum);
-
-            SharedPreferences memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
-            String memoListString = memoInfo.getString("memoList", null);
-            try
-            {
-                JSONArray jsonArray = new JSONArray(memoListString);
-
-                JSONObject jsonObject = (JSONObject) jsonArray.get(randomNum);
-                memoText = jsonObject.getString("memoText");
-                bookId = jsonObject.getInt("bookId");
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.toString());
-            }
-
-            // 메모에 저장되어 있는 bookId 에 해당하는 title, img 가져온다.
-            SharedPreferences bookInfo = view.getContext().getSharedPreferences("bookInfo", Context.MODE_PRIVATE);
-            String bookListString = bookInfo.getString("bookList", null);
-
-            try
-            {
-                JSONArray jsonArray = new JSONArray(bookListString);
-                for (int i = 0; i < jsonArray.length(); i++)
-                {
-                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                    if(bookId == jsonObject.getInt("bookId"))
-                    {
-                        img = jsonObject.getString("img");
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.toString());
-            }
-
-            textView_memo_text.setText(memoText);
-            Util util = new Util();
-            Bitmap bitmap = util.stringToBitmap(img);
-            imageView_img.setImageBitmap(bitmap);
-        }
-
-        Log.d(TAG, "HomeFragment onCreateView ");*/
-
         return view;
     }
 
-
-
-
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
-
         try
         {
-
+            // 랜덤으로 사용자가 작성한 메모를 보여주기 위한 랜덤 숫자를 생성하는 스레드에서
+            // 생성할 숫자의 범위를 지정하기 위해서 저장되어 있는 메모의 개수를 알아야 한다.
+            // 저장되어 있는 메모의 개수를 파악하기 위해 memoInfo 파일에 저장된 memoList 문자열을 가져온다.
+            // 문자열의 형태로는 저장된 메모의 개수를 알 수 없기 때문에 JsonArray 형식으로 변환하여 길이를 구한다.
             SharedPreferences memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
             String memoListString = memoInfo.getString("memoList", null);
             if(memoListString != null)
@@ -214,38 +144,35 @@ public class HomeFragment extends Fragment
             }
 
 
-            // 랜덤메모 스레드 시작
-            // 사용자가 작성한 메모를 랜덤으로 선정해 3초 간격으로 화면에 보여주기 위해서
-            // (thread == null && length > 0) 조건에서는 HomeFragment 로 다시 돌아왔을 때
-            // 스레드에 의해서 랜덤메모 프래그먼트가 생성될때까지 화면에 나타나지 않는 문제가 발생한다.
-            // 그래서 메모가
-            if(length >0)
+            // 문제 :  if(thread == null && length > 0) 조건에서 다른 프래그먼트에서 HomeFragment 로 돌아왔을 때
+            //        스레드에 의해서 랜덤메모 프래그먼트가 생성될때까지 화면에 나타나지 않는 문제 발생
+            // 원인 : 스레드가 시작되어야만 핸들러에서 랜덤메모 프래그먼트를 생성하기 때문
+            // 해결 : 저장된 메모가 존재하면 일단 랜덤메모 프래그먼트를 생성한 다음에 스레드를 시작
+            if(length > 0)
             {
+                // 저장된 메모가 1개 이상이면 랜덤메모 프래그먼트를 생성한다.
                 fragmentManager.beginTransaction().replace(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
 
                 if(thread == null)
                 {
+                    // 랜덤메모 스레드 시작
+                    // 사용자가 작성한 메모를 랜덤으로 선정해 3초 간격으로 화면에 보여주기 위해서 랜덤 숫자를 생성하는 스레드이다.
                     MemoThread memoThread = new MemoThread();
                     thread = new Thread(memoThread);
                     thread.start();
                 }
             }
-
-
         }
         catch (Exception e)
         {
             System.out.println(e.toString());
         }
-
-
-
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
-
 
         // To Read / Reading / Read 버튼을 클릭하면 해당하는 리스트를 보여줄 수 있도록 클릭이벤트를 등록한다.
         button_to_read.setOnClickListener(new View.OnClickListener()
@@ -298,6 +225,8 @@ public class HomeFragment extends Fragment
     public void onDestroyView() {
         super.onDestroyView();
 
+        // 프래그먼트가 화면에 안보일 때 스레드가 null 이 아니라면 스레드를 멈춘다.
+        // 화면이 다시 보일 때 시작하는 스레드가 중복되어 실행되지 않도록 스레드를 null 로 초기환한다.
         if(thread !=null)
         {
             thread.interrupt();
