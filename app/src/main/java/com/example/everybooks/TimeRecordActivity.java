@@ -150,12 +150,15 @@ public class TimeRecordActivity extends AppCompatActivity
                                         aniThread = new Thread(gifThread);
                                         aniThread.start();
 
-                                        // 기존
+
                                         // TimeRecordService 실행
                                         Intent intent = new Intent(getApplicationContext(), TimeRecordService.class);
                                         intent.putExtra("readTime", readTime);
                                         intent.putExtra("bookId", bookId);
                                         startService(intent);
+
+
+
 
                                         dialog.dismiss();
                                     }
@@ -222,6 +225,9 @@ public class TimeRecordActivity extends AppCompatActivity
 
     }
 
+    // onNewIntent()
+    // 실행한 Activity 가 foreground 인 상태에서 Intent 에 데이터를 담아서 다시 호출되면
+    // onCreate() 대신 onNewIntent() 가 호출된다.
     @Override
     protected void onNewIntent(Intent intent)
     {
@@ -377,5 +383,4 @@ public class TimeRecordActivity extends AppCompatActivity
                 break;
         }
     }
-
 }

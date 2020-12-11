@@ -246,4 +246,12 @@ public class TimeRecordService extends Service
             }
         }
     }
+
+    final String CHANNEL_ID = "channel";
+    // test
+    Notification notiEx = new NotificationCompat.Builder(TimeRecordService.this, CHANNEL_ID)
+            .setContentTitle("Title Example")
+            .setContentText("Content Text Example")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .build();
 }

@@ -1,6 +1,5 @@
 package com.example.everybooks;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.everybooks.data.User;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
