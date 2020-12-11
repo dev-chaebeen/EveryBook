@@ -20,6 +20,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.everybooks.data.Util;
@@ -58,6 +59,9 @@ public class HomeFragment extends Fragment
     Handler memoHandler;
     Thread thread;
 
+    // test
+    FragmentManager fragmentManager;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -65,6 +69,9 @@ public class HomeFragment extends Fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
         getChildFragmentManager().beginTransaction().add(R.id.home_frame, new ToReadFragment()).commit();
         //getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commit();
+
+        // test
+        fragmentManager = getChildFragmentManager();
 
         // 뷰 요소 초기화
         button_to_read = view.findViewById(R.id.btn_to_read);
@@ -103,7 +110,13 @@ public class HomeFragment extends Fragment
                // RandomMemoFragment randomMemoFragment = new RandomMemoFragment(randomNum);
                 //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 //fragmentTransaction.detach(homeFragment).attach(homeFragment).commitAllowingStateLoss();
-                getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commit();
+
+                fragmentManager.beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
+
+                // 기존
+                //getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
+
+
                 //getChildFragmentManager().beginTransaction().detach(randomMemoFragment).attach(randomMemoFragment).commitAllowingStateLoss();
 
 
