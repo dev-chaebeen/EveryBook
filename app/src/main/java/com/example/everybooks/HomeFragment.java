@@ -88,7 +88,6 @@ public class HomeFragment extends Fragment
         Log.d(TAG, "HomeFragment");
 
         // test
-        // test
         // 랜덤 메모 핸들러
         memoHandler = new Handler(Looper.getMainLooper())
         {
@@ -111,11 +110,15 @@ public class HomeFragment extends Fragment
                 //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 //fragmentTransaction.detach(homeFragment).attach(homeFragment).commitAllowingStateLoss();
 
-                fragmentManager.beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
 
-                // 기존
+                // test 확인
+                fragmentManager.beginTransaction().replace(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
+
                 //getChildFragmentManager().beginTransaction().add(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
-
+                // 에러 발생 fragment-has-not-been-attached-yet
+                // 원인 : 부모 프래그먼트가 생성되기 전에 자식 프래그먼트를 추가하려고 해서..?
+                // 해결 :
+                // 출처 : https://stackoverflow.com/questions/43562394/fragment-has-not-been-attached-yet
 
                 //getChildFragmentManager().beginTransaction().detach(randomMemoFragment).attach(randomMemoFragment).commitAllowingStateLoss();
 
