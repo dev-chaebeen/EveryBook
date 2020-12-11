@@ -265,6 +265,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
 
                                                 Log.d(TAG, "저장되어있는 allMemoList.size : " + allMemoList.size());
 
+
                                             }
                                             catch (Exception e)
                                             {
@@ -497,7 +498,6 @@ public class ReadBookInfoActivity extends AppCompatActivity
 
                                         Log.d(TAG, "저장되어있는 allMemoList.size : " + allMemoList.size());
 
-
                                     }
                                     catch (Exception e)
                                     {
@@ -543,18 +543,11 @@ public class ReadBookInfoActivity extends AppCompatActivity
 
                                 // 현재 화면 종료하고
                                 finish();
+
                                 // 다시 요청
                                 intent = new Intent(getApplicationContext(), ReadingBookInfoActivity.class);
                                 intent.putExtra("bookId", memo.getBookId());
                                 startActivity(intent);
-
-                            /*
-                            // 확인 클릭했을 때 해당 메모 삭제한다.
-                            MemoAdapter.memoList.remove(position);
-
-                            // 아래 method를 호출하지 않을 경우, 삭제된 item이 화면에 계속 보여진다.
-                            memoAdapter.notifyDataSetChanged();*/
-                                //dialog.dismiss();
 
                             }
                         });

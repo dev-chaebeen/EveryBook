@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.everybooks.data.Book;
 import com.example.everybooks.data.Memo;
+import com.example.everybooks.data.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -72,7 +73,15 @@ public class CreateMemoActivity extends AppCompatActivity {
                         int minute = cal.get(cal.MINUTE);
                         int second = cal.get(cal.SECOND);
 
-                        String today = year + "." + month + "." + date + " " +  hour + ":"+ minute + ":" + second;
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.HOUR_OF_DAY, hour);
+                        calendar.set(Calendar.MINUTE, minute);
+                        calendar.set(Calendar.SECOND, second);
+
+                        Log.d(TAG, "TimeRecordActivity, 형식 바꿀 때 시간 " + hour + ":" + minute + ":" + second);
+
+                        Util util = new Util();
+                        String today =  year + "." + month + "." + date + " " + util.stringFromCalendar(calendar);
 
                         try
                         {

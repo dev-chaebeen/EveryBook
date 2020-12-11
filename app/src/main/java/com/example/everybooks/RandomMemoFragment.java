@@ -53,7 +53,7 @@ public class RandomMemoFragment extends Fragment
         textView_memo_text = view.findViewById(R.id.memo_text);
 
         // 이 프래그먼트는 HomeFragment 에서 전달받은 수의 위치에 있는 메모 데이터를 뷰 요소에 배치하는 프래그먼트이다.
-        // 배치하는 데이터는 메모가 적힌 책의 표지 이미지, 메모 내용이다.
+        // 배치하는 데이터는 메모가 적힌 책의 표지 이미지와 메모 내용이다.
 
         // 메모 데이터를 가져오기 위해서 memoInfo 파일의 memoList 문자열을 가져온다.
         // 특정한 위치에 있는 메모의 데이터를 가져오기 위해서 memoList 문자열을 JsonArray 형식으로 변환한다.

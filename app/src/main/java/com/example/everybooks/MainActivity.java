@@ -22,6 +22,7 @@ import com.example.everybooks.data.Notification;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -67,14 +68,6 @@ public class MainActivity extends AppCompatActivity
 
     final String TAG = "테스트";
 
-    Thread thread;
-    Handler memoHandler;
-    Random random;
-    Memo memo;
-
-    int randomNum;
-
-    String img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,94 +85,21 @@ public class MainActivity extends AppCompatActivity
         profileLogoutFragment = new ProfileLogoutFragment();
         profileFragment = new ProfileFragment();
 
-        setFragment(HOME);// 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
+        // 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
+        setFragment(HOME);
 
-        random = new Random();
     }
-
-    // 랜덤 메모 스레드 클래스 생성
-    // 5초마다 작성한 메모를 랜덤으로 보여준다.
-    class MemoThread implements Runnable
-    {
-        boolean running = false;
-
-        public void run() {
-            running = true;
-            while (running) {
-                Message message = memoHandler.obtainMessage();
-
-                randomNum = random.nextInt(allMemoList.size());
-
-                message.arg1 =  randomNum;
-
-                memoHandler.sendMessage(message);
-                try {
-                    Thread.sleep(3000);
-                } catch (Exception e) {
-                    return;
-                }
-            }
-        }
-    }
-
 
     @Override
     protected void onResume()
     {
         super.onResume();
 
-        // test 전역으로 변경
         toReadBookList = new ArrayList<>();
         readingBookList = new ArrayList<>();
         readBookList = new ArrayList<>();
         allMemoList = new ArrayList<>();
         notiList = new ArrayList<>();
-
-        // 기존
-        /*// 랜덤 메모 핸들러
-        memoHandler = new Handler(Looper.getMainLooper())
-        {
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                super.handleMessage(msg);
-
-                int randomNum = msg.arg1;
-                Log.d(TAG, "핸들러 "+ randomNum);
-
-                Bundle bundle = new Bundle(1);
-                bundle.putInt("randomNum", randomNum);
-
-                // 기존
-                homeFragment.setArguments(bundle);
-                // 프래그먼트 갱신
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.detach(homeFragment).attach(homeFragment).commitAllowingStateLoss();
-
-                // test
-
-                homeFragment.setArguments(bundle);
-                // 프래그먼트 갱신
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.detach(homeFragment).attach(homeFragment).commitAllowingStateLoss();
-
-                // test
-                //RandomMemoFragment randomMemoFragment = new RandomMemoFragment();
-
-                //fragmentTransaction.replace(R.id.random_memo_frame, randomMemoFragment);
-
-
-                //fragmentTransaction.detach(randomMemoFragment).attach(randomMemoFragment).commitAllowingStateLoss();
-
-                // 다른 액티비티 갔다가 메인액티비티로 돌아왔을 때 이 코드가 실행되기 전까지는 프래그먼트가 나타나지 않는 문제 발생
-
-                // 에러발생  Fatal Exception: java.lang.illegalStateException Can not perform this action after onSaveInstanceState
-                // 원인 : Fragment 를 생성할 때, commit() 메서드를 호출하는 시점은 Activity 가 상태를 저장하기 전에 이루어져야 하는데, Activity 의 상태 저장 후에 이루어졌기 때문
-                // 해결 : Activity 가 상태를 저장하고 난 후에 commit()를 하기 위해서는 commitAllowingStateLoss() 메서드를 이용
-                // 출처: https://eso0609.tistory.com/69
-
-            }
-        };
-*/
 
         // 하단 네비 바 아이템 클릭하면 해당하는 프래그먼트로 변경
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
@@ -206,9 +126,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        // 저장되어있는 책 리스트 어댑터에 보내주기
+        // 저장되어있는 책 리스트를 리사이클러뷰에서 보여줄 수 있도록 ArrayList<Book> 형태로 변환해서 어댑터에 보내준다.
         try
         {
+            // bookInfo 파일에서 bookList 를 문자열의 형태로 가져온다.
+            // 문자열의 형태를 ArrayList<Book> 로 변환하기 위해서 JsonArray 형태로 변환한다.
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
             String bookListString = bookInfo.getString("bookList", null);
             Log.d(TAG, "MainActivity, 저장되어있는 책 목록 : " + bookListString);
@@ -217,7 +139,7 @@ public class MainActivity extends AppCompatActivity
             {
                 JSONArray jsonArray = new JSONArray(bookListString);
 
-                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                // JsonArray 의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
                 for (int i = 0; i < jsonArray.length(); i++)
                 {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -249,6 +171,7 @@ public class MainActivity extends AppCompatActivity
                     book.setReadTime(readTime);
                     book.setStarNum(starNum);
 
+                    // book 객체의 state 속성에 따라 책의 상태를 구분해서 적절한 ArrayList 에 담는다.
                     if(book.getState().equals("toRead"))
                     {
                         toReadBookList.add(0, book);
@@ -264,7 +187,7 @@ public class MainActivity extends AppCompatActivity
 
                 }
 
-                //어댑터에 보내기
+                // 책의 상태에 따라 구분해서 담은 책리스트를 적절한 어댑터에 보낸다.
                 Log.d(TAG, "MainActivity, 어댑터에 보내는 읽을책.size : " + toReadBookList.size());
                 Log.d(TAG, "MainActivity, 어댑터에 보내는 읽는책.size : " + readingBookList.size());
                 Log.d(TAG, "MainActivity, 어댑터에 보내는 읽은책.size : " + readBookList.size());
@@ -277,14 +200,17 @@ public class MainActivity extends AppCompatActivity
                 readBookAdapter.notifyDataSetChanged();
             }
         }
-        catch (Exception e)
+        catch (JSONException e)
         {
             System.out.println(e.toString());
         }
 
-        // 저장되어있는 메모리스트 어댑터에 보내주기
+
+        // 저장되어있는 메모 리스트를 리사이클러뷰에서 보여줄 수 있도록 ArrayList<Memo> 형태로 변환해서 어댑터에 보내준다.
         try
         {
+            // memoInfo 파일에서 memoList 를 문자열의 형태로 가져온다.
+            // 문자열의 형태를 ArrayList<Memo> 로 변환하기 위해서 JsonArray 형태로 변환한다.
             SharedPreferences memoInfo = getSharedPreferences("memoInfo", MODE_PRIVATE);
             String memoListString = memoInfo.getString("memoList", null);
             Log.d(TAG, "MainActivity, 저장되어있는 메모 목록 : " + memoListString);
@@ -293,7 +219,7 @@ public class MainActivity extends AppCompatActivity
             {
                 JSONArray jsonArray = new JSONArray(memoListString);
 
-                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Memo 객체에 담은 뒤 ArrayList<Memo> 에 담는다.
                 for (int i = 0; i < jsonArray.length(); i++)
                 {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -308,7 +234,7 @@ public class MainActivity extends AppCompatActivity
 
                 }
 
-                //어댑터에 보내기
+                // 어댑터에 보내기
                 Log.d(TAG, "MainActivity, 어댑터에 보내는 메모.size : " + allMemoList.size());
 
                 allMemoAdapter = new AllMemoAdapter(getApplicationContext(), allMemoList);
@@ -316,25 +242,14 @@ public class MainActivity extends AppCompatActivity
             }
 
         }
-        catch (Exception e)
+        catch (JSONException e)
         {
             System.out.println(e.toString());
         }
 
 
-        // 기존
-        // 스레드 시작
-        //if(thread == null && allMemoList.size() >0)
-        //
-       /* if(allMemoList.size() >0)
-        {
-            MemoThread memoThread = new MemoThread();
-            thread = new Thread(memoThread);
-            thread.start();
-        }*/
 
-
-        // 저장되어있는 알림리스트 어댑터에 보내주기
+        // 저장되어있는 알림 리스트를 리스트뷰에서 보여줄 수 있도록 ArrayList<Notification> 형태로 변환해서 어댑터에 보내준다.
         try
         {
             SharedPreferences notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
@@ -345,7 +260,7 @@ public class MainActivity extends AppCompatActivity
             {
                 JSONArray jsonArray = new JSONArray(notiListString);
 
-                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Book 객체에 담은 뒤 ArrayList<Book> 에 담는다.
+                // 가져온 jsonArray의 길이만큼 반복해서 jsonObject 를 가져오고, Notification 객체에 담은 뒤 ArrayList<Notification> 에 담는다.
                 for (int i = 0; i < jsonArray.length(); i++)
                 {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -360,7 +275,6 @@ public class MainActivity extends AppCompatActivity
 
                 }
 
-                //어댑터에 보내기
                 Log.d(TAG, "MainActivity, 어댑터에 보내는 알림.size : " + notiList.size());
 
                 notificationAdapter = new NotificationAdapter(getApplicationContext(), notiList);
@@ -368,7 +282,7 @@ public class MainActivity extends AppCompatActivity
             }
 
         }
-        catch (Exception e)
+        catch (JSONException e)
         {
             System.out.println(e.toString());
         }
@@ -445,18 +359,6 @@ public class MainActivity extends AppCompatActivity
             finish();
             toast.cancel();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // 랜덤메모 스레드 멈추기
-        if(thread !=null)
-        {
-            thread.interrupt();
-        }
-
     }
 
     @Override
