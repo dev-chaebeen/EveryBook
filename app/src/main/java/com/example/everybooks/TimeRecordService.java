@@ -103,10 +103,13 @@ public class TimeRecordService extends Service
 
             Log.d(TAG, " 저장되어있던 초단위 시간 : " + timeInSeconds);
 
-            // 1초 씩 증가하는 스레드
-            TimeRecordThread timeRecordThread = new TimeRecordThread();
-            timeThread = new Thread(timeRecordThread);
-            timeThread.start();
+            // 1초 씩 증가하는 스레드 시작
+            if(timeThread == null)
+            {
+                TimeRecordThread timeRecordThread = new TimeRecordThread();
+                timeThread = new Thread(timeRecordThread);
+                timeThread.start();
+            }
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -161,6 +164,7 @@ public class TimeRecordService extends Service
         if (timeThread != null) {
             // 1초씩 증가하는 스레드를 멈추고 현재 독서 시간을 저장한다.
             timeThread.interrupt();
+            timeThread = null;
 
             SharedPreferences bookInfo = getSharedPreferences("bookInfo", MODE_PRIVATE);
             String bookListString = bookInfo.getString("bookList", null);
