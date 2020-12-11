@@ -19,7 +19,6 @@ public class AllMemoFragment extends Fragment
     private RecyclerView.Adapter adapter;
 
     // 뷰 요소 선언 
-    CardView memo;
     TextView title;
     TextView memo_text;
     TextView memo_date;
@@ -47,10 +46,8 @@ public class AllMemoFragment extends Fragment
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-
+    public void onResume() {
+        super.onResume();
         // 리사이클러뷰 생성 및 어댑터 연결
         recyclerView = view.findViewById(R.id.all_memo_list);
         recyclerView.setHasFixedSize(true);
@@ -58,5 +55,4 @@ public class AllMemoFragment extends Fragment
         adapter = new AllMemoAdapter(getContext());
         recyclerView.setAdapter(adapter);
     }
-
 }
