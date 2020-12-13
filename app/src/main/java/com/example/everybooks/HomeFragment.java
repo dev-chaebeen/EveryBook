@@ -3,7 +3,6 @@ package com.example.everybooks;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -39,7 +38,7 @@ public class HomeFragment extends Fragment
     ImageView imageView_mic;
 
     final String TAG = "테스트";
-    int randomNum;
+    int returnNum;
     int length;
 
     Handler memoHandler;
@@ -47,25 +46,66 @@ public class HomeFragment extends Fragment
 
     FragmentManager fragmentManager;
 
+    String memoOrder;
+    int memoInterval;
+
     // 랜덤 메모 스레드
     // 사용자가 작성한 메모를 일정한 시간 간격마다 랜덤으로 보여주기 위해서
-    // 사용자가 작성한 메모의 수 이내의 랜덤 숫자를 3초마다 발생시키는 스레드이다.
-    class MemoThread implements Runnable {
+    // 사용자가 작성한 메모의 수 이내의 랜덤 숫자를 n 초마다 발생시키는 스레드이다.
+    class RandomMemoThread implements Runnable {
         boolean running = false;
 
         public void run() {
             running = true;
-            while (running) {
+            while (running)
+            {
+
                 Message message = memoHandler.obtainMessage();
 
-                Random random = new Random();
-                randomNum = random.nextInt(length);
+                Log.d(TAG, "RandomMemoThread / memoOrder 과 memoInterval : "+ memoOrder + memoInterval);
 
-                message.arg1 = randomNum;
+                    Random random = new Random();
+                    returnNum = random.nextInt(length);
+                    message.arg1 = returnNum;
+                    memoHandler.sendMessage(message);
 
-                memoHandler.sendMessage(message);
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(memoInterval*1000);
+                } catch (Exception e) {
+                    return;
+                }
+            }
+        }
+    }
+
+    // 최신순 메모 스레드
+    // 사용자가 작성한 메모를 일정한 시간 간격마다 최신순으로 보여주기 위해서
+    // 사용자가 작성한 메모의 수부터 1씩 작아지는 수를 n 초마다 발생시키는 스레드이다.
+    class LatestMemoThread implements Runnable {
+        boolean running = false;
+
+        public void run() {
+            running = true;
+            returnNum = length;
+
+            while (running)
+            {
+                Message message = memoHandler.obtainMessage();
+
+                Log.d(TAG, "LatestMemoThread /  memoOrder 과 memoInterval : "+ memoOrder + memoInterval);
+
+                returnNum--;
+
+                if(returnNum == 0)
+                {
+                    returnNum = length;
+                }
+
+                message.arg1 = returnNum;
+                memoHandler.sendMessage(message);
+
+                try {
+                    Thread.sleep(memoInterval*1000);
                 } catch (Exception e) {
                     return;
                 }
@@ -91,6 +131,10 @@ public class HomeFragment extends Fragment
         fragmentManager = getChildFragmentManager();
 
         Log.d(TAG, "HomeFragment onCreateView()");
+
+        SharedPreferences memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
+        memoOrder = memoInfo.getString("memoOrder", "random");
+        memoInterval = Integer.parseInt(memoInfo.getString("memoInterval", "3"));
 
         // 랜덤 메모 스레드에서 생성된 랜덤 수를 랜덤 메모 프래그먼트로 전달하면서 프래그먼트를 생성하는 핸들러
         memoHandler = new Handler(Looper.getMainLooper())
@@ -129,16 +173,21 @@ public class HomeFragment extends Fragment
         super.onResume();
         try
         {
-            // 랜덤으로 사용자가 작성한 메모를 보여주기 위한 랜덤 숫자를 생성하는 스레드에서
+            // 랜덤으로 사용자가 작성한 메모를 보여주기 위한 숫자를 생성하는 스레드에서
             // 생성할 숫자의 범위를 지정하기 위해서 저장되어 있는 메모의 개수를 알아야 한다.
             // 저장되어 있는 메모의 개수를 파악하기 위해 memoInfo 파일에 저장된 memoList 문자열을 가져온다.
             // 문자열의 형태로는 저장된 메모의 개수를 알 수 없기 때문에 JsonArray 형식으로 변환하여 길이를 구한다.
             SharedPreferences memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = memoInfo.edit();
+
             String memoListString = memoInfo.getString("memoList", null);
             if(memoListString != null)
             {
                 JSONArray jsonArray = new JSONArray(memoListString);
                 length = jsonArray.length();
+
+                editor.putString("memoLength", String.valueOf(length));
+                editor.commit();
 
                 Log.d(TAG, "HomeFragment 메모 length :" + length);
             }
@@ -151,16 +200,26 @@ public class HomeFragment extends Fragment
             if(length > 0)
             {
                 // 저장된 메모가 1개 이상이면 랜덤메모 프래그먼트를 생성한다.
-                fragmentManager.beginTransaction().replace(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
+                fragmentManager.beginTransaction().replace(R.id.random_memo_frame, new RandomMemoFragment(returnNum)).commitAllowingStateLoss();
 
                 if(thread == null && length >1)
                 {
                     // thread 가 null 이고 저장된 메모가 2개일 때부터 랜덤메모 스레드 시작
                     // 저장된 메모가 1개라면 스레드를 이용해 바꿔줄 필요가 없기 때문이다.
                     // 사용자가 작성한 메모를 랜덤으로 선정해 3초 간격으로 화면에 보여주기 위해서 랜덤 숫자를 생성하는 스레드이다.
-                    MemoThread memoThread = new MemoThread();
-                    thread = new Thread(memoThread);
-                    thread.start();
+
+                    if(memoOrder.equals("random"))
+                    {
+                        RandomMemoThread randomMemoThread = new RandomMemoThread();
+                        thread = new Thread(randomMemoThread);
+                        thread.start();
+                    }
+                    else if(memoOrder.equals("latest"))
+                    {
+                        LatestMemoThread latestMemoThread = new LatestMemoThread();
+                        thread = new Thread(latestMemoThread);
+                        thread.start();
+                    }
                 }
             }
         }
