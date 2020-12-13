@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment
     final String TAG = "테스트";
     int returnNum;
     int length;
+    int stopNum;
 
     Handler memoHandler;
     Thread thread;
@@ -49,9 +50,13 @@ public class HomeFragment extends Fragment
     String memoOrder;
     int memoInterval;
 
+    SharedPreferences memoInfo;
+    SharedPreferences.Editor editor;
+
+
     // 랜덤 메모 스레드
     // 사용자가 작성한 메모를 일정한 시간 간격마다 랜덤으로 보여주기 위해서
-    // 사용자가 작성한 메모의 수 이내의 랜덤 숫자를 n 초마다 발생시키는 스레드이다.
+    // 사용자가 작성한 메모 개수 이내의 랜덤 숫자를 n 초마다 발생시키는 스레드이다.
     class RandomMemoThread implements Runnable {
         boolean running = false;
 
@@ -61,8 +66,6 @@ public class HomeFragment extends Fragment
             {
 
                 Message message = memoHandler.obtainMessage();
-
-                Log.d(TAG, "RandomMemoThread / memoOrder 과 memoInterval : "+ memoOrder + memoInterval);
 
                     Random random = new Random();
                     returnNum = random.nextInt(length);
@@ -78,31 +81,36 @@ public class HomeFragment extends Fragment
         }
     }
 
-    // 최신순 메모 스레드
+    // 최신 순 메모 스레드
     // 사용자가 작성한 메모를 일정한 시간 간격마다 최신순으로 보여주기 위해서
-    // 사용자가 작성한 메모의 수부터 1씩 작아지는 수를 n 초마다 발생시키는 스레드이다.
+    // 사용자가 작성한 메모의 개수부터 1씩 작아지는 수를 n 초마다 발생시키는 스레드이다.
     class LatestMemoThread implements Runnable {
         boolean running = false;
 
         public void run() {
             running = true;
-            returnNum = length;
+
+            if(stopNum == -1)
+            {
+                returnNum = length;
+            }
+            else
+            {
+                returnNum = stopNum;
+            }
 
             while (running)
             {
                 Message message = memoHandler.obtainMessage();
 
-                Log.d(TAG, "LatestMemoThread /  memoOrder 과 memoInterval : "+ memoOrder + memoInterval);
+                    message.arg1 = returnNum;
+                    memoHandler.sendMessage(message);
 
-                returnNum--;
-
-                if(returnNum == 0)
-                {
-                    returnNum = length;
-                }
-
-                message.arg1 = returnNum;
-                memoHandler.sendMessage(message);
+                    if(returnNum == 0)
+                    {
+                        returnNum = length;
+                    }
+                    returnNum--;
 
                 try {
                     Thread.sleep(memoInterval*1000);
@@ -115,21 +123,30 @@ public class HomeFragment extends Fragment
 
     // 작성순 메모 스레드
     // 사용자가 작성한 메모를 일정한 시간 간격마다 작성한 순서대로 보여주기 위해서
-    // 0부터 사용자가 작성한 메모의 갯수 - 1 까지 n 초마다 발생시키는 스레드이다.
-    // -1 하는 이유는 사용자가 작성한 첫번째 메모를 가져오려면 0이라는 수로 접근해야하기 때문에 마지막 메모를 가져오려면 개수 -1 로 접근해야 한다.
+    // 0부터 사용자가 작성한 메모의 개수 - 1 까지 n 초마다 발생시키는 스레드이다.
+    // -1 하는 이유는 사용자가 작성한 첫번째 메모는 0번째에 위치하기 때문에
+    // 마지막 메모를 가져오려면 개수 -1 로 접근해야한다.
 
     class CreateMemoThread implements Runnable {
         boolean running = false;
 
         public void run() {
             running = true;
-            returnNum = 0;
+
+
+            if(stopNum == -1)
+            {
+                returnNum = 0;
+            }
+            else
+            {
+                returnNum = stopNum;
+            }
 
             while (running)
             {
                 Message message = memoHandler.obtainMessage();
 
-                Log.d(TAG, "CreateMemoThread /  memoOrder 과 memoInterval : "+ memoOrder + memoInterval);
 
                 if(returnNum == length)
                 {
@@ -169,7 +186,7 @@ public class HomeFragment extends Fragment
 
         Log.d(TAG, "HomeFragment onCreateView()");
 
-        SharedPreferences memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
+        memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
         memoOrder = memoInfo.getString("memoOrder", "random");
         memoInterval = Integer.parseInt(memoInfo.getString("memoInterval", "3"));
 
@@ -214,8 +231,8 @@ public class HomeFragment extends Fragment
             // 생성할 숫자의 범위를 지정하기 위해서 저장되어 있는 메모의 개수를 알아야 한다.
             // 저장되어 있는 메모의 개수를 파악하기 위해 memoInfo 파일에 저장된 memoList 문자열을 가져온다.
             // 문자열의 형태로는 저장된 메모의 개수를 알 수 없기 때문에 JsonArray 형식으로 변환하여 길이를 구한다.
-            SharedPreferences memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = memoInfo.edit();
+            memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
+            editor = memoInfo.edit();
 
             String memoListString = memoInfo.getString("memoList", null);
             if(memoListString != null)
@@ -223,12 +240,15 @@ public class HomeFragment extends Fragment
                 JSONArray jsonArray = new JSONArray(memoListString);
                 length = jsonArray.length();
 
-                editor.putString("memoLength", String.valueOf(length));
+                editor.putInt("memoLength", length);
                 editor.commit();
 
                 Log.d(TAG, "HomeFragment 메모 length :" + length);
             }
 
+
+            // 다시 페이지에 돌아왔을 때 이전에 보여주던 메모에서 이어서 보여주기 위해 stopNum 에 저장해둔 수를 가져온다.
+            stopNum = memoInfo.getInt("stopNum", -1);
 
             // 문제 :  if(thread == null && length > 0) 조건에서 다른 프래그먼트에서 HomeFragment 로 돌아왔을 때
             //        스레드에 의해서 랜덤메모 프래그먼트가 생성될때까지 화면에 나타나지 않는 문제 발생
@@ -348,6 +368,14 @@ public class HomeFragment extends Fragment
             thread.interrupt();
             thread = null;
         }
+
+        // 멈췄을 때 보여준 메모의 위치를 저장한다. 다시 화면에 돌아왔을 때 그 이후의 메모부터 보여주기 위해서
+        stopNum = returnNum;
+        Log.d(TAG, "onPause() stopNum : " + stopNum);
+
+        editor.putInt("stopNum", stopNum);
+        editor.commit();
+
     }
 }
 
