@@ -19,6 +19,7 @@ public class EtcFragment extends Fragment
     LinearLayout linearLayout_calendar;
     LinearLayout linearLayout_asmr_video;
     LinearLayout linearLayout_translate;
+    LinearLayout linearLayout_memo_setting;
 
     View.OnClickListener click;
     Intent intent;
@@ -43,6 +44,7 @@ public class EtcFragment extends Fragment
         linearLayout_calendar = view.findViewById(R.id.calendar);
         linearLayout_asmr_video = view.findViewById(R.id.asmr_video);
         linearLayout_translate = view.findViewById(R.id.translate);
+        linearLayout_memo_setting = view.findViewById(R.id.memo_setting);
 
         // 각 메뉴를 클릭하면 해당하는 화면으로 전환한다.
         click = new View.OnClickListener()
@@ -75,6 +77,11 @@ public class EtcFragment extends Fragment
                         intent = new Intent(getActivity(), TranslateActivity.class);
                         startActivity(intent);
                         break;
+
+                    case R.id.memo_setting :
+                        intent = new Intent(getActivity(), MemoSettingActivity.class);
+                        startActivity(intent);
+                        break;
                 }
             }
         };
@@ -85,6 +92,7 @@ public class EtcFragment extends Fragment
         linearLayout_calendar.setOnClickListener(click);
         linearLayout_asmr_video.setOnClickListener(click);
         linearLayout_translate.setOnClickListener(click);
+        linearLayout_memo_setting.setOnClickListener(click);
     }
 }
 

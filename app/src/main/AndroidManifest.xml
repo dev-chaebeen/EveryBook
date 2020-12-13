@@ -59,6 +59,7 @@
             />
         <activity android:name=".EditNotificationActivity"/>
         <activity android:name=".SearchBookActivity"/>
+        <activity android:name=".MemoSettingActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

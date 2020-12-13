@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    ><!--    tools:context=".BookInfo"-->
+
+    <!-- 회색 바 -->
+    <LinearLayout
+        android:id="@+id/bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/grey"
+        android:orientation="horizontal"
+        >
+
+        <!-- Memo Setting -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="150dp"
+            android:text="Memo Setting"
+            android:textSize="20sp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Add -->
+        <TextView
+            android:id="@+id/save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:gravity="right"
+            android:text="Save"
+            android:textSize="20sp"
+            android:layout_marginRight="20dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout><!--end 회색바-->
+
+
+    <!--회색바 아래 콘텐츠 공간-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="Memo Order"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp" />
+
+        <LinearLayout
+            android:id="@+id/order_random"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/text_order_random"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="랜덤순"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:textSize="16dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            />
+
+        <LinearLayout
+            android:id="@+id/order_latest"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/text_order_latest"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="최신순"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:textSize="16dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            />
+
+        <LinearLayout
+            android:id="@+id/order_create"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/text_order_create"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="작성순"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:textSize="16dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="Time Interval"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            >
+
+            <EditText
+                android:id="@+id/time_interval"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="left"
+                android:textSize="16sp"
+                android:textColor="@color/dark_green"
+                android:text="3"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:text="초 마다 변경"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- 선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey" />
+
+    </LinearLayout><!--end 콘텐츠 공간-->
+</LinearLayout>
