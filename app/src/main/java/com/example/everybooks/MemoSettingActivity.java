@@ -78,9 +78,11 @@ public class MemoSettingActivity extends AppCompatActivity
                 switch (v.getId()) {
                     case R.id.save:
                         // save 버튼을 클릭하면 입력받은 메모 변경 순서와 초를 SharedPreferences memoInfo 파일에 저장한다.
-                        editor.putString("memeOrder", memoOrder);
+                        editor.putString("memoOrder", memoOrder);
                         editor.putString("memoInterval", editText_time_interval.getText().toString());
+                        editor.commit();
 
+                        finish();
                         Log.d(TAG, "MemoSettingActivity, 저장하는 값 :" + memoOrder + memoInterval);
                         break;
 
@@ -138,6 +140,7 @@ public class MemoSettingActivity extends AppCompatActivity
         memoOrder = memoInfo.getString("memoOrder", "random");
         memoInterval = memoInfo.getString("memoInterval", "3");
 
+        Log.d(TAG, "화면 구성 시 가져온 값 " + memoOrder + memoInterval);
         switch(memoOrder){
           case "random":
               textView_order_random.setTextColor(Color.parseColor("#414D41"));
