@@ -264,7 +264,7 @@ public class NotificationActivity extends AppCompatActivity
         Calendar alarmCalendar = Calendar.getInstance();
         alarmCalendar.setTimeInMillis(System.currentTimeMillis());
         alarmCalendar.set(Calendar.HOUR_OF_DAY, 23);
-        alarmCalendar.set(Calendar.MINUTE, 43);
+        alarmCalendar.set(Calendar.MINUTE, 45);
         alarmCalendar.set(Calendar.SECOND, 0);
         /*
         alarmCalendar.setTimeInMillis(System.currentTimeMillis());
