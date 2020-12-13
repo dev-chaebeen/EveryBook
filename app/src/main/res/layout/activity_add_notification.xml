@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".BookInfo"
     android:orientation="vertical"
     >
 
@@ -52,6 +51,13 @@
     </LinearLayout><!--end 회색바-->
 
     <!--회색바 아래 콘텐츠 공간-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -118,98 +124,6 @@
                 android:timePickerMode="spinner" />
           -->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-
-                <!--반복 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="반복"
-                    android:textSize="16sp"
-                    android:layout_marginTop="10dp"
-                    >
-                </TextView>
-
-                 <!--요일 -->
-                <!-- 리스트뷰로 변경하기 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center"
-                    android:gravity="right"
-                    android:layout_marginRight="10dp"
-
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="월"
-                        android:textSize="16sp"
-                        android:layout_marginRight="5dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/dark_green"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="화"
-                        android:textSize="16sp"
-                        android:layout_marginRight="5dp"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="수"
-                        android:textSize="16sp"
-                        android:layout_marginRight="5dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/dark_green"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="목"
-                        android:textSize="16sp"
-                        android:layout_marginRight="5dp"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="금"
-                        android:textSize="16sp"
-                        android:layout_marginRight="5dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/dark_green"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="토"
-                        android:textSize="16sp"
-                        android:layout_marginRight="5dp"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="일"
-                        android:textSize="16sp"
-                        android:layout_marginRight="5dp"
-                        />
-
-                </LinearLayout><!--요일-->
-            </LinearLayout><!--반복-->
-
-
-            <!-- 선 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_grey"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -240,9 +154,116 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--반복 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="반복"
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"
+                    >
+                </TextView>
+
+                <ListView
+                    android:id="@+id/week_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:choiceMode="multipleChoice" />
+
+
+                <!--요일 -->
+                <!-- 리스트뷰로 변경하기 -->
+                <!--    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="right"
+                        android:layout_marginRight="10dp"
+
+                        >
+                        <TextView
+                            android:id="@+id/mon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="월"
+                            android:textSize="20sp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="@color/dark_green"
+                            />
+                        <TextView
+                            android:id="@+id/tue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="화"
+                            android:textSize="20sp"
+                            android:layout_marginRight="5dp"
+                            />
+                        <TextView
+                            android:id="@+id/wed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="수"
+                            android:textSize="20sp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="@color/dark_green"
+                            />
+                        <TextView
+                            android:id="@+id/thu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="목"
+                            android:textSize="20sp"
+                            android:layout_marginRight="5dp"
+                            />
+                        <TextView
+                            android:id="@+id/fri"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="금"
+                            android:textSize="20sp"
+                            android:layout_marginRight="5dp"
+                            android:textColor="@color/dark_green"
+                            />
+                        <TextView
+                            android:id="@+id/sat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="토"
+                            android:textSize="20sp"
+                            android:layout_marginRight="5dp"
+                            />
+                        <TextView
+                            android:id="@+id/sun"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="일"
+                            android:textSize="20sp"
+                            android:layout_marginRight="5dp"
+                            />
+
+                    </LinearLayout>&lt;!&ndash;요일&ndash;&gt;-->
+            </LinearLayout><!--반복-->
+
+
+            <!-- 선 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_grey"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
 
 
         </LinearLayout><!--목록-->
 
     </LinearLayout><!--end 콘텐츠 공간-->
+    </ScrollView>
 </LinearLayout>

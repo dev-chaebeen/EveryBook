@@ -112,7 +112,7 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
 
 
                                 Log.d(TAG,"읽을 책 → 읽는 책 ToReadBookAdapter 에서 책 리스트 : " + bookListString);
-                                Log.d(TAG, "클릭한 책의 bookId : " + book.getBookId() );
+                                //Log.d(TAG, "클릭한 책의 bookId : " + book.getBookId() );
 
                                 try
                                 {
@@ -148,11 +148,10 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                                 dialog.dismiss();
 
                                 //test
-                             /*   intent = new Intent(v.getContext(), MainActivity.class);
-                                intent.putExtra("change", "toReadFragment");
+                                intent = new Intent(v.getContext(), MainActivity.class);
                                 v.getContext().startActivity(intent);
 
-                                Log.d(TAG, "읽을 책 어댑터에서 메인 액티비티로 전환 ");*/
+                                Log.d(TAG, "읽을 책 어댑터에서 메인 액티비티로 전환 ");
 
                             }
                         });

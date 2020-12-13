@@ -3,10 +3,14 @@ package com.example.everybooks;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -28,6 +32,14 @@ public class AddNotificationActivity extends AppCompatActivity
     TextView textView_time;
     EditText notification_text;
 
+    TextView textView_mon;
+    TextView textView_tue;
+    TextView textView_wed;
+    TextView textView_thu;
+    TextView textView_fri;
+    TextView textView_sat;
+    TextView textView_sun;
+
     int notiId;
     int hour;
     int min;
@@ -39,7 +51,6 @@ public class AddNotificationActivity extends AppCompatActivity
     JSONObject jsonObject;
     SharedPreferences notiInfo;
     SharedPreferences.Editor editor;
-    Calendar calendar;
 
     final String TAG = "테스트";
 
@@ -130,9 +141,11 @@ public class AddNotificationActivity extends AppCompatActivity
                         finish();
 
                         break;
+
                     case R.id.time :
                         // 시간 클릭하면 타임피커 다이얼로그가 등장해서 설정할 시간을 입력받는다.
                         dialogTimePicker();
+
                 }
             }
         };
@@ -141,11 +154,23 @@ public class AddNotificationActivity extends AppCompatActivity
         textView_save.setOnClickListener(click);
         textView_time.setOnClickListener(click);
 
-        // 초기 시간을 현재 시간으로 보여준다.
-        hour = calendar.HOUR_OF_DAY;
-        min = calendar.MINUTE;
 
-        textView_time.setText(hour + ":" + min);
+        // 상수 지정
+        final int MONDAY = 0;
+        final int TUESDAY = 1;
+        final int WEDNESDAY = 2;
+        final int THURSDAY = 3;
+        final int FRIDAY = 4;
+        final int SATURDAY = 5;
+        final int SUNDAY = 6;
+
+        // 리스트뷰 지정
+        final String[] LIST_MENU = {"월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"} ;
+
+        // 리스트뷰 생성
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, LIST_MENU);    // 어댑터를 생성해서
+        ListView listView = findViewById(R.id.week_list) ;   // 지정된 리스트뷰에
+        listView.setAdapter(adapter) ;  // 뿌려준다.
 
     }
 
@@ -154,7 +179,13 @@ public class AddNotificationActivity extends AppCompatActivity
         super.onResume();
 
         // 현재 시간으로 초기화
-        calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
+
+        // 초기 시간을 현재 시간으로 보여준다.
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        min = calendar.get(Calendar.MINUTE);
+
+        textView_time.setText(hour + ":" + min);
     }
 
     private void dialogTimePicker(){
@@ -169,8 +200,9 @@ public class AddNotificationActivity extends AppCompatActivity
                 };
 
         //현재 시간으로 타임피커 초기값을 설정한다.
+        Calendar calendar = Calendar.getInstance();
         TimePickerDialog alert = new TimePickerDialog(this,
-                mTimeSetListener, calendar.HOUR_OF_DAY, calendar.MINUTE, true);
+                mTimeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
         alert.show();
     }
 

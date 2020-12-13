@@ -92,7 +92,7 @@ public class ToReadFragment extends Fragment
     public void onResume() {
         super.onResume();
 
-        Log.d(TAG, "ToReadFragment, toReadBookList.size : " + ToReadBookAdapter.toReadBookList.size() );
+        Log.d(TAG, "ToReadFragment onResume(), toReadBookList.size : " + ToReadBookAdapter.toReadBookList.size() );
 
         //showItemList();
 
