@@ -113,6 +113,43 @@ public class HomeFragment extends Fragment
         }
     }
 
+    // 작성순 메모 스레드
+    // 사용자가 작성한 메모를 일정한 시간 간격마다 작성한 순서대로 보여주기 위해서
+    // 0부터 사용자가 작성한 메모의 갯수 - 1 까지 n 초마다 발생시키는 스레드이다.
+    // -1 하는 이유는 사용자가 작성한 첫번째 메모를 가져오려면 0이라는 수로 접근해야하기 때문에 마지막 메모를 가져오려면 개수 -1 로 접근해야 한다.
+
+    class CreateMemoThread implements Runnable {
+        boolean running = false;
+
+        public void run() {
+            running = true;
+            returnNum = 0;
+
+            while (running)
+            {
+                Message message = memoHandler.obtainMessage();
+
+                Log.d(TAG, "CreateMemoThread /  memoOrder 과 memoInterval : "+ memoOrder + memoInterval);
+
+                if(returnNum == length)
+                {
+                    returnNum = 0;
+                }
+
+                message.arg1 = returnNum;
+                memoHandler.sendMessage(message);
+
+                returnNum++;
+
+                try {
+                    Thread.sleep(memoInterval*1000);
+                } catch (Exception e) {
+                    return;
+                }
+            }
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -218,6 +255,12 @@ public class HomeFragment extends Fragment
                     {
                         LatestMemoThread latestMemoThread = new LatestMemoThread();
                         thread = new Thread(latestMemoThread);
+                        thread.start();
+                    }
+                    else if(memoOrder.equals("create"))
+                    {
+                        CreateMemoThread createMemoThread = new CreateMemoThread();
+                        thread = new Thread(createMemoThread);
                         thread.start();
                     }
                 }

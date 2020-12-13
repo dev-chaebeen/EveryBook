@@ -164,13 +164,14 @@
 
             <EditText
                 android:id="@+id/time_interval"
-                android:layout_width="20dp"
+                android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:gravity="left"
                 android:textSize="16sp"
                 android:textColor="@color/dark_green"
                 android:text="3"
+                android:inputType="number"
                 />
 
             <TextView
