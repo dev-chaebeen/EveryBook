@@ -60,7 +60,8 @@ dependencies {
     implementation "gun0912.ted:tedpermission:2.2.3"
     // circle ImageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-
+    // swipe button
+    implementation 'com.ebanx:swipe-button:0.8.3'
 
 }
 

@@ -1,9 +1,13 @@
 package com.example.everybooks;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,16 +16,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.everybooks.data.Memo;
 import com.example.everybooks.data.Notification;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class NotificationActivity extends AppCompatActivity
 {
@@ -41,6 +46,11 @@ public class NotificationActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+
+
+        //test
+        setAlarm();
+
 
         // 요소 초기화
         linearLayout_notification = findViewById(R.id.notification);
@@ -243,4 +253,42 @@ public class NotificationActivity extends AppCompatActivity
         }
 
     }
+
+
+
+
+    void setAlarm() {
+        
+        Log.d(TAG, "알람 설정");
+
+        Calendar alarmCalendar = Calendar.getInstance();
+        alarmCalendar.setTimeInMillis(System.currentTimeMillis());
+        alarmCalendar.set(Calendar.HOUR_OF_DAY, 23);
+        alarmCalendar.set(Calendar.MINUTE, 43);
+        alarmCalendar.set(Calendar.SECOND, 0);
+        /*
+        alarmCalendar.setTimeInMillis(System.currentTimeMillis());
+        alarmCalendar.set(Calendar.HOUR_OF_DAY, alarmHour);
+        alarmCalendar.set(Calendar.MINUTE, alarmMinute);
+        alarmCalendar.set(Calendar.SECOND, 0);*/
+        // TimePickerDialog 에서 설정한 시간을 알람 시간으로 설정
+
+        if (alarmCalendar.before(Calendar.getInstance())) alarmCalendar.add(Calendar.DATE, 1);
+        // 알람 시간이 현재시간보다 빠를 때 하루 뒤로 맞춤
+        Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmIntent.setAction(AlarmReceiver.ACTION_RESTART_SERVICE);
+        PendingIntent alarmCallPendingIntent
+                = PendingIntent.getBroadcast
+                (getApplicationContext(), 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            alarmManager.setExactAndAllowWhileIdle
+                    (AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), alarmCallPendingIntent);
+        else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            alarmManager.setExact
+                    (AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), alarmCallPendingIntent);
+    } // 알람 설정
+
+
+
 }

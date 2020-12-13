@@ -60,6 +60,8 @@
         <activity android:name=".EditNotificationActivity"/>
         <activity android:name=".SearchBookActivity"/>
         <activity android:name=".MemoSettingActivity"/>
+        <activity android:name=".AlarmActivity"/>
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -76,7 +78,14 @@
             android:exported="true"
             android:stopWithTask="false" />
 
+        <service android:name=".AlarmService"
+            android:enabled="true"
+            android:exported="true"
+            ></service>
+        <receiver android:name=".AlarmReceiver"/>
+
     </application>
+
 
     <uses-permission android:name="android.permission.CAMERA" /><!--카메라 권한-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /><!--읽기 권한-->
@@ -84,6 +93,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="true"/><!--카메라 기능 사용-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /><!--백그라운드에서도 죽지 않도록 -->
     <uses-permission android:name="android.permission.INTERNET" /><!--인터넷 접근 권한 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/><!--잠금화면 깨우는 권한-->
 
 
 
