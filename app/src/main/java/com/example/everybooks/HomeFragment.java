@@ -124,8 +124,6 @@ public class HomeFragment extends Fragment
     // 작성순 메모 스레드
     // 사용자가 작성한 메모를 일정한 시간 간격마다 작성한 순서대로 보여주기 위해서
     // 0부터 사용자가 작성한 메모의 개수 - 1 까지 n 초마다 발생시키는 스레드이다.
-    // -1 하는 이유는 사용자가 작성한 첫번째 메모는 0번째에 위치하기 때문에
-    // 마지막 메모를 가져오려면 개수 -1 로 접근해야한다.
 
     class CreateMemoThread implements Runnable {
         boolean running = false;

@@ -83,6 +83,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /><!--쓰기 권한-->
     <uses-feature android:name="android.hardware.camera" android:required="true"/><!--카메라 기능 사용-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /><!--백그라운드에서도 죽지 않도록 -->
+    <uses-permission android:name="android.permission.INTERNET" /><!--인터넷 접근 권한 -->
+
+
+
 
 
 </manifest>

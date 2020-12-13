@@ -17,4 +17,7 @@
     <string name="title_etc">Etc</string>
     <string name="title_profile">Profile</string>
     <string name="title_activity_search_book">Search_book</string>
+
+    <string name="gmailEmail">chxxbeen@gmail.com</string>
+    <string name="gmailPassword">ahfks123@</string>
 </resources>
