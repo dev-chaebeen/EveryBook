@@ -3,11 +3,13 @@ package com.example.everybooks.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class Notification
 {
     int notiId;
     String text;
-    String[] days;
+    ArrayList<Integer> days;
     int hour;
     int minute;
 
@@ -36,11 +38,11 @@ public class Notification
         this.text = text;
     }
 
-    public String[] getDays() {
+    public ArrayList<Integer> getDays() {
         return days;
     }
 
-    public void setDays(String[] days) {
+    public void setDays(ArrayList<Integer> days) {
         this.days = days;
     }
 
@@ -77,6 +79,7 @@ public class Notification
             jsonObject.put("text", getText());
             jsonObject.put("hour", getHour());
             jsonObject.put("minute", getMinute());
+            jsonObject.put("days", days);
 
         } catch (JSONException e)
         {
