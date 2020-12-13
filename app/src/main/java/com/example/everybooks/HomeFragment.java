@@ -53,7 +53,6 @@ public class HomeFragment extends Fragment
     SharedPreferences memoInfo;
     SharedPreferences.Editor editor;
 
-
     // 랜덤 메모 스레드
     // 사용자가 작성한 메모를 일정한 시간 간격마다 랜덤으로 보여주기 위해서
     // 사용자가 작성한 메모 개수 이내의 랜덤 숫자를 n 초마다 발생시키는 스레드이다.
@@ -170,7 +169,6 @@ public class HomeFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        getChildFragmentManager().beginTransaction().add(R.id.home_frame, new ToReadFragment()).commit();
 
         // 뷰 요소 초기화
         button_to_read = view.findViewById(R.id.btn_to_read);
@@ -181,8 +179,6 @@ public class HomeFragment extends Fragment
         imageView_mic = view.findViewById(R.id.mic);
 
         fragmentManager = getChildFragmentManager();
-
-        Log.d(TAG, "HomeFragment onCreateView()");
 
         memoInfo = view.getContext().getSharedPreferences("memoInfo", Context.MODE_PRIVATE);
         memoOrder = memoInfo.getString("memoOrder", "random");
@@ -196,7 +192,7 @@ public class HomeFragment extends Fragment
                 super.handleMessage(msg);
 
                 int randomNum = msg.arg1;
-                Log.d(TAG, "HomeFragment 핸들러 " + randomNum);
+                //Log.d(TAG, "HomeFragment 핸들러 " + randomNum);
 
                 // 랜덤 메모 프래그먼트를 교체한다.
                 fragmentManager.beginTransaction().replace(R.id.random_memo_frame, new RandomMemoFragment(randomNum)).commitAllowingStateLoss();
@@ -223,6 +219,9 @@ public class HomeFragment extends Fragment
     public void onResume()
     {
         super.onResume();
+
+        getChildFragmentManager().beginTransaction().replace(R.id.home_frame, new ToReadFragment()).commit();
+
         try
         {
             // 랜덤으로 사용자가 작성한 메모를 보여주기 위한 숫자를 생성하는 스레드에서
@@ -259,9 +258,11 @@ public class HomeFragment extends Fragment
 
                 if(thread == null && length >1)
                 {
-                    // thread 가 null 이고 저장된 메모가 2개일 때부터 랜덤메모 스레드 시작
+                    // thread 가 null 이고 저장된 메모가 2개일 때부터 메모 변경 스레드 시작
                     // 저장된 메모가 1개라면 스레드를 이용해 바꿔줄 필요가 없기 때문이다.
-                    // 사용자가 작성한 메모를 랜덤으로 선정해 3초 간격으로 화면에 보여주기 위해서 랜덤 숫자를 생성하는 스레드이다.
+
+                    // 사용자가 설정한 초 간격에 맞게 메모를 화면에 보여주기 위해서 숫자를 생성하는 스레드이다.
+                    // 사용자가 설정한 순서에 따라 각각의 스레드를 시작한다.
 
                     if(memoOrder.equals("random"))
                     {
@@ -342,19 +343,7 @@ public class HomeFragment extends Fragment
         });
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        // 프래그먼트가 화면에 안보일 때 스레드가 null 이 아니라면 스레드를 멈춘다.
-        // 화면이 다시 보일 때 시작하는 스레드가 중복되어 실행되지 않도록 스레드를 null 로 초기환한다.
-        if(thread !=null)
-        {
-            thread.interrupt();
-            thread = null;
-        }
-    }
-
+    // 프래그먼트가 backstack 으로 들어감
     @Override
     public void onPause()
     {
@@ -375,5 +364,21 @@ public class HomeFragment extends Fragment
         editor.commit();
 
     }
+
+    // 다른 액티비티가 foreground 로 들어옴
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // 프래그먼트가 화면에 안보일 때 스레드가 null 이 아니라면 스레드를 멈춘다.
+        // 화면이 다시 보일 때 시작하는 스레드가 중복되어 실행되지 않도록 스레드를 null 로 초기환한다.
+        if(thread !=null)
+        {
+            thread.interrupt();
+            thread = null;
+        }
+    }
+
+
 }
 

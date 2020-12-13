@@ -35,6 +35,12 @@ public class ReadFragment extends Fragment
     {
         // 화면 생성
         view = inflater.inflate(R.layout.fragment_read_book, container, false);
+
+        if(ReadBookAdapter.readBookList.size()== 0)
+        {
+            textView_explain.setText("여기는 읽은 책을 보관하는 곳이에요 ! \n 책을 클릭해서 메모를 남길 수 있어요.");
+        }
+
         return view;
     }
 
@@ -58,12 +64,12 @@ public class ReadFragment extends Fragment
 
         Log.d(TAG, "ReadFragment, readBookList.size : " + ReadBookAdapter.readBookList.size() );
 
-        showItemList();
-
         if(ReadBookAdapter.readBookList.size()== 0)
         {
             textView_explain.setText("여기는 읽은 책을 보관하는 곳이에요 ! \n 책을 클릭해서 메모를 남길 수 있어요.");
         }
+
+        showItemList();
     }
 
     public void showItemList()

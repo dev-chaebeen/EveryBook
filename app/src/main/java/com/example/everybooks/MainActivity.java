@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
+  /*  @Override
     protected void onDestroy()
     {
         super.onDestroy();
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity
         toast = Toast.makeText(this, "또 기록하러 와주세요 ", Toast.LENGTH_SHORT);
         toast.show();
     }
-
+    */
     // 새로고침
     public void refresh()
     {

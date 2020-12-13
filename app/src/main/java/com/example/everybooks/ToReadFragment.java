@@ -84,7 +84,7 @@ public class ToReadFragment extends Fragment
     {
         super.onActivityCreated(savedInstanceState);
         // 기존
-        //showItemList();
+        showItemList();
 
     }
 
@@ -94,7 +94,7 @@ public class ToReadFragment extends Fragment
 
         Log.d(TAG, "ToReadFragment, toReadBookList.size : " + ToReadBookAdapter.toReadBookList.size() );
 
-        showItemList();
+        //showItemList();
 
         if(ToReadBookAdapter.toReadBookList.size() == 0)
         {

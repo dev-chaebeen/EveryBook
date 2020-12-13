@@ -1,6 +1,7 @@
 package com.example.everybooks;
 
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -130,15 +131,11 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                                     editor.putString("bookList", jsonArray.toString());
                                     editor.commit();
 
-                                    // test
-                                    Log.d(TAG,"읽을 책 → 읽는 책: " + jsonArray.toString());
-
                                 }
                                 catch (Exception e)
                                 {
                                     System.out.println(e.toString());
                                 }
-
 
                                 position = getAdapterPosition();
                                 Book book = getItem(position);
@@ -151,9 +148,11 @@ public class ToReadBookAdapter extends RecyclerView.Adapter<ToReadBookAdapter.Bo
                                 dialog.dismiss();
 
                                 //test
-                                /*
-                                intent = new Intent(v.getContext(), MainActivity.class);
-                                v.getContext().startActivity(intent);*/
+                             /*   intent = new Intent(v.getContext(), MainActivity.class);
+                                intent.putExtra("change", "toReadFragment");
+                                v.getContext().startActivity(intent);
+
+                                Log.d(TAG, "읽을 책 어댑터에서 메인 액티비티로 전환 ");*/
 
                             }
                         });
