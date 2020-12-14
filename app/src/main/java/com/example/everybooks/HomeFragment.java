@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -34,8 +33,6 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import static java.security.AccessController.getContext;
 
 public class HomeFragment extends Fragment
 {
@@ -248,11 +245,11 @@ public class HomeFragment extends Fragment
         int MY_PERMISSIONS_RECORD_AUDIO=1;
 
         //음성인식
-        i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getContext().getPackageName());
-        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
-        mRecognizer = SpeechRecognizer.createSpeechRecognizer(getContext());
-        mRecognizer.setRecognitionListener(listener);
+        intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getContext().getPackageName());
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(getContext());
+        speechRecognizer.setRecognitionListener(listener);
 
         //음성인식 버튼
         imageView_mic.setOnClickListener(new View.OnClickListener() {
@@ -265,7 +262,7 @@ public class HomeFragment extends Fragment
                 } else {
                     //권한을 허용한 경우
                     try {
-                        mRecognizer.startListening(i);
+                        speechRecognizer.startListening(intent);
                     } catch(SecurityException e) {
                         e.printStackTrace();
                     }
@@ -277,8 +274,8 @@ public class HomeFragment extends Fragment
     }
 
     // test
-    Intent i;
-    SpeechRecognizer mRecognizer;
+    //Intent i;
+    SpeechRecognizer speechRecognizer;
 
     @Override
     public void onResume()
@@ -450,10 +447,10 @@ public class HomeFragment extends Fragment
     public void onDestroy() {
         super.onDestroy();
 
-        if(mRecognizer!=null){
-            mRecognizer.destroy();
-            mRecognizer.cancel();
-            mRecognizer = null;
+        if(speechRecognizer !=null){
+            speechRecognizer.destroy();
+            speechRecognizer.cancel();
+            speechRecognizer = null;
         }
     }
 
@@ -487,7 +484,7 @@ public class HomeFragment extends Fragment
         @Override
         public void onError(int error) {
             Toast.makeText(getContext(), "천천히 다시 말해주세요.", Toast.LENGTH_SHORT).show();
-            mRecognizer.destroy();
+            speechRecognizer.destroy();
         }
 
         @Override
@@ -520,7 +517,7 @@ public class HomeFragment extends Fragment
             // intent = new Intent(getContext(), SearchBookActivity.class);
             // startActivity(intent);
 
-            mRecognizer.destroy();
+            speechRecognizer.destroy();
             //mRecognizer.startListening(i); //음성인식이 계속 되는 구문이니 필요에 맞게 쓰시길 바람
         }
     };

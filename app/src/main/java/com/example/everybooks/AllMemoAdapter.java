@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHolder>
 {
@@ -29,8 +28,7 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
     int position;
     Memo memo;
     Context context;
-    // test
-    TextToSpeech tts;
+    TextToSpeech textToSpeech;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -109,7 +107,6 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
             });
 
 
-
             // 아이템을 길게 클릭하면 메모를 읽어준다.
             itemView.setOnLongClickListener(new View.OnLongClickListener()
             {
@@ -119,16 +116,15 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
                     position = getAdapterPosition();
 
                     if (position != RecyclerView.NO_POSITION) {
-                        // 메모를 클릭했을 때 각 메모에 해당하는 책의 상세정보 화면으로 전환하기 위해서
-                        // 클릭한 아이템의 메모 객체를 가져온 뒤 메모의 bookId 를 얻는다.
+                        // 클릭한 아이템의 메모 내용을 가져와서 읽어준다.
                         memo = getItem(position);
 
                         System.out.println("-------------------------------------- 음성출력 시작!");
                         String totalSpeak = memo.getMemoText();
 
-                        tts.setPitch(1.5f); //1.5톤 올려서
-                        tts.setSpeechRate(1.0f); //1배속으로 읽기
-                        tts.speak(totalSpeak, TextToSpeech.QUEUE_FLUSH, null);
+                        textToSpeech.setPitch(1.5f); //1.5톤 올려서
+                        textToSpeech.setSpeechRate(1.0f); //1배속으로 읽기
+                        textToSpeech.speak(totalSpeak, TextToSpeech.QUEUE_FLUSH, null);
                     }
                     return true; // 롱클릭 이벤트 이후 클릭 이벤트 발생하지 않도록 true 반환
                 }
@@ -149,10 +145,10 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
         this.allMemoList = arrayList;
     }
 
-    public AllMemoAdapter(Context context, TextToSpeech tts)
+    public AllMemoAdapter(Context context, TextToSpeech textToSpeech)
     {
         this.context = context;
-        this.tts = tts;
+        this.textToSpeech = textToSpeech;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴하는 메소드
