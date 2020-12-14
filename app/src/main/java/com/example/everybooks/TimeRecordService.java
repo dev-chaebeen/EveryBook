@@ -331,16 +331,20 @@ public class TimeRecordService extends Service
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
 
+            // 총 누적 초를 받아온 뒤
             timeInSeconds = msg.arg1;
 
+            // 시, 분, 초에 맞게 계산한다.
             int seconds = timeInSeconds;
             int minutes = seconds / 60;
             seconds = seconds % 60;
             int hours = minutes / 60;
             minutes = minutes % 60;
 
+            // 형식에 맞춰 문자열로 바꿔준다.
             readTime = "" + String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
 
+            // 전환한 화면에서보여주기 위해서 누적 독서시간을 나타내는 문자열과 어떤 책인지 알려주는 bookId 를 인텐트에 담아 TimeRecordActivity 로 화면을 전환한다.
             intent = new Intent(getApplicationContext(), TimeRecordActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("readTime",readTime);
@@ -349,7 +353,7 @@ public class TimeRecordService extends Service
         }
     };
 
-    // 타임 스레드 클래스 생성
+    // 타임 스레드 클래스
     class TimeRecordThread implements Runnable {
 
         boolean running = false;
@@ -359,6 +363,7 @@ public class TimeRecordService extends Service
             running = true;
             while (running)
             {
+                // 총 누적시간에 1을 더한다.
                 timeInSeconds += 1;
                 Message message = timeHandler.obtainMessage();
                 message.arg1 =  timeInSeconds;

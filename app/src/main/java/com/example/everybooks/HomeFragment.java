@@ -255,7 +255,6 @@ public class HomeFragment extends Fragment
         mRecognizer.setRecognitionListener(listener);
 
         //음성인식 버튼
-
         imageView_mic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -277,14 +276,9 @@ public class HomeFragment extends Fragment
         return view;
     }
 
-
-
     // test
     Intent i;
     SpeechRecognizer mRecognizer;
-
-
-
 
     @Override
     public void onResume()
