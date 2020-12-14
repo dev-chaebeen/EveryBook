@@ -108,13 +108,7 @@ public class TimeRecordService extends Service
             }
         }
 
-        // PendingIntent : Notification 으로 작업을 수행할 때 인텐트를 실행하기 위해서 사용한다.
-
-        // test
         intent = new Intent(this, MainActivity.class);
-        // 기존
-        //intent = new Intent(this, TimeRecordActivity.class);
-        //intent.putExtra("bookId", bookId);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
@@ -125,9 +119,6 @@ public class TimeRecordService extends Service
         // foreground 서비스로 실행한다.
         startForeground( 1, builder.build() );
 
-        // QQQ: 쓰레드 등을 실행하여서 서비스에 적합한 로직을 구현한다.
-
-        //return START_STICKY;
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -168,7 +159,7 @@ public class TimeRecordService extends Service
         }
     }
 
-    // 강제 종료 시점
+   /* // 강제 종료 시점
     public void onTaskRemoved(Intent rootIntent)
     {
         // 스레드가 생성되지 않은 상황에서는 강제종료 시에도 코드가 동작하지 않도록 하기 위해서
@@ -202,7 +193,7 @@ public class TimeRecordService extends Service
                 System.out.println(e.toString());
             }
         }
-    }
+    }*/
 
 
     /* @Override
@@ -342,23 +333,18 @@ public class TimeRecordService extends Service
 
             timeInSeconds = msg.arg1;
 
-            // 여기서 HH:MM:SS 형식으로 바꿔서 보여준다.
-            int secs = timeInSeconds;
-            int mins = secs / 60;
-            secs = secs % 60;
-            int hours = mins / 60;
-            mins = mins % 60;
+            int seconds = timeInSeconds;
+            int minutes = seconds / 60;
+            seconds = seconds % 60;
+            int hours = minutes / 60;
+            minutes = minutes % 60;
 
-            Log.d(TAG, " 형식 변환한 뒤 : " + hours + ":" + mins + ":" + secs);
-
-            readTime = "" + String.format("%02d", hours) + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs);
+            readTime = "" + String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
 
             intent = new Intent(getApplicationContext(), TimeRecordActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("readTime",readTime);
             intent.putExtra("bookId", bookId);
-            Log.d(TAG, "TimeRecordService 에서 액티비티로 보내는 readTime" + readTime);
-
             startActivity(intent);
         }
     };
@@ -368,9 +354,11 @@ public class TimeRecordService extends Service
 
         boolean running = false;
 
-        public void run() {
+        public void run()
+        {
             running = true;
-            while (running) {
+            while (running)
+            {
                 timeInSeconds += 1;
                 Message message = timeHandler.obtainMessage();
                 message.arg1 =  timeInSeconds;

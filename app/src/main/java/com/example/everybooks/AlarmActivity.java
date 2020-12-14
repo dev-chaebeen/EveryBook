@@ -1,7 +1,9 @@
 package com.example.everybooks;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -26,22 +28,25 @@ public class AlarmActivity extends AppCompatActivity {
     boolean flag = true;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
+
         calendar = Calendar.getInstance();
         swipeButton = (SwipeButton) findViewById(R.id.swipe_btn);
         timeText = (TextView) findViewById(R.id.time);
         textView_alarm_text = findViewById(R.id.alarm_text);
 
-
         Log.d("테스트","알람 액티비티");
 
+
+        // 잠금 화면 위로 activity 띄워줌
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        // 잠금 화면 위로 activity 띄워줌
+
 
         mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.beep);   // 소리를 재생할 MediaPlayer
         mediaPlayer.setLooping(true);   // 무한반복

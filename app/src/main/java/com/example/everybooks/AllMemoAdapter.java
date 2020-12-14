@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHolder>
 {
@@ -27,6 +29,8 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
     int position;
     Memo memo;
     Context context;
+    // test
+    TextToSpeech tts;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -104,37 +108,31 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
                 }
             });
 
-            /*// 이 기능 없음
-            // 아이템을 길게 클릭하면 메모를 삭제하겠냐는 다이얼로그가 등장한다.
+
+
+            // 아이템을 길게 클릭하면 메모를 읽어준다.
             itemView.setOnLongClickListener(new View.OnLongClickListener()
             {
                 @Override
                 public boolean onLongClick(View v)
                 {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("메모를 삭제하시겠습니까?.");
-                    builder.setPositiveButton("확인",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                           MemoAdapter.memoList.remove(position);
-                           notifyDataSetChanged();
-                           dialog.dismiss();
-                        }
-                    });
+                    position = getAdapterPosition();
 
-                    builder.setNegativeButton("취소",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            Toast.makeText( v.getContext(), "취소" ,Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    if (position != RecyclerView.NO_POSITION) {
+                        // 메모를 클릭했을 때 각 메모에 해당하는 책의 상세정보 화면으로 전환하기 위해서
+                        // 클릭한 아이템의 메모 객체를 가져온 뒤 메모의 bookId 를 얻는다.
+                        memo = getItem(position);
 
-                    builder.show();
+                        System.out.println("-------------------------------------- 음성출력 시작!");
+                        String totalSpeak = memo.getMemoText();
+
+                        tts.setPitch(1.5f); //1.5톤 올려서
+                        tts.setSpeechRate(1.0f); //1배속으로 읽기
+                        tts.speak(totalSpeak, TextToSpeech.QUEUE_FLUSH, null);
+                    }
                     return true; // 롱클릭 이벤트 이후 클릭 이벤트 발생하지 않도록 true 반환
                 }
-            });*/
+            });
         }
     }
 
@@ -149,6 +147,12 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
     {
         this.context = context;
         this.allMemoList = arrayList;
+    }
+
+    public AllMemoAdapter(Context context, TextToSpeech tts)
+    {
+        this.context = context;
+        this.tts = tts;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴하는 메소드

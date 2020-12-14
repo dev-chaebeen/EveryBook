@@ -19,7 +19,7 @@ import com.example.everybooks.util.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class RandomMemoFragment extends Fragment
+public class ChangeMemoFragment extends Fragment
 {
     // 뷰 요소 선언
     ImageView imageView_img;
@@ -33,9 +33,9 @@ public class RandomMemoFragment extends Fragment
     final String TAG = "테스트";
     private View view;
 
-    public RandomMemoFragment(){}
+    public ChangeMemoFragment(){}
 
-    public RandomMemoFragment(int randomNum)
+    public ChangeMemoFragment(int randomNum)
     {
         this.randomNum = randomNum;
     }

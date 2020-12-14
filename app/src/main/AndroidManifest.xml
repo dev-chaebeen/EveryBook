@@ -94,6 +94,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /><!--백그라운드에서도 죽지 않도록 -->
     <uses-permission android:name="android.permission.INTERNET" /><!--인터넷 접근 권한 -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/><!--잠금화면 깨우는 권한-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>    <!-- 음성인식에 필요함 -->
+
+
 
 
 

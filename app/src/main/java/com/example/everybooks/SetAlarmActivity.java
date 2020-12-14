@@ -115,8 +115,10 @@ public class SetAlarmActivity  extends AppCompatActivity
         TimePickerDialog.OnTimeSetListener mTimeSetListener =
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        textView_time.setText(hourOfDay +":"+minute);
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute)
+                    {
+                        time = "" + String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute) ;
+                        textView_time.setText(time);
                         hour = hourOfDay;
                         min = minute;
                     }

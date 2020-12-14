@@ -1,6 +1,7 @@
 package com.example.everybooks;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Locale;
+
 public class AllMemoFragment extends Fragment
 {
     View view;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
+
+    TextToSpeech tts;
 
     // 뷰 요소 선언 
     TextView title;
@@ -46,13 +51,40 @@ public class AllMemoFragment extends Fragment
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //음성출력 생성, 리스너 초기화
+        tts = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status!=android.speech.tts.TextToSpeech.ERROR) {
+                    tts.setLanguage(Locale.KOREAN);
+                }
+            }
+        });
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         // 리사이클러뷰 생성 및 어댑터 연결
         recyclerView = view.findViewById(R.id.all_memo_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new AllMemoAdapter(getContext());
+        adapter = new AllMemoAdapter(getContext(), tts);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if(tts != null){
+            tts.stop();
+            tts.shutdown();
+            tts = null;
+        }
+
     }
 }
