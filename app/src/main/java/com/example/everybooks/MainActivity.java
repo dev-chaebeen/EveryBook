@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity
     AllMemoAdapter allMemoAdapter;
     NotificationAdapter notificationAdapter;
 
-    // test
     ArrayList<Book> toReadBookList;
     ArrayList<Book> readingBookList;
     ArrayList<Book> readBookList;
@@ -72,9 +71,6 @@ public class MainActivity extends AppCompatActivity
     final int PROFILE = 3;
 
     final String TAG = "테스트";
-
-    // test
-    private AlarmManager alarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,7 +252,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        // 저장되어있는 알림 리스트를 리스트뷰에서 보여줄 수 있도록 ArrayList<Notification> 형태로 변환해서 어댑터에 보내준다.
+        /*// 저장되어있는 알림 리스트를 리스트뷰에서 보여줄 수 있도록 ArrayList<Notification> 형태로 변환해서 어댑터에 보내준다.
         try
         {
             SharedPreferences notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
@@ -292,7 +288,7 @@ public class MainActivity extends AppCompatActivity
         catch (JSONException e)
         {
             System.out.println(e.toString());
-        }
+        }*/
     }
 
     // 프레그먼트 교체가 일어나는 메소드
@@ -368,21 +364,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-  /*  @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-
-        toast = Toast.makeText(this, "또 기록하러 와주세요 ", Toast.LENGTH_SHORT);
-        toast.show();
-    }
-    */
     // 새로고침
     public void refresh()
     {
         toReadBookAdapter.notifyDataSetChanged();
     }
-
-
 
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,11 +15,16 @@ import com.ebanx.swipebtn.SwipeButton;
 import java.util.Calendar;
 
 public class AlarmActivity extends AppCompatActivity {
+
     Calendar calendar;
+
     SwipeButton swipeButton;
     TextView timeText;
+    TextView textView_alarm_text;
+
     MediaPlayer mediaPlayer;
     boolean flag = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +32,8 @@ public class AlarmActivity extends AppCompatActivity {
         calendar = Calendar.getInstance();
         swipeButton = (SwipeButton) findViewById(R.id.swipe_btn);
         timeText = (TextView) findViewById(R.id.time);
+        textView_alarm_text = findViewById(R.id.alarm_text);
+
 
         Log.d("테스트","알람 액티비티");
 
@@ -38,6 +46,8 @@ public class AlarmActivity extends AppCompatActivity {
         mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.beep);   // 소리를 재생할 MediaPlayer
         mediaPlayer.setLooping(true);   // 무한반복
         mediaPlayer.start();
+
+        textView_alarm_text.setText(getIntent().getStringExtra("alarmText"));
 
         new Thread(new Runnable() {
             @Override
@@ -65,6 +75,7 @@ public class AlarmActivity extends AppCompatActivity {
             public void onStateChange(boolean active) {
                 mediaPlayer.stop();
                 flag=false;
+                Toast.makeText(getApplicationContext(), "종료하였습니다.", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }); // Swipe Button 밀어서 해제

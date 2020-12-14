@@ -54,7 +54,8 @@ public class EtcFragment extends Fragment
                 switch (v.getId()) {
 
                     case R.id.notification :
-                        intent = new Intent(getActivity(), NotificationActivity.class);
+                        //intent = new Intent(getActivity(), NotificationActivity.class);
+                        intent = new Intent(getActivity(), SetAlarmActivity.class);
                         startActivity(intent);
                         break;
 

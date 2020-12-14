@@ -47,11 +47,6 @@ public class NotificationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
-
-        //test
-        setAlarm();
-
-
         // 요소 초기화
         linearLayout_notification = findViewById(R.id.notification);
         textView_add = findViewById(R.id.add);
@@ -253,42 +248,6 @@ public class NotificationActivity extends AppCompatActivity
         }
 
     }
-
-
-
-
-    void setAlarm() {
-        
-        Log.d(TAG, "알람 설정");
-
-        Calendar alarmCalendar = Calendar.getInstance();
-        alarmCalendar.setTimeInMillis(System.currentTimeMillis());
-        alarmCalendar.set(Calendar.HOUR_OF_DAY, 23);
-        alarmCalendar.set(Calendar.MINUTE, 45);
-        alarmCalendar.set(Calendar.SECOND, 0);
-        /*
-        alarmCalendar.setTimeInMillis(System.currentTimeMillis());
-        alarmCalendar.set(Calendar.HOUR_OF_DAY, alarmHour);
-        alarmCalendar.set(Calendar.MINUTE, alarmMinute);
-        alarmCalendar.set(Calendar.SECOND, 0);*/
-        // TimePickerDialog 에서 설정한 시간을 알람 시간으로 설정
-
-        if (alarmCalendar.before(Calendar.getInstance())) alarmCalendar.add(Calendar.DATE, 1);
-        // 알람 시간이 현재시간보다 빠를 때 하루 뒤로 맞춤
-        Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmIntent.setAction(AlarmReceiver.ACTION_RESTART_SERVICE);
-        PendingIntent alarmCallPendingIntent
-                = PendingIntent.getBroadcast
-                (getApplicationContext(), 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            alarmManager.setExactAndAllowWhileIdle
-                    (AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), alarmCallPendingIntent);
-        else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-            alarmManager.setExact
-                    (AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), alarmCallPendingIntent);
-    } // 알람 설정
-
 
 
 }
