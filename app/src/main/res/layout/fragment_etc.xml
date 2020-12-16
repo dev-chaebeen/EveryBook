@@ -233,4 +233,37 @@
         android:background="@color/light_grey"
         android:layout_marginTop="5dp" />
 
+    <LinearLayout
+        android:id="@+id/book_recommendation"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        >
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:src="@drawable/ic_book"
+            >
+        </ImageView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="left"
+            android:text="Book Recommendation"
+            android:textSize="16sp"
+            android:layout_marginStart="10dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_marginTop="5dp" />
+
 </LinearLayout>

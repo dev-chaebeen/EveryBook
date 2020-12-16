@@ -16,13 +16,13 @@ import com.example.everybooks.data.Book;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.BookViewHolder>
+public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdapter.BookViewHolder>
 {
     private int position;
     Book book;
 
     // todo static 수정하기
-    static ArrayList<Book> searchBookList = new ArrayList<>();
+    static ArrayList<Book> recommendBookList = new ArrayList<>();
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -75,15 +75,15 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
         }
     }
 
-    SearchBookAdapter(){}
+    RecommendBookAdapter(){}
 
-    SearchBookAdapter(ArrayList<Book> searchBookList) {
-        this.searchBookList = searchBookList;
+    RecommendBookAdapter(ArrayList<Book> recommendBookList) {
+        this.recommendBookList = recommendBookList;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴하는 메소드
     @Override
-    public SearchBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public RecommendBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_book, parent, false);
         return new BookViewHolder(view);
@@ -91,9 +91,9 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시하는 메소드
     @Override
-    public void onBindViewHolder(SearchBookAdapter.BookViewHolder holder, int position)
+    public void onBindViewHolder(RecommendBookAdapter.BookViewHolder holder, int position)
     {
-        Book book = searchBookList.get(position);
+        Book book = recommendBookList.get(position);
 
         //holder.imageView_img.setImageDrawable(book.getImg());
         holder.textView_title.setText(book.getTitle());
@@ -105,7 +105,7 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
     // getItemCount() - 전체 데이터 갯수 리턴하는 메소드
     @Override
     public int getItemCount() {
-        return searchBookList.size() ;
+        return recommendBookList.size() ;
     }
 
     public int getPosition(int position)
@@ -131,20 +131,20 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
         String today = year + "." + month + "." + date;
         book.setInsertDate(today);
         book.setState("toRead");
-        searchBookList.add(0,book);
+        recommendBookList.add(0,book);
         notifyItemInserted(0);
     }
 
     // 아이템 삭제 메소드
     public void removeItem(int position)
     {
-        searchBookList.remove(position);
+        recommendBookList.remove(position);
         notifyItemRemoved(position);
     }
 
     // 아이템 가져오는 메소드
     public Book getItem(int position) {
-        return searchBookList.get(position);
+        return recommendBookList.get(position);
     }
 
 }

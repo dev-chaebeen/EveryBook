@@ -22,10 +22,6 @@ import static android.content.Context.MODE_PRIVATE;
 // 책 정보 객체 생성하는 클래스
 public class Book
 {
-    ArrayList<Book> toReadBookList;
-    ArrayList<Book> readingBookList;
-    ArrayList<Book> readBookList;
-
     private int bookId;
     private String img;
     private String title;
@@ -38,7 +34,7 @@ public class Book
     private String state;
     private String readTime;
     private int starNum;
-
+    private String plot;
 
     // getter / setter
     public String getImg() {
@@ -145,6 +141,11 @@ public class Book
         this.starNum = starNum;
     }
 
+    public String getPlot() {
+        return plot;
+    }
 
-
+    public void setPlot(String plot) {
+        this.plot = plot;
+    }
 }

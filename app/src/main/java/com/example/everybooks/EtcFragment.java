@@ -20,6 +20,7 @@ public class EtcFragment extends Fragment
     LinearLayout linearLayout_asmr_video;
     LinearLayout linearLayout_translate;
     LinearLayout linearLayout_memo_setting;
+    LinearLayout linearLayout_book_recommendation;
 
     View.OnClickListener click;
     Intent intent;
@@ -45,6 +46,7 @@ public class EtcFragment extends Fragment
         linearLayout_asmr_video = view.findViewById(R.id.asmr_video);
         linearLayout_translate = view.findViewById(R.id.translate);
         linearLayout_memo_setting = view.findViewById(R.id.memo_setting);
+        linearLayout_book_recommendation = view.findViewById(R.id.book_recommendation);
 
         // 각 메뉴를 클릭하면 해당하는 화면으로 전환한다.
         click = new View.OnClickListener()
@@ -83,6 +85,11 @@ public class EtcFragment extends Fragment
                         intent = new Intent(getActivity(), MemoSettingActivity.class);
                         startActivity(intent);
                         break;
+
+                    case R.id.book_recommendation :
+                        intent = new Intent(getActivity(), RecommendBookActivity.class);
+                        startActivity(intent);
+                        break;
                 }
             }
         };
@@ -94,6 +101,7 @@ public class EtcFragment extends Fragment
         linearLayout_asmr_video.setOnClickListener(click);
         linearLayout_translate.setOnClickListener(click);
         linearLayout_memo_setting.setOnClickListener(click);
+        linearLayout_book_recommendation.setOnClickListener(click);
     }
 }
 
