@@ -40,6 +40,9 @@ public class LoginActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
+        intent = new Intent(this, LoadingActivity.class);
+        startActivity(intent);
+
         // 화면생성
         setContentView(R.layout.activity_login);
 

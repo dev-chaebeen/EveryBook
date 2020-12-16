@@ -132,12 +132,6 @@ public class  AllMemoAdapter extends RecyclerView.Adapter<AllMemoAdapter.ViewHol
         }
     }
 
-    public AllMemoAdapter(){}
-
-    public AllMemoAdapter(Context context)
-    {
-        this.context = context;
-    }
 
     public AllMemoAdapter(Context context, ArrayList<Memo> arrayList)
     {

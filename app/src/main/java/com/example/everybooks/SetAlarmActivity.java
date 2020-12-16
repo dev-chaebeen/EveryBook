@@ -121,6 +121,13 @@ public class SetAlarmActivity  extends AppCompatActivity
                         textView_time.setText(time);
                         hour = hourOfDay;
                         min = minute;
+
+                        SharedPreferences notiInfo = getSharedPreferences("notiInfo", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = notiInfo.edit();
+                        editor.putInt("alarmHour", hour);
+                        editor.putInt("alarmMin", min);
+                        editor.commit();
+
                     }
                 };
 
