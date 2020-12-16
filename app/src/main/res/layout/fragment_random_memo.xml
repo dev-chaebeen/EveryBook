@@ -29,13 +29,17 @@
             android:layout_marginLeft="50dp"
             android:gravity="center"
             android:orientation="vertical">
-
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center"
+                android:textSize="13sp" />
             <TextView
                 android:id="@+id/memo_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center"
-                android:text="작성한 메모가 일정 간격으로 나타나는 공간입니다"
                 android:textSize="13sp" />
 
         </LinearLayout>

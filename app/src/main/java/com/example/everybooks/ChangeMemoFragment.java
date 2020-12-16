@@ -24,9 +24,11 @@ public class ChangeMemoFragment extends Fragment
     // 뷰 요소 선언
     ImageView imageView_img;
     TextView textView_memo_text;
+    TextView textView_title;
 
     String img;
     String memoText;
+    String title;
     int bookId;
     int randomNum;
 
@@ -49,6 +51,7 @@ public class ChangeMemoFragment extends Fragment
         // 뷰 요소 초기화
         imageView_img = view.findViewById(R.id.img);
         textView_memo_text = view.findViewById(R.id.memo_text);
+        textView_title = view.findViewById(R.id.title);
 
         // 이 프래그먼트는 HomeFragment 에서 전달받은 수의 위치에 있는 메모 데이터를 뷰 요소에 배치하는 프래그먼트이다.
         // 배치하는 데이터는 메모가 적힌 책의 표지 이미지와 메모 내용이다.
@@ -89,6 +92,7 @@ public class ChangeMemoFragment extends Fragment
                 if(bookId == jsonObject.getInt("bookId"))
                 {
                     img = jsonObject.getString("img");
+                    title = jsonObject.getString("title");
                 }
             }
         }
@@ -105,6 +109,7 @@ public class ChangeMemoFragment extends Fragment
         // 얻어낸 데이터를 뷰 요소에 배치한다.
         textView_memo_text.setText(memoText);
         imageView_img.setImageBitmap(bitmap);
+        textView_title.setText(title);
 
         return view;
     }
