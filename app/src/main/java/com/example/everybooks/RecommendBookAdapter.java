@@ -32,7 +32,7 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
         ImageView imageView_img;
         TextView textView_title;
         TextView textView_writer;
-        TextView textView_plot;
+        TextView textView_comment;
 
         // 생성자
         BookViewHolder(View itemView) {
@@ -42,7 +42,7 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
             imageView_img = itemView.findViewById(R.id.img);
             textView_title = itemView.findViewById(R.id.title);
             textView_writer = itemView.findViewById(R.id.writer);
-            textView_plot = itemView.findViewById(R.id.plot);
+            textView_comment = itemView.findViewById(R.id.comment);
 
             // 아이템을 클릭하면 책을 추가할거냐고 묻는다.
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +94,7 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
     @Override
     public RecommendBookAdapter.BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_book, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recommend_book, parent, false);
         return new BookViewHolder(view);
     }
 
@@ -102,12 +102,12 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
     @Override
     public void onBindViewHolder(RecommendBookAdapter.BookViewHolder holder, int position)
     {
-        Book book = recommendBookList.get(position);
+        RecommendBook book = recommendBookList.get(position);
 
         //holder.imageView_img.setImageDrawable(book.getImg());
         holder.textView_title.setText(book.getTitle());
         holder.textView_writer.setText(book.getWriter());
-        holder.textView_plot.setText(book.getPlot());
+        holder.textView_comment.setText(book.getRecommendComment());
 
     }
 
@@ -125,30 +125,6 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
     public void setPosition(int position)
     {
         this.position = position;
-    }
-
-    // 아이템 추가 메소드
-    public void addItem(RecommendBook book)
-    {
-        //현재 년도, 월, 일
-        Calendar cal = Calendar.getInstance();
-
-        int year = cal.get ( cal.YEAR );
-        int month = cal.get ( cal.MONTH ) + 1 ;
-        int date = cal.get ( cal.DATE ) ;
-
-        String today = year + "." + month + "." + date;
-        book.setInsertDate(today);
-        book.setState("toRead");
-        recommendBookList.add(0,book);
-        notifyItemInserted(0);
-    }
-
-    // 아이템 삭제 메소드
-    public void removeItem(int position)
-    {
-        recommendBookList.remove(position);
-        notifyItemRemoved(position);
     }
 
     // 아이템 가져오는 메소드

@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 
 public class RecommendBookActivity extends AppCompatActivity
 {
-    // 뷰 요소 초기화
+    // 뷰 요소 선언
     TextView textView_total_num;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -41,8 +41,6 @@ public class RecommendBookActivity extends AppCompatActivity
     RecommendBook recommendBook;
 
     String totalCount;
-    int recom_year;
-    int recom_month;
 
     final String TAG = "RecommendBookActivity";
 
@@ -51,6 +49,8 @@ public class RecommendBookActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_book);
 
+        // 뷰 요소 초기화
+        textView_total_num = findViewById(R.id.total_num);
 
         // 임시로 데이터 추가
        /* ArrayList<Book> list = RecommendBookAdapter.recommendBookList;
@@ -174,6 +174,7 @@ public class RecommendBookActivity extends AppCompatActivity
                             {
                                 totalCount = xmlPullParser.nextText();
                                 Log.d(TAG,"totalCount : " + totalCount);
+
                             }
                             else if(startTag.equals("item"))
                             {
@@ -351,8 +352,10 @@ public class RecommendBookActivity extends AppCompatActivity
             //어답터 연결
             RecommendBookAdapter adapter = new RecommendBookAdapter(getApplicationContext(), recommendBookList);
             recyclerView.setAdapter(adapter);
-        }
 
+            Log.d(TAG, "totalCount view" + totalCount);
+            textView_total_num.setText(totalCount);
+        }
 
     }
 
@@ -360,6 +363,8 @@ public class RecommendBookActivity extends AppCompatActivity
     public static String getOnlyKor(String str)
     {
         String textWithoutTag = str.replaceAll("&nbsp;", " ");
+        textWithoutTag.replaceAll("&rsquo;","");
+        textWithoutTag.replaceAll("&lsquo;","");
         textWithoutTag = textWithoutTag.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
         return textWithoutTag;
     }
