@@ -1,6 +1,5 @@
 package com.example.everybooks;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,8 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.everybooks.data.Book;
-import com.example.everybooks.data.RecommendBook;
+import com.example.everybooks.data.ExternalBook;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -22,13 +20,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RecommendBookActivity extends AppCompatActivity
 {
@@ -38,8 +33,8 @@ public class RecommendBookActivity extends AppCompatActivity
     private RecyclerView.Adapter adapter;
 
     String requestUrl;
-    ArrayList<RecommendBook> recommendBookList = new ArrayList<>();
-    RecommendBook recommendBook;
+    ArrayList<ExternalBook> externalBookList = new ArrayList<>();
+    ExternalBook externalBook;
 
     String totalCount;
 
@@ -61,7 +56,7 @@ public class RecommendBookActivity extends AppCompatActivity
         textView_total_num = findViewById(R.id.total_num);
 
         // 임시로 데이터 추가
-       /* ArrayList<Book> list = RecommendBookAdapter.recommendBookList;
+       /* ArrayList<Book> list = RecommendBookAdapter.externalBookList;
         Book book = new Book();
         book.setTitle("추천책");
         book.setWriter("추천책작가");
@@ -193,23 +188,23 @@ public class RecommendBookActivity extends AppCompatActivity
                             }
                             else if(startTag.equals("item"))
                             {
-                                recommendBook = new RecommendBook();
+                                externalBook = new ExternalBook();
                                 Log.d(TAG,"recommnedBook 객체 추가");
                             }
                             else if(startTag.equals("recomtitle"))
                             {
-                                recommendBook.setTitle(xmlPullParser.nextText());
-                                Log.d(TAG, "recomTitle : " + recommendBook.getTitle());
+                                externalBook.setTitle(xmlPullParser.nextText());
+                                Log.d(TAG, "recomTitle : " + externalBook.getTitle());
                             }
                             else if(startTag.equals("recomauthor"))
                             {
-                                recommendBook.setWriter(xmlPullParser.nextText());
-                                Log.d(TAG, "recomAuthor : " + recommendBook.getWriter());
+                                externalBook.setWriter(xmlPullParser.nextText());
+                                Log.d(TAG, "recomAuthor : " + externalBook.getWriter());
                             }
                             else if(startTag.equals("recompublisher"))
                             {
-                                recommendBook.setPublisher(xmlPullParser.nextText());
-                                Log.d(TAG, "recomPublisher : " + recommendBook.getPublisher());
+                                externalBook.setPublisher(xmlPullParser.nextText());
+                                Log.d(TAG, "recomPublisher : " + externalBook.getPublisher());
                             }
                             else if(startTag.equals("recomcontens"))
                             {
@@ -217,19 +212,19 @@ public class RecommendBookActivity extends AppCompatActivity
 
                                 comment = getOnlyKor(comment);
                                 Log.d(TAG, "comment : " + comment);
-                                recommendBook.setRecommendComment(comment);
-                                Log.d(TAG, "recomcontens : " + recommendBook.getRecommendComment());
+                                externalBook.setDescription(comment);
+                                Log.d(TAG, "recomcontens : " + externalBook.getDescription());
 
                             }
                             else if(startTag.equals("publishYear"))
                             {
-                                recommendBook.setPublishDate(xmlPullParser.nextText());
-                                Log.d(TAG, "publishYear : " + recommendBook.getPublishDate());
+                                externalBook.setPublishDate(xmlPullParser.nextText());
+                                Log.d(TAG, "publishYear : " + externalBook.getPublishDate());
                             }
                             else if(startTag.equals("recomfilepath"))
                             {
-                                recommendBook.setImgFilePath(xmlPullParser.nextText());
-                                Log.d(TAG, "recomfilepath : " + recommendBook.getImgFilePath());
+                                externalBook.setImgFilePath(xmlPullParser.nextText());
+                                Log.d(TAG, "recomfilepath : " + externalBook.getImgFilePath());
                             }
 
                             break;
@@ -239,7 +234,7 @@ public class RecommendBookActivity extends AppCompatActivity
                             String endTag = xmlPullParser.getName();
                             if(endTag.equals("item"))
                             {
-                                recommendBookList.add(recommendBook);
+                                externalBookList.add(externalBook);
                             }
 
                             break;
@@ -272,9 +267,9 @@ public class RecommendBookActivity extends AppCompatActivity
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            Log.d(TAG, "recommendBookList.size() : " + recommendBookList.size());
+            Log.d(TAG, "externalBookList.size() : " + externalBookList.size());
             //어답터 연결
-            RecommendBookAdapter adapter = new RecommendBookAdapter(getApplicationContext(), recommendBookList);
+            RecommendBookAdapter adapter = new RecommendBookAdapter(getApplicationContext(), externalBookList);
             recyclerView.setAdapter(adapter);
 
             textView_total_num.setText(totalCount);

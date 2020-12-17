@@ -1,10 +1,10 @@
 package com.example.everybooks.data;
 
-public class RecommendBook extends Book
+public class ExternalBook extends Book
 {
     private int recommendYear;
     private int recommendMonth;
-    private String recommendComment;
+    private String description;
     private String imgFilePath;
 
     public int getRecommendYear() {
@@ -23,12 +23,12 @@ public class RecommendBook extends Book
         this.recommendMonth = recommendMonth;
     }
 
-    public String getRecommendComment() {
-        return recommendComment;
+    public String getDescription() {
+        return description;
     }
 
-    public void setRecommendComment(String recommendComment) {
-        this.recommendComment = recommendComment;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getImgFilePath() {

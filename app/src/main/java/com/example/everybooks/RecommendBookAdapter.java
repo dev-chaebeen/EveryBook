@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.everybooks.data.Book;
-import com.example.everybooks.data.RecommendBook;
+import com.example.everybooks.data.ExternalBook;
 import com.example.everybooks.util.Util;
 
 import org.json.JSONArray;
@@ -33,7 +33,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdapter.BookViewHolder>
 {
     private int position;
-    RecommendBook recommendBook;
+    ExternalBook externalBook;
 
     Context context;
     int bookId;
@@ -41,7 +41,7 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
     JSONArray jsonArray;
     Intent intent;
 
-    static ArrayList<RecommendBook> recommendBookList = new ArrayList<>();
+    static ArrayList<ExternalBook> externalBookList = new ArrayList<>();
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -73,7 +73,7 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
                             {
                                 // 읽을 책 리스트에 추가한다.
                                 position = getAdapterPosition();
-                                recommendBook = getItem(position);
+                                externalBook = getItem(position);
 
                                 //addItem(book);
 
@@ -96,10 +96,10 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
                                 Book book = new Book();
                                 book.setBookId(bookId);
                                 book.setImg(imgString);
-                                book.setTitle(recommendBook.getTitle());
-                                book.setWriter(recommendBook.getWriter());
-                                book.setPublisher(recommendBook.getPublisher());
-                                book.setPublishDate(recommendBook.getPublishDate());
+                                book.setTitle(externalBook.getTitle());
+                                book.setWriter(externalBook.getWriter());
+                                book.setPublisher(externalBook.getPublisher());
+                                book.setPublishDate(externalBook.getPublishDate());
                                 book.setState("toRead");
 
                                 Calendar cal = Calendar.getInstance();
@@ -191,13 +191,13 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
 
     RecommendBookAdapter(){}
 
-    RecommendBookAdapter(ArrayList<RecommendBook> recommendBookList) {
-        this.recommendBookList = recommendBookList;
+    RecommendBookAdapter(ArrayList<ExternalBook> externalBookList) {
+        this.externalBookList = externalBookList;
     }
 
-    RecommendBookAdapter(Context context, ArrayList<RecommendBook> recommendBookList) {
+    RecommendBookAdapter(Context context, ArrayList<ExternalBook> externalBookList) {
         this.context = context;
-        this.recommendBookList = recommendBookList;
+        this.externalBookList = externalBookList;
     }
 
 
@@ -213,20 +213,20 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
     @Override
     public void onBindViewHolder(RecommendBookAdapter.BookViewHolder holder, int position)
     {
-        RecommendBook book = recommendBookList.get(position);
+        ExternalBook book = externalBookList.get(position);
 
         Glide.with(holder.itemView.getContext()).load(book.getImgFilePath()).into(holder.imageView_img);
 
         holder.textView_title.setText(book.getTitle());
         holder.textView_writer.setText(book.getWriter());
-        holder.textView_comment.setText(book.getRecommendComment());
+        holder.textView_comment.setText(book.getDescription());
 
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴하는 메소드
     @Override
     public int getItemCount() {
-        return recommendBookList.size() ;
+        return externalBookList.size() ;
     }
 
     public int getPosition(int position)
@@ -240,8 +240,8 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
     }
 
     // 아이템 가져오는 메소드
-    public RecommendBook getItem(int position) {
-        return recommendBookList.get(position);
+    public ExternalBook getItem(int position) {
+        return externalBookList.get(position);
     }
 
 }

@@ -9,26 +9,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Book;
-import com.example.everybooks.data.RecommendBook;
+import com.example.everybooks.data.ExternalBook;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -38,14 +32,15 @@ public class SearchBookActivity extends AppCompatActivity
 {
     // 뷰 요소 선언
     ImageView imageView_mic;
+    TextView textView_total_num;
     TextView textView_search_num;
     ProgressBar progressBar;                // 데이터 로딩중을 표시할 프로그레스바
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
 
-    ArrayList<Book> searchBookList = new ArrayList<>();
-
+    ArrayList<ExternalBook> searchBookList = new ArrayList<>();
+    ExternalBook searchBook;
 
     // test
     private List<String> list;                      // String 데이터를 담고있는 리스트
@@ -57,7 +52,7 @@ public class SearchBookActivity extends AppCompatActivity
     String requestUrl;
 
     String TAG = "SearchBookActivity";
-    String total;
+    String totalCount;
     String searchKeyword;
 
     @Override
@@ -71,6 +66,7 @@ public class SearchBookActivity extends AppCompatActivity
         // 뷰 요소 초기화
         imageView_mic = findViewById(R.id.mic);
         textView_search_num = findViewById(R.id.search_num);
+        textView_total_num = findViewById(R.id.total_num);
         progressBar = findViewById(R.id.progressbar);
 
         // 인텐트로 전달받은 데이터 담기
@@ -79,7 +75,7 @@ public class SearchBookActivity extends AppCompatActivity
 
         progressBar.setVisibility(View.GONE);
 
-        for (int i = 0; i < 20; i++) {
+      /*  for (int i = 0; i < 20; i++) {
             // 임시로 데이터 추가
             ArrayList<Book> list = SearchBookAdapter.searchBookList;
             Book book = new Book();
@@ -88,7 +84,7 @@ public class SearchBookActivity extends AppCompatActivity
             book.setPlot("줄거리"+i);
             list.add(book);
         }
-
+*/
         // 리사이클러뷰 생성
        /* recyclerView = findViewById(R.id.search_book_list);
         recyclerView.setHasFixedSize(true);
@@ -115,6 +111,12 @@ public class SearchBookActivity extends AppCompatActivity
             }
         });*/
 
+        // 리사이클러뷰 생성
+        recyclerView = findViewById(R.id.search_book_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+
         //AsyncTask
         MyAsyncTask myAsyncTask = new MyAsyncTask();
         myAsyncTask.execute();
@@ -126,7 +128,7 @@ public class SearchBookActivity extends AppCompatActivity
         // 리스트에 다음 데이터를 입력할 동안에 이 메소드가 또 호출되지 않도록 mLockListView 를 true로 설정한다.
         mLockListView = true;
 
-        // 다음 20개의 데이터를 불러와서 리스트에 저장한다.
+     /*   // 다음 20개의 데이터를 불러와서 리스트에 저장한다.
         for (int i = 0; i < 20; i++) {
             // 임시로 데이터 추가
             ArrayList<Book> list = SearchBookAdapter.searchBookList;
@@ -135,7 +137,7 @@ public class SearchBookActivity extends AppCompatActivity
             book.setWriter("추가한책작가"+i);
             book.setPlot("추가한줄거리"+i);
             list.add(book);
-        }
+        }*/
 
         // 1초 뒤 프로그레스바를 감추고 데이터를 갱신하고, 중복 로딩 체크하는 Lock을 했던 mLockListView변수를 풀어준다.
         new Handler().postDelayed(new Runnable() {
@@ -161,7 +163,7 @@ public class SearchBookActivity extends AppCompatActivity
             String clientSecret = getString(R.string.search_book_api_client_secret);//애플리케이션 클라이언트 시크릿값";
             try {
                 String text = URLEncoder.encode(searchKeyword, "UTF-8");
-                String apiURL = "https://openapi.naver.com/v1/search/book?query="+ text; // json 결과
+                String apiURL = "https://openapi.naver.com/v1/search/book?query="+ text + "&display=20"; // json 결과
                 //String apiURL = "https://openapi.naver.com/v1/search/book.xml?query="+ text; // xml 결과
                 URL url = new URL(apiURL);
                 HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -186,12 +188,42 @@ public class SearchBookActivity extends AppCompatActivity
 
                 // JSON 형식으로 얻은 값을 담아준다.
                 JSONObject jsonObject = new JSONObject(response.toString());
-                total = jsonObject.getString("total");
+                totalCount = jsonObject.getString("total");
+                Log.d(TAG, "total : " + totalCount);
 
-                Log.d(TAG, "response.getString total : " + total);
+                String items = jsonObject.getString("items");
+                JSONArray jsonArray = new JSONArray(items);
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
+                    JSONObject item = (JSONObject) jsonArray.get(i);
+                    String title = item.getString("title");
+                    String image = item.getString("image");
+                    String writer = item.getString("author");
+                    String publisher = item.getString("publisher");
+                    String publishDate = item.getString("pubdate");
+                    String description = item.getString("description");
 
+                    searchBook = new ExternalBook();
+                    searchBook.setTitle(title);
+                    searchBook.setWriter(writer);
+                    searchBook.setImgFilePath(image);
+                    searchBook.setPublisher(publisher);
+                    searchBook.setPublishDate(publishDate);
+                    searchBook.setDescription(description);
 
+                    searchBookList.add(searchBook);
 
+                 /*   Log.d(TAG, "title : " + title);
+                    Log.d(TAG, "image : " + image);
+                    Log.d(TAG, "writer : " + writer);
+                    Log.d(TAG, "publisher : " + publisher);
+                    Log.d(TAG, "publishDate : " + publishDate);
+                    Log.d(TAG, "description : " + description);*/
+
+                }
+
+                Log.d(TAG, "for 문 돌린 뒤 searchBookList.size() :" + searchBookList.size());
+                Log.d(TAG, "total : " + totalCount);
 
             } catch (Exception e) {
                 System.out.println(e);
@@ -205,12 +237,12 @@ public class SearchBookActivity extends AppCompatActivity
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-          //  Log.d(TAG, "searchBookList.size() : " + searchBookList.size());
-            /*//어답터 연결
-            RecommendBookAdapter adapter = new RecommendBookAdapter(getApplicationContext(), searchBookList);
+            //  Log.d(TAG, "searchBookList.size() : " + searchBookList.size());
+            //어답터 연결
+            SearchBookAdapter adapter = new SearchBookAdapter(getApplicationContext(), searchBookList);
             recyclerView.setAdapter(adapter);
 
-            textView_total_num.setText(totalCount);*/
+            textView_total_num.setText(totalCount);
         }
 
     }

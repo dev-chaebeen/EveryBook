@@ -1,6 +1,7 @@
 package com.example.everybooks;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,9 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.everybooks.data.Book;
+import com.example.everybooks.data.ExternalBook;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,16 +23,16 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
 {
     private int position;
     Book book;
+    Context context;
 
-    // todo static 수정하기
-    static ArrayList<Book> searchBookList = new ArrayList<>();
+    static ArrayList<ExternalBook> searchBookList = new ArrayList<>();
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView_img;
         TextView textView_title;
         TextView textView_writer;
-        TextView textView_plot;
+        TextView textView_comment;
 
         // 생성자
         BookViewHolder(View itemView) {
@@ -39,7 +42,7 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
             imageView_img = itemView.findViewById(R.id.img);
             textView_title = itemView.findViewById(R.id.title);
             textView_writer = itemView.findViewById(R.id.writer);
-            textView_plot = itemView.findViewById(R.id.plot);
+            textView_comment = itemView.findViewById(R.id.comment);
 
             // 아이템을 클릭하면 책을 추가할거냐고 묻는다.
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -77,9 +80,13 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
 
     SearchBookAdapter(){}
 
-    SearchBookAdapter(ArrayList<Book> searchBookList) {
+    SearchBookAdapter(Context context, ArrayList<ExternalBook> searchBookList)
+    {
+        this.context = context;
         this.searchBookList = searchBookList;
     }
+
+
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴하는 메소드
     @Override
@@ -93,12 +100,13 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
     @Override
     public void onBindViewHolder(SearchBookAdapter.BookViewHolder holder, int position)
     {
-        Book book = searchBookList.get(position);
+        ExternalBook book = searchBookList.get(position);
 
-        //holder.imageView_img.setImageDrawable(book.getImg());
+        Glide.with(holder.itemView.getContext()).load(book.getImgFilePath()).into(holder.imageView_img);
+
         holder.textView_title.setText(book.getTitle());
         holder.textView_writer.setText(book.getWriter());
-        holder.textView_plot.setText(book.getPlot());
+        holder.textView_comment.setText(book.getDescription());
 
     }
 
@@ -119,7 +127,7 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
     }
 
     // 아이템 추가 메소드
-    public void addItem(Book book)
+    public void addItem(ExternalBook book)
     {
         //현재 년도, 월, 일
         Calendar cal = Calendar.getInstance();
