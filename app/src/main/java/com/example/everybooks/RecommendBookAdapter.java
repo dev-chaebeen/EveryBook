@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.everybooks.data.Book;
 import com.example.everybooks.data.RecommendBook;
 
@@ -104,7 +105,8 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
     {
         RecommendBook book = recommendBookList.get(position);
 
-        //holder.imageView_img.setImageDrawable(book.getImg());
+        Glide.with(holder.itemView.getContext()).load(book.getImgFilePath()).into(holder.imageView_img);
+
         holder.textView_title.setText(book.getTitle());
         holder.textView_writer.setText(book.getWriter());
         holder.textView_comment.setText(book.getRecommendComment());

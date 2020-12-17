@@ -19,6 +19,7 @@
             android:layout_gravity="left|center"
             android:src="@drawable/ic_book"
             android:layout_marginLeft="5dp"
+            android:scaleType="fitCenter"
          />
 
         <LinearLayout

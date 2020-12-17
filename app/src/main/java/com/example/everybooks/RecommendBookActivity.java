@@ -133,7 +133,7 @@ public class RecommendBookActivity extends AppCompatActivity
         @Override
         protected String doInBackground(String... strings) {
 
-            // 현재년도, 현재월 -1 이랑 월의 일수 구해서 start_date, end_date로 넘긴다.
+            //todo 현재년도, 현재월 -1 이랑 월의 일수 구해서 start_date, end_date로 넘긴다.
 
             requestUrl = "https://nl.go.kr/NL/search/openApi/saseoApi.do?key=" + getString(R.string.recommend_book_api_key)
                     +"&start_date=20201101&end_date=20201131";
@@ -353,7 +353,6 @@ public class RecommendBookActivity extends AppCompatActivity
             RecommendBookAdapter adapter = new RecommendBookAdapter(getApplicationContext(), recommendBookList);
             recyclerView.setAdapter(adapter);
 
-            Log.d(TAG, "totalCount view" + totalCount);
             textView_total_num.setText(totalCount);
         }
 
@@ -363,8 +362,8 @@ public class RecommendBookActivity extends AppCompatActivity
     public static String getOnlyKor(String str)
     {
         String textWithoutTag = str.replaceAll("&nbsp;", " ");
-        textWithoutTag.replaceAll("&rsquo;","");
-        textWithoutTag.replaceAll("&lsquo;","");
+        textWithoutTag = textWithoutTag.replaceAll("&rsquo;","");
+        textWithoutTag = textWithoutTag.replaceAll("&lsquo;","");
         textWithoutTag = textWithoutTag.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
         return textWithoutTag;
     }
