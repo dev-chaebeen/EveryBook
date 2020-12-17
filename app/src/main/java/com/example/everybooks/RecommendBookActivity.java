@@ -26,6 +26,7 @@ import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,6 +44,13 @@ public class RecommendBookActivity extends AppCompatActivity
     String totalCount;
 
     final String TAG = "RecommendBookActivity";
+
+    int year;
+    int month;
+    int lastDay;
+
+    String thisMonthStart;
+    String thisMonthEnd;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,12 +71,20 @@ public class RecommendBookActivity extends AppCompatActivity
         // 리사이클러뷰 생성
         recyclerView = findViewById(R.id.recommend_book_list);
         recyclerView.setHasFixedSize(true);
-        //adapter = new RecommendBookAdapter(RecommendBookAdapter.recommendBookList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        //recyclerView.setAdapter(adapter);
 
-        // test
-//        AsyncTask
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        lastDay = calendar.getMaximum(Calendar.DAY_OF_MONTH);
+
+        thisMonthStart = Integer.toString(year)+Integer.toString(month)+ "01";
+        thisMonthEnd = Integer.toString(year)+Integer.toString(month)+Integer.toString(lastDay);
+
+        Log.d(TAG, "첫 일" + thisMonthStart);
+        Log.d(TAG, "마지막 일" + thisMonthEnd);
+
+        //AsyncTask
         MyAsyncTask myAsyncTask = new MyAsyncTask();
         myAsyncTask.execute();
 
@@ -133,10 +149,9 @@ public class RecommendBookActivity extends AppCompatActivity
         @Override
         protected String doInBackground(String... strings) {
 
-            //todo 현재년도, 현재월 -1 이랑 월의 일수 구해서 start_date, end_date로 넘긴다.
-
             requestUrl = "https://nl.go.kr/NL/search/openApi/saseoApi.do?key=" + getString(R.string.recommend_book_api_key)
-                    +"&start_date=20201101&end_date=20201131";
+                    +"&start_date=" + thisMonthStart + "&end_date=" + thisMonthEnd;
+
             URL url = null;
             try {
                 url = new URL(requestUrl);
