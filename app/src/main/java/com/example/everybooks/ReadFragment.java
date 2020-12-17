@@ -52,7 +52,8 @@ public class ReadFragment extends Fragment
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
 
         Log.d(TAG, "ReadFragment, readBookList.size : " + ReadBookAdapter.readBookList.size() );

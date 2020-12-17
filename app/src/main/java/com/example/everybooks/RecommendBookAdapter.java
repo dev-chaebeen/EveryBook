@@ -1,6 +1,7 @@
 package com.example.everybooks;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.Book;
+import com.example.everybooks.data.RecommendBook;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,8 +23,9 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
     private int position;
     Book book;
 
-    // todo static 수정하기
-    static ArrayList<Book> recommendBookList = new ArrayList<>();
+    Context context;
+
+    static ArrayList<RecommendBook> recommendBookList = new ArrayList<>();
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -77,9 +80,15 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
 
     RecommendBookAdapter(){}
 
-    RecommendBookAdapter(ArrayList<Book> recommendBookList) {
+    RecommendBookAdapter(ArrayList<RecommendBook> recommendBookList) {
         this.recommendBookList = recommendBookList;
     }
+
+    RecommendBookAdapter(Context context, ArrayList<RecommendBook> recommendBookList) {
+        this.context = context;
+        this.recommendBookList = recommendBookList;
+    }
+
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴하는 메소드
     @Override
@@ -119,7 +128,7 @@ public class RecommendBookAdapter extends RecyclerView.Adapter<RecommendBookAdap
     }
 
     // 아이템 추가 메소드
-    public void addItem(Book book)
+    public void addItem(RecommendBook book)
     {
         //현재 년도, 월, 일
         Calendar cal = Calendar.getInstance();
