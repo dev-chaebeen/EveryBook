@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.everybooks.data.Book;
 import com.example.everybooks.data.RecommendBook;
 
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -45,6 +46,7 @@ public class SearchBookActivity extends AppCompatActivity
 
     ArrayList<Book> searchBookList = new ArrayList<>();
 
+
     // test
     private List<String> list;                      // String 데이터를 담고있는 리스트
     boolean lastItemVisibleFlag = false; //  // 리스트 스크롤이 마지막 셀(맨 바닥)로 이동했는지 체크할 변수
@@ -55,6 +57,8 @@ public class SearchBookActivity extends AppCompatActivity
     String requestUrl;
 
     String TAG = "SearchBookActivity";
+    String total;
+    String searchKeyword;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -68,6 +72,10 @@ public class SearchBookActivity extends AppCompatActivity
         imageView_mic = findViewById(R.id.mic);
         textView_search_num = findViewById(R.id.search_num);
         progressBar = findViewById(R.id.progressbar);
+
+        // 인텐트로 전달받은 데이터 담기
+        searchKeyword = getIntent().getStringExtra("keyword");
+
 
         progressBar.setVisibility(View.GONE);
 
@@ -152,7 +160,7 @@ public class SearchBookActivity extends AppCompatActivity
             String clientId = getString(R.string.search_book_api_client_id);//애플리케이션 클라이언트 아이디값";
             String clientSecret = getString(R.string.search_book_api_client_secret);//애플리케이션 클라이언트 시크릿값";
             try {
-                String text = URLEncoder.encode("천개의", "UTF-8");
+                String text = URLEncoder.encode(searchKeyword, "UTF-8");
                 String apiURL = "https://openapi.naver.com/v1/search/book?query="+ text; // json 결과
                 //String apiURL = "https://openapi.naver.com/v1/search/book.xml?query="+ text; // xml 결과
                 URL url = new URL(apiURL);
@@ -177,6 +185,12 @@ public class SearchBookActivity extends AppCompatActivity
                 Log.d(TAG,"response.toString()" + response.toString());
 
                 // JSON 형식으로 얻은 값을 담아준다.
+                JSONObject jsonObject = new JSONObject(response.toString());
+                total = jsonObject.getString("total");
+
+                Log.d(TAG, "response.getString total : " + total);
+
+
 
 
             } catch (Exception e) {

@@ -395,7 +395,9 @@ public class HomeFragment extends Fragment
             public boolean onQueryTextSubmit(String query)
             {
                 intent = new Intent(getContext(), SearchBookActivity.class);
+                intent.putExtra("keyword", searchView_search.getQuery().toString());
                 startActivity(intent);
+
                 return true;
             }
 
