@@ -23,4 +23,6 @@
     <string name="book_recommendation">Book Recommendation</string>
 
     <string name="recommend_book_api_key">6d365a21098825b75acdfbe30d03f24bc72912600ce743476401337c7259378d</string>
+    <string name="search_book_api_client_id">FOrEKAo5PXq2oMzMAwzf</string>
+    <string name="search_book_api_client_secret">_AFpHxsuEr</string>
 </resources>

@@ -265,97 +265,6 @@ public class RecommendBookActivity extends AppCompatActivity
                 }
             }
 
-
-            //requestUrl = "https://nl.go.kr/NL/search/openApi/saseoApi.do?key=" + getString(R.string.recommend_book_api_key);
-
-           /* try {
-
-                boolean b_totalCount = false;
-                boolean b_recom_title = false;
-                boolean b_recom_author = false;
-                boolean b_recom_publisher = false;
-                boolean b_recom_contents = false;
-                boolean b_recom_file_path = false;
-                boolean b_recom_year = false;
-                boolean b_recom_month = false;
-                boolean b_publish_year = false;
-
-                URL url = new URL(requestUrl);
-                InputStream is = url.openStream();
-                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                XmlPullParser parser = factory.newPullParser();
-                parser.setInput(new InputStreamReader(is, "UTF-8"));
-
-                String tag;
-                int eventType = parser.getEventType();
-
-                while(eventType != XmlPullParser.END_DOCUMENT){
-                    switch (eventType){
-                        case XmlPullParser.START_DOCUMENT:
-                            recommendBookList = new ArrayList<RecommendBook>();
-                            break;
-                        case XmlPullParser.END_DOCUMENT:
-                            break;
-                        case XmlPullParser.END_TAG:
-                            if(parser.getName().equals("item") && recommendBook != null) {
-                                recommendBookList.add(recommendBook);
-                            }
-                            break;
-                        case XmlPullParser.START_TAG:
-                            if(parser.getName().equals("busArrivalList")){
-                                recommendBook = new RecommendBook();
-                            }
-                            if (parser.getName().equals("totalCount")) b_totalCount = true;
-                            if (parser.getName().equals("recom_title")) b_recom_title = true;
-                            if (parser.getName().equals("recom_author")) b_recom_author = true;
-                            if (parser.getName().equals("recom_publisher")) b_recom_publisher = true;
-                            if (parser.getName().equals("recom_contents")) b_recom_contents = true;
-                            if (parser.getName().equals("recom_file_path")) b_recom_file_path = true;
-                            if (parser.getName().equals("recom_year")) b_recom_year = true;
-                            if (parser.getName().equals("recom_month")) b_recom_month = true;
-                            if (parser.getName().equals("publish_year")) b_publish_year = true;
-
-
-                            break;
-                        case XmlPullParser.TEXT:
-                            if(b_totalCount){
-                                totalCount = Integer.parseInt(parser.getText());
-                                b_totalCount = false;
-                            } else if(b_recom_title) {
-                                recommendBook.setTitle(parser.getText());
-                                b_recom_title = false;
-                            } else if (b_recom_author) {
-                                recommendBook.setWriter(parser.getText());
-                                b_recom_author = false;
-                            } else if (b_recom_publisher) {
-                                recommendBook.setPublisher(parser.getText());
-                                b_recom_publisher = false;
-                            } else if (b_recom_contents) {
-                                recommendBook.setPlot(parser.getText());
-                                b_recom_contents = false;
-                            } else if (b_recom_file_path) {
-                                recommendBook.setImg(parser.getText());
-                                b_recom_file_path = false;
-                            } else if (b_recom_year) {
-                                recom_year = Integer.parseInt(parser.getText());
-                                b_recom_year = false;
-                            } else if (b_recom_month) {
-                                recom_month = Integer.parseInt(parser.getText());
-                                b_recom_month = false;
-                            } else if (b_publish_year) {
-                                recommendBook.setPublishDate(parser.getText());
-                                b_publish_year = false;
-                            }
-
-                            break;
-                    }
-                    eventType = parser.next();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
-
-
             return null;
         }
 
@@ -383,14 +292,7 @@ public class RecommendBookActivity extends AppCompatActivity
         return textWithoutTag;
     }
 
-    private String safeNextText(XmlPullParser parser)
-            throws XmlPullParserException, IOException {
-        String result = parser.nextText();
-        if (parser.getEventType() != XmlPullParser.END_TAG) {
-            parser.nextTag();
-        }
-        return result;
-    }
+
 
 
 }
