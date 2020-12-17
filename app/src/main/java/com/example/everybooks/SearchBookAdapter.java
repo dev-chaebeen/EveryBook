@@ -188,8 +188,8 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
                                     }
 
                                     intent = new Intent(context, MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     context.startActivity(intent);
-
 
                                     break;
 
