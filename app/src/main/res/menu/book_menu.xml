@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/link"
+        android:title="자세히 보기"
+        >
+    </item>
+    <item
+        android:id="@+id/add_book"
+        android:title="책 추가하기"
+        >
+    </item>
+    <item
+        android:id="@+id/cancel"
+        android:title="취소"
+        >
+    </item>
+</menu>

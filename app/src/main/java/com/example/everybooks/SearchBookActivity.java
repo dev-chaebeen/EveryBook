@@ -1,5 +1,6 @@
 package com.example.everybooks;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,13 +10,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.everybooks.data.Book;
 import com.example.everybooks.data.ExternalBook;
+import com.example.everybooks.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,13 +34,15 @@ import java.util.List;
 public class SearchBookActivity extends AppCompatActivity
 {
     // 뷰 요소 선언
+    SearchView searchView_search;
     ImageView imageView_mic;
     TextView textView_total_num;
     TextView textView_search_num;
     ProgressBar progressBar;                // 데이터 로딩중을 표시할 프로그레스바
+    Intent intent;
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private SearchBookAdapter adapter;
 
     ArrayList<ExternalBook> searchBookList = new ArrayList<>();
     ExternalBook searchBook;
@@ -54,6 +59,7 @@ public class SearchBookActivity extends AppCompatActivity
     String TAG = "SearchBookActivity";
     String totalCount;
     String searchKeyword;
+    int startNum=1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -64,58 +70,40 @@ public class SearchBookActivity extends AppCompatActivity
         setContentView(R.layout.activity_search_book);
 
         // 뷰 요소 초기화
+        searchView_search = findViewById(R.id.search);
         imageView_mic = findViewById(R.id.mic);
-        textView_search_num = findViewById(R.id.search_num);
         textView_total_num = findViewById(R.id.total_num);
         progressBar = findViewById(R.id.progressbar);
 
         // 인텐트로 전달받은 데이터 담기
         searchKeyword = getIntent().getStringExtra("keyword");
 
-
         progressBar.setVisibility(View.GONE);
 
-      /*  for (int i = 0; i < 20; i++) {
-            // 임시로 데이터 추가
-            ArrayList<Book> list = SearchBookAdapter.searchBookList;
-            Book book = new Book();
-            book.setTitle("검색한책"+i);
-            book.setWriter("검색한책작가"+i);
-            book.setPlot("줄거리"+i);
-            list.add(book);
-        }
-*/
-        // 리사이클러뷰 생성
-       /* recyclerView = findViewById(R.id.search_book_list);
-        recyclerView.setHasFixedSize(true);
-        adapter = new SearchBookAdapter(SearchBookAdapter.searchBookList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        recyclerView.setAdapter(adapter);
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        // 검색창에 키워드를 입력하고 검색 버튼을 누르면 검색 결과화면으로 이동한다.
+        searchView_search.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener()
+        {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            public boolean onQueryTextSubmit(String query)
+            {
+                intent = new Intent(getApplicationContext(), SearchBookActivity.class);
+                intent.putExtra("keyword", searchView_search.getQuery().toString());
+                startActivity(intent);
 
-                int lastVisibleItemPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
-
-                // 리사이클러뷰의 마지막 도착 ! 다음 데이터 로드
-                if (lastVisibleItemPosition == itemTotalCount)
-                {
-                    progressBar.setVisibility(View.VISIBLE);
-                    // 다음 데이터를 불러온다.
-                    getItem();
-                }
-
+                return true;
             }
-        });*/
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                return false;
+            }
+        });
 
         // 리사이클러뷰 생성
         recyclerView = findViewById(R.id.search_book_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
 
         //AsyncTask
         MyAsyncTask myAsyncTask = new MyAsyncTask();
@@ -128,31 +116,20 @@ public class SearchBookActivity extends AppCompatActivity
         // 리스트에 다음 데이터를 입력할 동안에 이 메소드가 또 호출되지 않도록 mLockListView 를 true로 설정한다.
         mLockListView = true;
 
-     /*   // 다음 20개의 데이터를 불러와서 리스트에 저장한다.
-        for (int i = 0; i < 20; i++) {
-            // 임시로 데이터 추가
-            ArrayList<Book> list = SearchBookAdapter.searchBookList;
-            Book book = new Book();
-            book.setTitle("추가한책"+i);
-            book.setWriter("추가한책작가"+i);
-            book.setPlot("추가한줄거리"+i);
-            list.add(book);
-        }*/
-
         // 1초 뒤 프로그레스바를 감추고 데이터를 갱신하고, 중복 로딩 체크하는 Lock을 했던 mLockListView변수를 풀어준다.
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 page++;
-                adapter.notifyDataSetChanged();
+
+                MyAsyncTask myAsyncTask = new MyAsyncTask();
+                myAsyncTask.execute();
                 progressBar.setVisibility(View.GONE);
                 mLockListView = false;
             }
         },1000);
 
     }
-
-
 
     public class MyAsyncTask extends AsyncTask<String, Void, String> {
 
@@ -163,7 +140,10 @@ public class SearchBookActivity extends AppCompatActivity
             String clientSecret = getString(R.string.search_book_api_client_secret);//애플리케이션 클라이언트 시크릿값";
             try {
                 String text = URLEncoder.encode(searchKeyword, "UTF-8");
-                String apiURL = "https://openapi.naver.com/v1/search/book?query="+ text + "&display=20"; // json 결과
+                String apiURL = "https://openapi.naver.com/v1/search/book?query="+ text + "&display=20" + "&start=" + startNum; // json 결과
+
+                Log.d(TAG,"startNum : " + startNum);
+
                 //String apiURL = "https://openapi.naver.com/v1/search/book.xml?query="+ text; // xml 결과
                 URL url = new URL(apiURL);
                 HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -202,6 +182,11 @@ public class SearchBookActivity extends AppCompatActivity
                     String publisher = item.getString("publisher");
                     String publishDate = item.getString("pubdate");
                     String description = item.getString("description");
+                    String link = item.getString("link");
+
+                    Util util = new Util();
+                    title = util.getOnlyKor(title);
+                    description = util.getOnlyKor(description);
 
                     searchBook = new ExternalBook();
                     searchBook.setTitle(title);
@@ -210,15 +195,9 @@ public class SearchBookActivity extends AppCompatActivity
                     searchBook.setPublisher(publisher);
                     searchBook.setPublishDate(publishDate);
                     searchBook.setDescription(description);
+                    searchBook.setLink(link);
 
                     searchBookList.add(searchBook);
-
-                 /*   Log.d(TAG, "title : " + title);
-                    Log.d(TAG, "image : " + image);
-                    Log.d(TAG, "writer : " + writer);
-                    Log.d(TAG, "publisher : " + publisher);
-                    Log.d(TAG, "publishDate : " + publishDate);
-                    Log.d(TAG, "description : " + description);*/
 
                 }
 
@@ -237,64 +216,14 @@ public class SearchBookActivity extends AppCompatActivity
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            //  Log.d(TAG, "searchBookList.size() : " + searchBookList.size());
             //어답터 연결
             SearchBookAdapter adapter = new SearchBookAdapter(getApplicationContext(), searchBookList);
             recyclerView.setAdapter(adapter);
 
+            Log.d(TAG, "totalCount 어댑터 연결하고 " + totalCount);
             textView_total_num.setText(totalCount);
         }
 
     }
-
-
-    public static String getOnlyKor(String str)
-    {
-        String textWithoutTag = str.replaceAll("&nbsp;", " ");
-        textWithoutTag = textWithoutTag.replaceAll("&rsquo;","");
-        textWithoutTag = textWithoutTag.replaceAll("&lsquo;","");
-        textWithoutTag = textWithoutTag.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-        return textWithoutTag;
-    }
-
-
-
-    /*
-    String clientId = "YOUR_CLIENT_ID";//애플리케이션 클라이언트 아이디값";
-        String clientSecret = "YOUR_CLIENT_SECRET";//애플리케이션 클라이언트 시크릿값";
-        try {
-            String text = URLEncoder.encode("안녕하세요. 오늘 기분은 어떻습니까?", "UTF-8");
-            String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
-            URL url = new URL(apiURL);
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("X-Naver-Client-Id", clientId);
-            con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
-            // post request
-            String postParams = "source=ko&target=en&text=" + text;
-            con.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(postParams);
-            wr.flush();
-            wr.close();
-            int responseCode = con.getResponseCode();
-            BufferedReader br;
-            if(responseCode==200) { // 정상 호출
-                br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            } else {  // 에러 발생
-                br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-            }
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-            while ((inputLine = br.readLine()) != null) {
-                response.append(inputLine);
-            }
-            br.close();
-            System.out.println(response.toString());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    */
-
 
 }

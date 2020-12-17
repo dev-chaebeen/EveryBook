@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.everybooks.data.ExternalBook;
+import com.example.everybooks.util.Util;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -210,7 +211,8 @@ public class RecommendBookActivity extends AppCompatActivity
                             {
                                 String comment = xmlPullParser.nextText();
 
-                                comment = getOnlyKor(comment);
+                                Util util = new Util();
+                                comment = util.getOnlyKor(comment);
                                 Log.d(TAG, "comment : " + comment);
                                 externalBook.setDescription(comment);
                                 Log.d(TAG, "recomcontens : " + externalBook.getDescription());
@@ -274,20 +276,5 @@ public class RecommendBookActivity extends AppCompatActivity
 
             textView_total_num.setText(totalCount);
         }
-
     }
-
-
-    public static String getOnlyKor(String str)
-    {
-        String textWithoutTag = str.replaceAll("&nbsp;", " ");
-        textWithoutTag = textWithoutTag.replaceAll("&rsquo;","");
-        textWithoutTag = textWithoutTag.replaceAll("&lsquo;","");
-        textWithoutTag = textWithoutTag.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-        return textWithoutTag;
-    }
-
-
-
-
 }

@@ -56,6 +56,14 @@ public class Util
         return formatter.format(cal.getTime());
     }
 
+    public static String getOnlyKor(String str)
+    {
+        String textWithoutTag = str.replaceAll("&nbsp;", " ");
+        textWithoutTag = textWithoutTag.replaceAll("&rsquo;","");
+        textWithoutTag = textWithoutTag.replaceAll("&lsquo;","");
+        textWithoutTag = textWithoutTag.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+        return textWithoutTag;
+    }
 
 
 }

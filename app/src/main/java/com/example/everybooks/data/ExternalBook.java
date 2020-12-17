@@ -2,26 +2,9 @@ package com.example.everybooks.data;
 
 public class ExternalBook extends Book
 {
-    private int recommendYear;
-    private int recommendMonth;
     private String description;
     private String imgFilePath;
-
-    public int getRecommendYear() {
-        return recommendYear;
-    }
-
-    public void setRecommendYear(int recommendYear) {
-        this.recommendYear = recommendYear;
-    }
-
-    public int getRecommendMonth() {
-        return recommendMonth;
-    }
-
-    public void setRecommendMonth(int recommendMonth) {
-        this.recommendMonth = recommendMonth;
-    }
+    private String link;
 
     public String getDescription() {
         return description;
@@ -37,6 +20,14 @@ public class ExternalBook extends Book
 
     public void setImgFilePath(String imgFilePath) {
         this.imgFilePath = imgFilePath;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     @Override
