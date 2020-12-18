@@ -166,7 +166,7 @@ public class ReadBookInfoActivity extends AppCompatActivity
                                                     book.setReadTime(readTime);
                                                     book.setState(state);
                                                     book.setStarNum(starNum);
-                                                    bookArrayList.add(0, book);
+                                                    bookArrayList.add(book);
 
                                                 }
 
