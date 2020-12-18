@@ -27,6 +27,7 @@ public class AllMemoFragment extends Fragment
     TextView title;
     TextView memo_text;
     TextView memo_date;
+    TextView explain;
 
     @Nullable
     @Override
@@ -47,7 +48,7 @@ public class AllMemoFragment extends Fragment
         title = view.findViewById(R.id.title);
         memo_text = view.findViewById(R.id.memo_text);
         memo_date = view.findViewById(R.id.memo_date);
-
+        explain = view.findViewById(R.id.explain);
     }
 
     @Override
@@ -68,6 +69,12 @@ public class AllMemoFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
+
+        if(AllMemoAdapter.allMemoList.size() == 0)
+        {
+            explain.setText(" 여기엔 작성한 모든 메모가 보여져요 ! ");
+        }
+
         // 리사이클러뷰 생성 및 어댑터 연결
         recyclerView = view.findViewById(R.id.all_memo_list);
         recyclerView.setHasFixedSize(true);

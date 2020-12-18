@@ -1,6 +1,7 @@
  package com.example.everybooks;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,28 +9,39 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class ChartFragment extends Fragment
+ public class ChartFragment extends Fragment
 {
     private View view;
 
     // 뷰 요소 선언
     BarChart chart;
+    Spinner spinner;
 
     int January;
     int February;
@@ -43,6 +55,9 @@ public class ChartFragment extends Fragment
     int October;
     int November;
     int December;
+
+    int year;
+    int selectYear;
 
     final String TAG = "ChartFragment";
 
@@ -61,12 +76,57 @@ public class ChartFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         // 뷰 요소 초기화
         chart = view.findViewById(R.id.barchart);
+        spinner = view.findViewById(R.id.spinner_year);
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
+
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        selectYear = year;
+
+        // spinner 리스트
+        Integer[] years = {year, year-1, year-2, year-3};
+
+        //using ArrayAdapter
+        ArrayAdapter spinnerAdapter;
+        spinnerAdapter = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, years);
+        spinner.setAdapter(spinnerAdapter);
+
+        //event listener
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                Toast.makeText(getContext(),"선택된 아이템 : "+ spinner.getSelectedItem(),Toast.LENGTH_SHORT).show();
+                selectYear = (Integer) spinner.getSelectedItem();
+                drawChart();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    public void drawChart()
+    {
+        January = 0;
+        February = 0;
+        March = 0;
+        April = 0;
+        May = 0;
+        June = 0;
+        July = 0;
+        August = 0;
+        September = 0;
+        October = 0;
+        November = 0;
+        December = 0;
 
         // x 축 구성할 리스트
         ArrayList month = new ArrayList();
@@ -106,7 +166,10 @@ public class ChartFragment extends Fragment
 
                         String[] yearMonthDate = endDate.split("\\.");
 
-                        if (yearMonthDate[0].equals("2020")) {
+
+                        Log.d(TAG, "selectYear : " + selectYear);
+                        if (yearMonthDate[0].equals(Integer.toString(selectYear)))
+                        {
                             switch (yearMonthDate[1]) {
                                 case "01":
                                     January++;
@@ -144,10 +207,8 @@ public class ChartFragment extends Fragment
                                 case "12":
                                     December++;
                                     break;
-
                             }
                         }
-
                     }
                 }
             }
@@ -156,9 +217,6 @@ public class ChartFragment extends Fragment
         {
             System.out.println(e.toString());
         }
-
-
-
 
         // 차트에 출력할 독서 권수
         ArrayList NumOfBooks = new ArrayList();
@@ -193,6 +251,7 @@ public class ChartFragment extends Fragment
         chart.getXAxis().setTextSize(13);
 
         chart.setPinchZoom(false);  // 차트 확대 안되도록 함
+        chart.setTouchEnabled(false); // 그래프 터치해도 아무 변화없게 막음
         chart.setDescription (null);// description 제거
 
         // 범례 제거
@@ -201,7 +260,5 @@ public class ChartFragment extends Fragment
 
         // 차트에 데이터 넣기
         chart.setData(data);
-
-        Log.d(TAG, "12월에 읽은 책 수 : " + December );
     }
 }

@@ -27,7 +27,6 @@
         </TextView>
 
         <Spinner
-            android:entries="@array/year"
             android:id="@+id/spinner_year"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
