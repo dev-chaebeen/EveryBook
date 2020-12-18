@@ -153,7 +153,7 @@ public class SearchBookAdapter extends RecyclerView.Adapter<SearchBookAdapter.Bo
                                         // 책을 구분하기 위해 저장된 책의 bookId 가 겹치지 않도록 bookInfo 에 저장된 bookId의 값을 1 증가시킨다.
                                         SharedPreferences.Editor editor = bookInfo.edit();
                                         editor.putInt("bookId", bookId + 1);
-                                        editor.commit();
+                                        editor.apply();
 
                                         // SharedPreference bookInfo 파일에서 "toReadBookLIst" 키로 저장된 책 리스트를 불러온다.
                                         bookListString = bookInfo.getString("bookList", null);
