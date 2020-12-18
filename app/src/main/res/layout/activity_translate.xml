@@ -26,14 +26,13 @@
 
             android:text="Translate"
             android:textSize="20sp"
-
             />
-
-
     </LinearLayout>
 
-
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
     <!--회색바 아래 콘텐츠 공간-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,29 +43,26 @@
         android:layout_marginRight="20dp"
         >
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+
 
         <!-- 번역할 이미지 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 >
 
                 <ImageView
                     android:id="@+id/add_photo"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="200dp"
+                    android:layout_height="300dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_add_photo">
                 </ImageView>
             </LinearLayout>
 
-        </ScrollView>
+
 
         <!--버튼-->
         <Button
@@ -97,10 +93,6 @@
             >
         </TextView>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
         <!-- 번역 결과 -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -128,10 +120,7 @@
 
         </LinearLayout><!-- end 번역 결과 -->
 
-        </ScrollView>
-
-
     </LinearLayout><!--회색바 아래-->
 
-
+    </ScrollView>
 </LinearLayout>
