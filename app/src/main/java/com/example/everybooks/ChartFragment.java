@@ -250,7 +250,7 @@ import java.util.Calendar;
         // 텍스트 크기
         bardataset.setValueTextSize(11);
         chart.getXAxis().setTextSize(13);
-        chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        //chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
 
         chart.getAxisRight().setEnabled(false);
         chart.getAxisLeft().setStartAtZero(true); //setAxisMinimum(0f); // start at zero
