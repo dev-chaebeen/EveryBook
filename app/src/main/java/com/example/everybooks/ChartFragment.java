@@ -101,7 +101,20 @@ import java.util.Calendar;
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Toast.makeText(getContext(),"선택된 아이템 : "+ spinner.getSelectedItem(),Toast.LENGTH_SHORT).show();
+                January = 0;
+                February = 0;
+                March = 0;
+                April = 0;
+                May = 0;
+                June = 0;
+                July = 0;
+                August = 0;
+                September = 0;
+                October = 0;
+                November = 0;
+                December = 0;
+
+                //Toast.makeText(getContext(),"선택된 아이템 : "+ spinner.getSelectedItem(),Toast.LENGTH_SHORT).show();
                 selectYear = (Integer) spinner.getSelectedItem();
                 drawChart();
             }
@@ -115,18 +128,6 @@ import java.util.Calendar;
 
     public void drawChart()
     {
-        January = 0;
-        February = 0;
-        March = 0;
-        April = 0;
-        May = 0;
-        June = 0;
-        July = 0;
-        August = 0;
-        September = 0;
-        October = 0;
-        November = 0;
-        December = 0;
 
         // x 축 구성할 리스트
         ArrayList month = new ArrayList();
@@ -249,6 +250,10 @@ import java.util.Calendar;
         // 텍스트 크기
         bardataset.setValueTextSize(11);
         chart.getXAxis().setTextSize(13);
+        chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        chart.getAxisRight().setEnabled(false);
+        chart.getAxisLeft().setStartAtZero(true); //setAxisMinimum(0f); // start at zero
 
         chart.setPinchZoom(false);  // 차트 확대 안되도록 함
         chart.setTouchEnabled(false); // 그래프 터치해도 아무 변화없게 막음
